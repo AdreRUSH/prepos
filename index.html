@@ -22,6 +22,13 @@
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:14px;min-height:100vh;}
 
+/* SYNC INDICATOR */
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--dim);display:inline-block;margin-right:6px;transition:background 0.3s;}
+.sync-dot.syncing{background:var(--amber);animation:pulse 1s infinite;}
+.sync-dot.synced{background:var(--green);}
+.sync-dot.error{background:var(--red);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
 /* NAV */
 .nav{position:sticky;top:0;z-index:100;background:rgba(8,10,9,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:50px;gap:10px;}
 .nav-brand{font-family:var(--font-h);font-size:16px;font-weight:800;color:var(--green);letter-spacing:-0.5px;white-space:nowrap;}
@@ -30,13 +37,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:
 .nav-tab{padding:5px 12px;font-family:var(--font-b);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:var(--dim);white-space:nowrap;transition:all 0.15s;}
 .nav-tab.active{background:var(--green-bg);color:var(--green);}
 .nav-tab:hover:not(.active){color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .nav-date{font-size:10px;color:var(--dim);white-space:nowrap;}
+.sync-label{font-size:10px;color:var(--dim);white-space:nowrap;display:flex;align-items:center;}
 
 /* LAYOUT */
 .app{max-width:1140px;margin:0 auto;padding:20px 16px;}
 .page{display:none;}.page.active{display:block;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+/* LOADING SCREEN */
+.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
+.loading-screen h2{font-family:var(--font-h);font-size:28px;font-weight:800;color:var(--green);}
+.loading-screen p{color:var(--dim);font-size:12px;letter-spacing:2px;text-transform:uppercase;}
+.loading-bar{width:200px;height:2px;background:var(--border);}
+.loading-fill{height:100%;background:var(--green);width:0%;transition:width 0.5s;}
 
 /* CARDS */
 .card{background:var(--s1);border:1px solid var(--border);padding:16px;margin-bottom:10px;}
@@ -52,7 +67,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:
 .sec{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--dim);margin-bottom:10px;margin-top:20px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .sec:first-child{margin-top:0;}
 
-/* TODAY REVIEW HIGHLIGHT */
+/* TODAY REVIEW BOX */
 .today-rev-box{background:rgba(255,171,0,0.08);border:1px solid rgba(255,171,0,0.3);padding:14px;margin-bottom:12px;}
 .today-rev-title{font-family:var(--font-h);font-size:12px;font-weight:700;color:var(--amber);margin-bottom:10px;letter-spacing:2px;text-transform:uppercase;}
 .rev-chip{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border2);padding:5px 10px;margin:3px;font-size:12px;cursor:pointer;transition:all 0.12s;}
@@ -60,7 +75,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:
 .rev-chip.done{opacity:0.4;text-decoration:line-through;}
 .rev-chip-day{font-size:9px;color:var(--amber);letter-spacing:1px;}
 
-/* TASK ITEMS */
+/* TASKS */
 .task{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border:1px solid var(--border);margin-bottom:3px;cursor:pointer;transition:background 0.12s;background:var(--s1);}
 .task:hover{background:var(--s2);}
 .task.done{opacity:0.38;}
@@ -92,13 +107,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:
 .sched-table tr.past-row td{opacity:0.45;}
 .gt-badge{font-size:9px;padding:2px 8px;background:var(--red-bg);border:1px solid rgba(255,82,82,0.4);color:var(--red);letter-spacing:1px;text-transform:uppercase;}
 .subj-badge{font-size:9px;padding:2px 8px;border:1px solid var(--border2);color:var(--dim);}
-.rev-date-cell{font-size:10px;color:var(--dim);}
+.rev-date-cell{font-size:10px;color:var(--dim);cursor:pointer;}
 .rev-date-cell.due{color:var(--red);font-weight:600;}
-.rev-date-cell.today{color:var(--amber);font-weight:600;}
-.rev-date-cell.done{color:var(--green);}
-.bool-true{color:var(--green);font-size:11px;}
-.bool-false{color:var(--dim);font-size:11px;}
-.cb-cell{cursor:pointer;text-align:center;}
+.rev-date-cell.today-rev{color:var(--amber);font-weight:600;}
+.rev-date-cell.done-rev{color:var(--green);}
+.bool-cell{cursor:pointer;text-align:center;}
+.bool-t{color:var(--green);font-size:11px;}
+.bool-f{color:var(--dim);font-size:11px;}
 
 /* INPUTS */
 .inp{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font-b);font-size:13px;padding:7px 10px;outline:none;transition:border-color 0.15s;}
@@ -132,32 +147,38 @@ select.inp{cursor:pointer;}
 .weak-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--red-bg);background:var(--red-bg);margin-bottom:3px;}
 .wdot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;}
 
-/* MCQ LOG */
+/* MCQ ROW */
 .mcq-row{display:grid;grid-template-columns:80px 1fr 50px 60px 60px 55px;gap:8px;align-items:center;padding:7px 10px;border:1px solid var(--border);margin-bottom:3px;background:var(--s1);font-size:12px;}
-
-/* NOTIF */
-.notif{position:fixed;bottom:16px;right:16px;z-index:999;background:var(--green);color:#000;padding:9px 16px;font-size:12px;font-weight:600;letter-spacing:1px;transform:translateY(60px);opacity:0;transition:all 0.3s;}
-.notif.show{transform:translateY(0);opacity:1;}
 
 /* ADD FORM */
 .aform{background:var(--s2);border:1px solid var(--border2);padding:14px;margin-bottom:12px;display:none;}
 .aform-ttl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:10px;}
 .frow{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;}
 
+/* NOTIF */
+.notif{position:fixed;bottom:16px;right:16px;z-index:9999;background:var(--green);color:#000;padding:9px 16px;font-size:12px;font-weight:600;letter-spacing:1px;transform:translateY(60px);opacity:0;transition:all 0.3s;}
+.notif.show{transform:translateY(0);opacity:1;}
+
 ::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--border2);}
 
 @media(max-width:700px){
-  .grid2,.grid3{grid-template-columns:1fr;}
+  .grid2{grid-template-columns:1fr;}
   .stat-row{grid-template-columns:repeat(3,1fr);}
   .nav-date{display:none;}
   .mcq-row{grid-template-columns:60px 1fr 40px 40px;}
-  .sched-table th:nth-child(n+4),.sched-table td:nth-child(n+4){display:none;}
 }
 </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading-screen">
+  <h2>PrepOS</h2>
+  <p>Connecting to sync...</p>
+  <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
+</div>
 
 <nav class="nav">
   <div class="nav-brand">PrepOS <small>INI-CET</small></div>
@@ -169,25 +190,24 @@ select.inp{cursor:pointer;}
     <button class="nav-tab" onclick="go('focus')">Focus</button>
     <button class="nav-tab" onclick="go('weak')">Weak Topics</button>
   </div>
-  <div class="nav-date" id="nav-date"></div>
+  <div class="nav-right">
+    <div class="sync-label"><span class="sync-dot" id="sync-dot"></span><span id="sync-label">Connecting...</span></div>
+    <div class="nav-date" id="nav-date"></div>
+  </div>
 </nav>
 
 <div class="app">
 
-<!-- ═══ DASHBOARD ═══ -->
+<!-- DASHBOARD -->
 <div class="page active" id="page-dashboard">
   <div class="stat-row" id="stat-row"></div>
   <div class="grid2">
     <div>
-      <!-- TODAY'S SPACED REPETITION -->
       <div class="today-rev-box" id="today-rev-box"></div>
-
       <div class="sec">Today's Study Blocks <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="genToday()">↻ Generate</button></div>
       <div id="today-study-tasks"></div>
-
       <div class="sec" style="margin-top:14px">MCQs</div>
       <div id="today-mcq-tasks"></div>
-
       <div class="sec" style="margin-top:14px">Anki</div>
       <div class="task" id="anki-task" onclick="toggleAnki()">
         <div class="tcb"></div>
@@ -197,7 +217,6 @@ select.inp{cursor:pointer;}
         <span class="tbadge tb-r">Critical</span>
       </div>
     </div>
-
     <div>
       <div class="sec">Daily Numbers</div>
       <div class="card">
@@ -212,34 +231,30 @@ select.inp{cursor:pointer;}
           <div><div style="font-size:10px;color:var(--dim);margin-bottom:3px">Fact Bk</div><input class="inp inp-sm" type="number" id="i-fb" placeholder="0" oninput="updateNums()"></div>
         </div>
       </div>
-
       <div class="sec">Weak Topics — Priority</div>
       <div id="dash-weak"></div>
-
-      <div class="sec" style="margin-top:14px">Overall Progress</div>
+      <div class="sec" style="margin-top:14px">Subject Progress</div>
       <div id="dash-progress"></div>
     </div>
   </div>
 </div>
 
-<!-- ═══ SCHEDULE ═══ -->
+<!-- SCHEDULE -->
 <div class="page" id="page-schedule">
-  <div class="sec">Full Study Schedule — Spaced Repetition View</div>
+  <div class="sec">Full Schedule — Click revision dates to mark done</div>
   <div style="overflow-x:auto">
-    <table class="sched-table" id="sched-table">
-      <thead>
-        <tr>
-          <th>Date</th><th>Day</th><th>Subject</th>
-          <th>Day+1</th><th>Day+3</th><th>Day+7</th><th>Day+15</th><th>Day+30</th>
-          <th>MCQ Done</th><th>Anki</th><th>GT Review</th><th>GT2 Weak</th><th>Fact Book</th>
-        </tr>
-      </thead>
+    <table class="sched-table">
+      <thead><tr>
+        <th>Date</th><th>Day</th><th>Subject</th>
+        <th>Day+1</th><th>Day+3</th><th>Day+7</th><th>Day+15</th><th>Day+30</th>
+        <th>MCQ</th><th>Anki</th><th>GT Rev</th><th>Weak Sub</th><th>Fact Bk</th>
+      </tr></thead>
       <tbody id="sched-body"></tbody>
     </table>
   </div>
 </div>
 
-<!-- ═══ REVISION ═══ -->
+<!-- REVISION -->
 <div class="page" id="page-revision">
   <div class="sec">Due Today / Overdue <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="showAF('af-rev')">+ Log Study</button></div>
   <div class="aform" id="af-rev">
@@ -255,13 +270,13 @@ select.inp{cursor:pointer;}
   <div id="rev-due-list"></div>
   <div class="sec">Upcoming 7 Days</div>
   <div id="rev-upcoming-list"></div>
-  <div class="sec">All Topics Scheduled</div>
+  <div class="sec">Review Completion by Subject</div>
   <div id="rev-all-list"></div>
 </div>
 
-<!-- ═══ MCQ LOG ═══ -->
+<!-- MCQ LOG -->
 <div class="page" id="page-mcq">
-  <div class="sec">MCQ Session Log <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="showAF('af-mcq')">+ Log Session</button></div>
+  <div class="sec">MCQ Log <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="showAF('af-mcq')">+ Log Session</button></div>
   <div class="aform" id="af-mcq">
     <div class="aform-ttl">Log MCQ Session</div>
     <div class="frow">
@@ -269,7 +284,7 @@ select.inp{cursor:pointer;}
       <input class="inp" id="m-type" placeholder="Type (PYQ/Mixed/Topic)">
       <input class="inp inp-sm" type="number" id="m-total" placeholder="Total">
       <input class="inp inp-sm" type="number" id="m-correct" placeholder="Correct">
-      <input class="inp" id="m-notes" placeholder="Notes">
+      <input class="inp" id="m-notes" placeholder="Notes / weak topics">
       <button class="btn btn-g" onclick="addMCQ()">Save</button>
     </div>
   </div>
@@ -285,7 +300,7 @@ select.inp{cursor:pointer;}
   <div id="mcq-list"></div>
 </div>
 
-<!-- ═══ FOCUS ═══ -->
+<!-- FOCUS -->
 <div class="page" id="page-focus">
   <div class="timer-wrap">
     <div style="text-align:center;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--dim);margin-bottom:16px">Focus Mode</div>
@@ -319,7 +334,7 @@ select.inp{cursor:pointer;}
   </div>
 </div>
 
-<!-- ═══ WEAK TOPICS ═══ -->
+<!-- WEAK TOPICS -->
 <div class="page" id="page-weak">
   <div class="sec">Weak Topic Tracker <button class="btn btn-r" style="font-size:9px;padding:3px 10px" onclick="showAF('af-weak')">+ Flag Topic</button></div>
   <div class="aform" id="af-weak">
@@ -337,8 +352,8 @@ select.inp{cursor:pointer;}
   <div class="card" style="margin-bottom:12px">
     <div class="card-ttl" style="color:var(--red)">Rule ⚡</div>
     <div style="font-size:12px;color:var(--dim);line-height:1.8">
-      IF same topic wrong <span style="color:var(--red);font-weight:600">3× this week</span> → <span style="color:var(--text)">becomes Block 1 topic next morning</span><br>
-      GT wrong 2+ times same topic → <span style="color:var(--text)">add here immediately</span>
+      Same topic wrong <span style="color:var(--red);font-weight:600">3× this week</span> → <span style="color:var(--text)">Block 1 topic next morning</span><br>
+      GT wrong 2+ times → <span style="color:var(--text)">add here immediately</span>
     </div>
   </div>
   <div id="weak-list"></div>
@@ -347,8 +362,24 @@ select.inp{cursor:pointer;}
 </div><!-- .app -->
 <div class="notif" id="notif"></div>
 
-<script>
-// ═══ DATA FROM YOUR SCHEDULE IMAGE ═══
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, addDoc, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2YEOaq87dOOeMJWToiIJWj_znW1lE4Ew",
+  authDomain: "prepos-bc08d.firebaseapp.com",
+  projectId: "prepos-bc08d",
+  storageBucket: "prepos-bc08d.firebasestorage.app",
+  messagingSenderId: "1053413399908",
+  appId: "1:1053413399908:web:e0f1b599435918daf2ee71"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+
+// ── SCHEDULE DATA ──
 const SCHEDULE = [
   {date:'2026-03-05',day:'Thursday',subject:'Pharma'},
   {date:'2026-03-06',day:'Friday',subject:'Pharma'},
@@ -396,103 +427,134 @@ const SCHEDULE = [
 ];
 
 const SR_DAYS = [1,3,7,15,30];
+const TODAY = new Date().toISOString().split('T')[0];
 
+// ── SYNC STATUS ──
+function setSyncStatus(status) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot ' + status;
+  lbl.textContent = status==='synced'?'Synced':status==='syncing'?'Saving...':status==='error'?'Offline':'Connecting...';
+}
+
+// ── STATE (in memory, synced to Firestore) ──
+let ST = {
+  schedState: {},
+  extraRevs: [],
+  mcqSessions: [],
+  weakTopics: [],
+  todayTasks: {},
+  dailyNums: {pyq:0,mcq:0,anki:0,fb:0,date:''},
+  focusTime: {total:0,sessions:0,date:''},
+};
+
+// ── FIRESTORE HELPERS ──
+const USER_DOC = 'users/mukesh'; // single user doc
+
+async function loadFromFirestore() {
+  try {
+    setSyncStatus('syncing');
+    const snap = await getDoc(doc(db, USER_DOC));
+    if (snap.exists()) {
+      const data = snap.data();
+      ST.schedState = data.schedState || {};
+      ST.extraRevs = data.extraRevs || [];
+      ST.mcqSessions = data.mcqSessions || [];
+      ST.weakTopics = data.weakTopics || [];
+      ST.todayTasks = data.todayTasks || {};
+      ST.dailyNums = data.dailyNums || {pyq:0,mcq:0,anki:0,fb:0,date:''};
+      ST.focusTime = data.focusTime || {total:0,sessions:0,date:''};
+    }
+    setSyncStatus('synced');
+  } catch(e) {
+    console.error(e);
+    setSyncStatus('error');
+    // fallback to localStorage
+    const local = localStorage.getItem('prepos_backup');
+    if (local) { try { Object.assign(ST, JSON.parse(local)); } catch(e2){} }
+  }
+}
+
+let saveTimer = null;
+async function save() {
+  // Local backup immediately
+  localStorage.setItem('prepos_backup', JSON.stringify(ST));
+  // Debounce Firestore save 800ms
+  clearTimeout(saveTimer);
+  setSyncStatus('syncing');
+  saveTimer = setTimeout(async () => {
+    try {
+      await setDoc(doc(db, USER_DOC), ST);
+      setSyncStatus('synced');
+    } catch(e) {
+      console.error(e);
+      setSyncStatus('error');
+    }
+  }, 800);
+}
+
+// Real-time listener — updates UI when another device saves
+onSnapshot(doc(db, USER_DOC), (snap) => {
+  if (snap.exists() && !saveTimer) {
+    const data = snap.data();
+    Object.assign(ST, data);
+    render();
+    setSyncStatus('synced');
+  }
+});
+
+// ── HELPERS ──
 function addDays(dateStr, n) {
   const d = new Date(dateStr+'T00:00:00');
   d.setDate(d.getDate()+n);
   return d.toISOString().split('T')[0];
 }
-
 function fmt(d) {
-  const dt = new Date(d+'T00:00:00');
-  return dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});
 }
-
 function daysDiff(a,b) { return Math.round((new Date(b)-new Date(a))/86400000); }
-
-// ═══ STORAGE ═══
-const LS = {
-  g: k => { try{return JSON.parse(localStorage.getItem('po2_'+k)||'null')}catch(e){return null} },
-  s: (k,v) => { try{localStorage.setItem('po2_'+k,JSON.stringify(v))}catch(e){} }
-};
-
-const TODAY = new Date().toISOString().split('T')[0];
-
-let ST = {
-  schedState: LS.g('schedState') || {},   // {date: {mcq,anki,gtReview,gt2Weak,fact, rev:{1:bool,3:bool...}}}
-  extraRevs: LS.g('extraRevs') || [],     // manually added revisions
-  mcqSessions: LS.g('mcqSessions') || [],
-  weakTopics: LS.g('weakTopics') || [],
-  todayTasks: LS.g('todayTasks') || {},
-  dailyNums: LS.g('dailyNums') || {pyq:0,mcq:0,anki:0,fb:0,date:''},
-  focusTime: LS.g('focusTime') || {total:0,sessions:0,date:''},
-};
-
-function save() {
-  LS.s('schedState',ST.schedState);
-  LS.s('extraRevs',ST.extraRevs);
-  LS.s('mcqSessions',ST.mcqSessions);
-  LS.s('weakTopics',ST.weakTopics);
-  LS.s('todayTasks',ST.todayTasks);
-  LS.s('dailyNums',ST.dailyNums);
-  LS.s('focusTime',ST.focusTime);
-}
 
 function getSchedState(date) {
   if (!ST.schedState[date]) ST.schedState[date] = {mcq:false,anki:false,gtReview:false,gt2Weak:false,fact:false,rev:{}};
   return ST.schedState[date];
 }
 
-// ═══ NAV ═══
-function go(id) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  const tabs=document.querySelectorAll('.nav-tab');
-  const pages=['dashboard','schedule','revision','mcq','focus','weak'];
-  tabs[pages.indexOf(id)].classList.add('active');
-  render();
-}
-
-document.getElementById('nav-date').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'long'});
-
-// ═══ NOTIF ═══
 function notify(msg) {
   const n=document.getElementById('notif');
   n.textContent=msg; n.classList.add('show');
   setTimeout(()=>n.classList.remove('show'),2200);
 }
-
 function showAF(id) {
   const f=document.getElementById(id);
   f.style.display=f.style.display==='none'||!f.style.display?'block':'none';
 }
 
-// ═══ GET TODAY'S REVISIONS DUE ═══
-function getTodayRevisions() {
+// ── NAV ──
+document.getElementById('nav-date').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'long'});
+
+window.go = function(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const tabs=document.querySelectorAll('.nav-tab');
+  ['dashboard','schedule','revision','mcq','focus','weak'].forEach((p,i)=>{ if(p===id)tabs[i].classList.add('active'); });
+  render();
+}
+
+// ── TODAY REVISIONS ──
+function getTodayRevs() {
   const due = [];
-  // From schedule
-  SCHEDULE.forEach(s => {
-    if (s.isGT) return;
-    SR_DAYS.forEach(d => {
-      const revDate = addDays(s.date, d);
-      if (revDate === TODAY) {
-        const ss = getSchedState(s.date);
-        due.push({
-          source: 'schedule',
-          dateKey: s.date,
-          srDay: d,
-          topic: s.subject,
-          done: ss.rev[d] || false,
-        });
+  SCHEDULE.filter(s=>!s.isGT).forEach(s=>{
+    SR_DAYS.forEach(d=>{
+      if (addDays(s.date,d)===TODAY) {
+        const ss=getSchedState(s.date);
+        due.push({source:'sched',dateKey:s.date,srDay:d,topic:s.subject,done:ss.rev[d]||false});
       }
     });
   });
-  // From extra revisions
-  ST.extraRevs.forEach(r => {
-    SR_DAYS.forEach(d => {
-      const revDate = addDays(r.studiedOn, d);
-      if (revDate === TODAY && !r.revDone?.[d]) {
+  ST.extraRevs.forEach(r=>{
+    SR_DAYS.forEach(d=>{
+      if (addDays(r.studiedOn,d)===TODAY) {
         due.push({source:'extra',id:r.id,srDay:d,topic:r.topic,subject:r.subject,done:r.revDone?.[d]||false});
       }
     });
@@ -500,215 +562,145 @@ function getTodayRevisions() {
   return due;
 }
 
-// ═══ DASHBOARD ═══
+// ── DASHBOARD ──
 function renderDashboard() {
-  // Stats
-  const totalDays = SCHEDULE.filter(s=>!s.isGT).length;
-  const studiedDays = SCHEDULE.filter(s=>!s.isGT && s.date <= TODAY).length;
-  const todayRevs = getTodayRevisions();
-  const doneRevs = todayRevs.filter(r=>r.done).length;
-  const totalMCQ = ST.mcqSessions.reduce((a,s)=>a+s.total,0);
-  const pct = totalDays ? Math.round(studiedDays/totalDays*100) : 0;
+  const studiedDays=SCHEDULE.filter(s=>!s.isGT&&s.date<=TODAY).length;
+  const totalDays=SCHEDULE.filter(s=>!s.isGT).length;
+  const todayRevs=getTodayRevs();
+  const doneRevs=todayRevs.filter(r=>r.done).length;
+  const totalMCQ=ST.mcqSessions.reduce((a,s)=>a+s.total,0);
+  const pct=totalDays?Math.round(studiedDays/totalDays*100):0;
 
-  document.getElementById('stat-row').innerHTML = `
+  document.getElementById('stat-row').innerHTML=`
     <div class="stat-box"><span class="stat-v">${pct}%</span><div class="stat-l">Schedule Done</div></div>
-    <div class="stat-box"><span class="stat-v" style="color:var(--amber)">${todayRevs.length}</span><div class="stat-l">Revisions Today</div></div>
-    <div class="stat-box"><span class="stat-v" style="color:var(--green)">${doneRevs}/${todayRevs.length}</span><div class="stat-l">Rev Completed</div></div>
+    <div class="stat-box"><span class="stat-v" style="color:var(--amber)">${todayRevs.length}</span><div class="stat-l">Reviews Today</div></div>
+    <div class="stat-box"><span class="stat-v" style="color:var(--green)">${doneRevs}/${todayRevs.length}</span><div class="stat-l">Rev Done</div></div>
     <div class="stat-box"><span class="stat-v" style="color:var(--blue)">${totalMCQ}</span><div class="stat-l">Total MCQs</div></div>
     <div class="stat-box"><span class="stat-v" style="color:var(--purple)">${ST.weakTopics.length}</span><div class="stat-l">Weak Topics</div></div>
   `;
 
-  // TODAY'S REVISIONS BOX
-  const trbEl = document.getElementById('today-rev-box');
-  if (todayRevs.length > 0) {
-    trbEl.innerHTML = `
-      <div class="today-rev-title">🔁 Revisions Due Today (${doneRevs}/${todayRevs.length} done)</div>
-      <div>${todayRevs.map((r,i)=>`
-        <span class="rev-chip ${r.done?'done':''}" onclick="markRevDone(${i},'${r.source}','${r.dateKey||''}','${r.id||''}',${r.srDay})">
-          <span class="rev-chip-day">D+${r.srDay}</span>
-          ${r.topic}${r.subject?' · '+r.subject:''}
-          ${r.done?'✓':''}
-        </span>
-      `).join('')}</div>
-    `;
-    trbEl.style.display='block';
-  } else {
-    trbEl.innerHTML = '<div class="today-rev-title">✓ No revisions due today</div><div style="font-size:12px;color:var(--dim)">All caught up!</div>';
-    trbEl.style.display='block';
-  }
+  // Today's revisions box
+  const trbEl=document.getElementById('today-rev-box');
+  trbEl.innerHTML=`<div class="today-rev-title">🔁 Revisions Due Today ${todayRevs.length?`(${doneRevs}/${todayRevs.length} done)`:'— All clear ✓'}</div>
+    <div>${todayRevs.length?todayRevs.map((r,i)=>`
+      <span class="rev-chip ${r.done?'done':''}" onclick="markRevDone(${i})">
+        <span class="rev-chip-day">D+${r.srDay}</span>${r.topic}${r.subject?` · ${r.subject}`:''}${r.done?' ✓':''}
+      </span>`).join(''):'<span style="color:var(--dim);font-size:12px">No revisions scheduled today. Good!</span>'}</div>`;
 
-  // Today's plan
+  // Store today's revs for onclick
+  window._todayRevs = todayRevs;
+
   renderTodayPlan();
 
   // Numbers
-  if (ST.dailyNums.date !== TODAY) { ST.dailyNums={pyq:0,mcq:0,anki:0,fb:0,date:TODAY}; save(); }
+  if(ST.dailyNums.date!==TODAY){ST.dailyNums={pyq:0,mcq:0,anki:0,fb:0,date:TODAY};save();}
   const n=ST.dailyNums;
   const setPB=(id,val,max)=>{document.getElementById('v-'+id).textContent=val+'/'+max;document.getElementById('f-'+id).style.width=Math.min(100,Math.round(val/max*100))+'%';};
   setPB('pyq',n.pyq,100);setPB('mcq',n.mcq,100);setPB('anki',n.anki,400);setPB('fb',n.fb,20);
-  ['pyq','mcq','anki','fb'].forEach(k=>{ document.getElementById('i-'+k).value=n[k]||''; });
+  ['pyq','mcq','anki','fb'].forEach(k=>{document.getElementById('i-'+k).value=n[k]||'';});
 
   // Weak topics
-  const wd=document.getElementById('dash-weak');
   const sw=[...ST.weakTopics].sort((a,b)=>b.count-a.count).slice(0,5);
-  wd.innerHTML=sw.length?sw.map(w=>`<div class="weak-item"><div class="wdot"></div><div style="flex:1">${w.name} <span style="color:var(--dim);font-size:11px">· ${w.subject}</span></div><div style="color:var(--red);font-size:11px;font-family:var(--font-h);font-weight:700">${w.count}×</div></div>`).join('')
+  document.getElementById('dash-weak').innerHTML=sw.length?sw.map(w=>`<div class="weak-item"><div class="wdot"></div><div style="flex:1">${w.name} <span style="color:var(--dim);font-size:11px">· ${w.subject}</span></div><div style="color:var(--red);font-size:11px;font-family:var(--font-h);font-weight:700">${w.count}×</div></div>`).join('')
     :'<div style="color:var(--dim);font-size:12px;padding:6px">No weak topics flagged yet.</div>';
 
   // Subject progress
-  const dp=document.getElementById('dash-progress');
-  const subjects={};
+  const subj={};
   SCHEDULE.filter(s=>!s.isGT).forEach(s=>{
-    if(!subjects[s.subject])subjects[s.subject]={total:0,done:0};
-    subjects[s.subject].total++;
-    if(s.date<=TODAY)subjects[s.subject].done++;
+    if(!subj[s.subject])subj[s.subject]={total:0,done:0};
+    subj[s.subject].total++;
+    if(s.date<=TODAY)subj[s.subject].done++;
   });
-  dp.innerHTML=Object.entries(subjects).map(([subj,d])=>{
+  document.getElementById('dash-progress').innerHTML=Object.entries(subj).map(([s,d])=>{
     const p=Math.round(d.done/d.total*100);
-    return `<div class="pb-wrap"><div class="pb-lbl"><span>${subj}</span><span>${d.done}/${d.total} days · ${p}%</span></div><div class="pb"><div class="pb-fill" style="width:${p}%"></div></div></div>`;
+    return `<div class="pb-wrap"><div class="pb-lbl"><span>${s}</span><span>${d.done}/${d.total} · ${p}%</span></div><div class="pb"><div class="pb-fill" style="width:${p}%"></div></div></div>`;
   }).join('');
 }
 
-function markRevDone(idx, source, dateKey, extraId, srDay) {
-  if (source==='schedule') {
-    const ss=getSchedState(dateKey);
-    ss.rev[srDay]=!ss.rev[srDay];
-  } else {
-    const r=ST.extraRevs.find(r=>r.id==extraId);
-    if(r){if(!r.revDone)r.revDone={};r.revDone[srDay]=!r.revDone[srDay];}
-  }
-  save(); renderDashboard();
+window.markRevDone = function(idx) {
+  const r=window._todayRevs[idx];
+  if(!r)return;
+  if(r.source==='sched'){const ss=getSchedState(r.dateKey);ss.rev[r.srDay]=!ss.rev[r.srDay];}
+  else{const ex=ST.extraRevs.find(x=>x.id==r.id);if(ex){if(!ex.revDone)ex.revDone={};ex.revDone[r.srDay]=!ex.revDone[r.srDay];}}
+  save();renderDashboard();notify(r.done?'Revision unmarked.':'Revision marked done! ✓');
 }
 
 function renderTodayPlan() {
   const tid='t-'+TODAY;
   if(!ST.todayTasks[tid])genToday();
   const tasks=ST.todayTasks[tid]||{study:[],mcq:[],ankiDone:false};
-
-  const studyEl=document.getElementById('today-study-tasks');
-  studyEl.innerHTML=tasks.study.map((t,i)=>`
-    <div class="task ${t.done?'done':''}" onclick="toggleTask('study',${i})">
-      <div class="tcb"></div>
-      <div class="task-txt">${t.text}<small>${t.sub||''}</small></div>
-      <span class="tbadge tb-a">${t.badge||'Study'}</span>
-    </div>
-  `).join('')||'<div style="color:var(--dim);font-size:12px;padding:6px">Click ↻ Generate</div>';
-
-  const mcqEl=document.getElementById('today-mcq-tasks');
-  mcqEl.innerHTML=tasks.mcq.map((t,i)=>`
-    <div class="task ${t.done?'done':''}" onclick="toggleTask('mcq',${i})">
-      <div class="tcb"></div>
-      <div class="task-txt">${t.text}<small>${t.sub||''}</small></div>
-      <span class="tbadge tb-b">MCQ</span>
-    </div>
-  `).join('');
-
+  document.getElementById('today-study-tasks').innerHTML=tasks.study.map((t,i)=>`
+    <div class="task ${t.done?'done':''}" onclick="toggleTask('study',${i})"><div class="tcb"></div>
+    <div class="task-txt">${t.text}<small>${t.sub||''}</small></div>
+    <span class="tbadge tb-a">${t.badge||'Study'}</span></div>`).join('')||'<div style="color:var(--dim);font-size:12px;padding:6px">Click ↻ Generate</div>';
+  document.getElementById('today-mcq-tasks').innerHTML=tasks.mcq.map((t,i)=>`
+    <div class="task ${t.done?'done':''}" onclick="toggleTask('mcq',${i})"><div class="tcb"></div>
+    <div class="task-txt">${t.text}<small>${t.sub||''}</small></div>
+    <span class="tbadge tb-b">MCQ</span></div>`).join('');
   const at=document.getElementById('anki-task');
   tasks.ankiDone?at.classList.add('done'):at.classList.remove('done');
 }
 
-function genToday() {
+window.genToday = function() {
   const tid='t-'+TODAY;
-  const todayEntry=SCHEDULE.find(s=>s.date===TODAY);
+  const entry=SCHEDULE.find(s=>s.date===TODAY);
   const study=[];
-  if(todayEntry&&!todayEntry.isGT){
-    study.push({text:todayEntry.subject+' – Today\'s Subject',sub:'PYQ → concept → Anki → fact book loop. Open PYQ first.',badge:'Block 1',done:false});
-  }
-  // Next pending subject
+  if(entry&&!entry.isGT)study.push({text:entry.subject+' – Today\'s Subject',sub:'PYQ → concept → Anki → fact book. Open PYQ first.',badge:'Block 1',done:false});
   const future=SCHEDULE.filter(s=>!s.isGT&&s.date>TODAY);
-  if(future.length){
-    const nextSubj=future.find(s=>s.subject!==(todayEntry?.subject));
-    if(nextSubj)study.push({text:nextSubj.subject+' – Preview / Weak Topic',sub:'Block 3 slot',badge:'Block 3',done:false});
-  }
-  const mcq=[
-    {text:'40 topic MCQs – '+(todayEntry?.subject||'Today\'s subject'),sub:'Same subject as Block 1. Wrong → Anki + tag.',done:false},
-    {text:'60 mixed MCQs – Cross-subject simulation',sub:'Tag weak topics. Appears 3× this week → Block 1 tomorrow.',done:false},
-  ];
-  ST.todayTasks[tid]={study,mcq,ankiDone:false};
+  const next=future.find(s=>s.subject!==(entry?.subject));
+  if(next)study.push({text:next.subject+' – Weak Area / Preview',sub:'Block 3 slot',badge:'Block 3',done:false});
+  ST.todayTasks[tid]={study,mcq:[
+    {text:'40 topic MCQs – '+(entry?.subject||'Today\'s subject'),sub:'Same subject as Block 1. Wrong → Anki + tag.',done:false},
+    {text:'60 mixed MCQs – Cross-subject simulation',sub:'Tag weak topics. 3× this week → Block 1 tomorrow.',done:false},
+  ],ankiDone:false};
   save();renderTodayPlan();notify('Today\'s plan generated!');
 }
 
-function toggleTask(type,idx){
+window.toggleTask = function(type,idx) {
   const tid='t-'+TODAY;
   if(!ST.todayTasks[tid])return;
   ST.todayTasks[tid][type][idx].done=!ST.todayTasks[tid][type][idx].done;
   save();renderTodayPlan();
 }
-function toggleAnki(){
+window.toggleAnki = function() {
   const tid='t-'+TODAY;
   if(!ST.todayTasks[tid])return;
   ST.todayTasks[tid].ankiDone=!ST.todayTasks[tid].ankiDone;
   save();renderTodayPlan();
 }
-function updateNums(){
+window.updateNums = function() {
   ST.dailyNums={pyq:+document.getElementById('i-pyq').value||0,mcq:+document.getElementById('i-mcq').value||0,anki:+document.getElementById('i-anki').value||0,fb:+document.getElementById('i-fb').value||0,date:TODAY};
   save();renderDashboard();
 }
 
-// ═══ SCHEDULE TABLE ═══
+// ── SCHEDULE ──
 function renderSchedule() {
   const tbody=document.getElementById('sched-body');
   tbody.innerHTML=SCHEDULE.map(s=>{
-    const isToday=s.date===TODAY;
-    const isPast=s.date<TODAY;
+    const isToday=s.date===TODAY,isPast=s.date<TODAY;
     const ss=getSchedState(s.date);
-    let cls=isPast?'past-row':'';
-    if(isToday)cls='today-row';
-    if(s.isGT)cls='gt-row';
-
-    if(s.isGT) return `<tr class="${cls}">
-      <td>${fmt(s.date)}</td><td style="color:var(--dim)">${s.day}</td>
-      <td><span class="gt-badge">${s.subject}</span></td>
-      <td colspan="5" style="color:var(--dim);font-size:11px">Grand Test Day — no spaced repetition</td>
-      <td class="cb-cell" onclick="toggleBool('${s.date}','gtReview')"><span class="${ss.gtReview?'bool-true':'bool-false'}">${ss.gtReview?'✓':'–'}</span></td>
-      <td class="cb-cell" onclick="toggleBool('${s.date}','anki')"><span class="${ss.anki?'bool-true':'bool-false'}">${ss.anki?'✓':'–'}</span></td>
-      <td class="cb-cell" onclick="toggleBool('${s.date}','gt2Weak')"><span class="${ss.gt2Weak?'bool-true':'bool-false'}">${ss.gt2Weak?'✓':'–'}</span></td>
-      <td class="cb-cell" onclick="toggleBool('${s.date}','fact')"><span class="${ss.fact?'bool-true':'bool-false'}">${ss.fact?'✓':'–'}</span></td>
-      <td></td>
-    </tr>`;
-
+    let cls=isPast?'past-row':'';if(isToday)cls='today-row';if(s.isGT)cls='gt-row';
+    if(s.isGT)return`<tr class="${cls}"><td>${fmt(s.date)}</td><td style="color:var(--dim)">${s.day}</td><td><span class="gt-badge">${s.subject}</span></td><td colspan="5" style="color:var(--dim);font-size:11px">Grand Test</td><td class="bool-cell" onclick="toggleBool('${s.date}','gtReview')"><span class="${ss.gtReview?'bool-t':'bool-f'}">${ss.gtReview?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','anki')"><span class="${ss.anki?'bool-t':'bool-f'}">${ss.anki?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gt2Weak')"><span class="${ss.gt2Weak?'bool-t':'bool-f'}">${ss.gt2Weak?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','fact')"><span class="${ss.fact?'bool-t':'bool-f'}">${ss.fact?'✓':'–'}</span></td></tr>`;
     const revCells=SR_DAYS.map(d=>{
-      const revDate=addDays(s.date,d);
-      const done=ss.rev[d]||false;
-      let cls2='rev-date-cell';
-      if(done)cls2+=' done';
-      else if(revDate<TODAY)cls2+=' due';
-      else if(revDate===TODAY)cls2+=' today';
-      return `<td class="${cls2}" onclick="toggleRev('${s.date}',${d})" style="cursor:pointer" title="Click to mark done">${done?'✓ '+fmt(revDate):fmt(revDate)}</td>`;
+      const rd=addDays(s.date,d),done=ss.rev[d]||false;
+      let c='rev-date-cell';if(done)c+=' done-rev';else if(rd<TODAY)c+=' due';else if(rd===TODAY)c+=' today-rev';
+      return`<td class="${c}" onclick="toggleRev('${s.date}',${d})">${done?'✓ ':''} ${fmt(rd)}</td>`;
     }).join('');
-
-    return `<tr class="${cls}" ${isToday?'id="today-sched-row"':''}>
-      <td style="${isToday?'color:var(--green);font-weight:700':''}">${fmt(s.date)}${isToday?' ◀':''}</td>
-      <td style="color:var(--dim)">${s.day}</td>
-      <td><span class="subj-badge">${s.subject}</span></td>
-      ${revCells}
-      <td class="cb-cell" onclick="toggleBool('${s.date}','mcq')"><span class="${ss.mcq?'bool-true':'bool-false'}">${ss.mcq?'✓':'–'}</span></td>
-      <td class="cb-cell" onclick="toggleBool('${s.date}','anki')"><span class="${ss.anki?'bool-true':'bool-false'}">${ss.anki?'✓':'–'}</span></td>
-      <td class="cb-cell" onclick="toggleBool('${s.date}','gtReview')"><span class="${ss.gtReview?'bool-true':'bool-false'}">${ss.gtReview?'✓':'–'}</span></td>
-      <td class="cb-cell" onclick="toggleBool('${s.date}','gt2Weak')"><span class="${ss.gt2Weak?'bool-true':'bool-false'}">${ss.gt2Weak?'✓':'–'}</span></td>
-      <td class="cb-cell" onclick="toggleBool('${s.date}','fact')"><span class="${ss.fact?'bool-true':'bool-false'}">${ss.fact?'✓':'–'}</span></td>
-    </tr>`;
+    return`<tr class="${cls}" ${isToday?'id="tsr"':''}><td style="${isToday?'color:var(--green);font-weight:700':''}">${fmt(s.date)}${isToday?' ◀':''}</td><td style="color:var(--dim)">${s.day}</td><td><span class="subj-badge">${s.subject}</span></td>${revCells}<td class="bool-cell" onclick="toggleBool('${s.date}','mcq')"><span class="${ss.mcq?'bool-t':'bool-f'}">${ss.mcq?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','anki')"><span class="${ss.anki?'bool-t':'bool-f'}">${ss.anki?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gtReview')"><span class="${ss.gtReview?'bool-t':'bool-f'}">${ss.gtReview?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gt2Weak')"><span class="${ss.gt2Weak?'bool-t':'bool-f'}">${ss.gt2Weak?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','fact')"><span class="${ss.fact?'bool-t':'bool-f'}">${ss.fact?'✓':'–'}</span></td></tr>`;
   }).join('');
-
-  // Scroll to today
-  setTimeout(()=>{
-    const row=document.getElementById('today-sched-row');
-    if(row)row.scrollIntoView({behavior:'smooth',block:'center'});
-  },100);
+  setTimeout(()=>{const r=document.getElementById('tsr');if(r)r.scrollIntoView({behavior:'smooth',block:'center'});},100);
 }
 
-function toggleRev(date,day){
-  const ss=getSchedState(date);
-  ss.rev[day]=!ss.rev[day];
-  save();renderSchedule();renderDashboard();
-  notify(ss.rev[day]?'Revision marked done!':'Revision unmarked.');
+window.toggleRev = function(date,day) {
+  const ss=getSchedState(date);ss.rev[day]=!ss.rev[day];
+  save();renderSchedule();renderDashboard();notify(ss.rev[day]?'Revision done ✓':'Unmarked.');
 }
-function toggleBool(date,key){
-  const ss=getSchedState(date);
-  ss[key]=!ss[key];
-  save();renderSchedule();
+window.toggleBool = function(date,key) {
+  const ss=getSchedState(date);ss[key]=!ss[key];save();renderSchedule();
 }
 
-// ═══ REVISION PAGE ═══
-function addRevMan(){
+// ── REVISION ──
+window.addRevMan = function() {
   const topic=document.getElementById('rev-topic').value.trim();
   const subj=document.getElementById('rev-subj').value.trim();
   const date=document.getElementById('rev-date').value;
@@ -719,72 +711,53 @@ function addRevMan(){
   notify('Revision scheduled: '+topic);
 }
 
-function renderRevision(){
-  // Build all due (from schedule + extra)
-  const due=[],upcoming=[],all=[];
+function renderRevision() {
+  const due=[],upcoming=[];
+  const markFn=(source,dateKey,extraId,srDay)=>`onclick="markRevPage('${source}','${dateKey||''}','${extraId||''}',${srDay})"`;
+  const revItem=r=>`<div class="task ${r.done?'done':''}" ${markFn(r.source,r.dateKey,r.id,r.srDay)}><div class="tcb"></div><div class="task-txt">${r.topic}${r.subject?` <span style="color:var(--dim);font-size:11px">· ${r.subject}</span>`:''}<small>Day +${r.srDay} · ${fmt(r.revDate)}${r.revDate<TODAY&&!r.done?' — OVERDUE':''}</small></div><span class="tbadge ${r.done?'tb-g':r.revDate<TODAY?'tb-r':'tb-a'}">${r.done?'Done':r.revDate<TODAY?'Overdue':'Due'}</span></div>`;
 
   SCHEDULE.filter(s=>!s.isGT).forEach(s=>{
     SR_DAYS.forEach(d=>{
-      const revDate=addDays(s.date,d);
-      const ss=getSchedState(s.date);
-      const done=ss.rev[d]||false;
-      const diff=daysDiff(TODAY,revDate);
-      const obj={source:'sched',dateKey:s.date,srDay:d,topic:s.subject,done,revDate,diff};
-      if(!done&&revDate<=TODAY)due.push(obj);
+      const rd=addDays(s.date,d),ss=getSchedState(s.date),done=ss.rev[d]||false,diff=daysDiff(TODAY,rd);
+      const obj={source:'sched',dateKey:s.date,srDay:d,topic:s.subject,done,revDate:rd,diff};
+      if(!done&&rd<=TODAY)due.push(obj);
       else if(!done&&diff>0&&diff<=7)upcoming.push(obj);
-      all.push(obj);
     });
   });
-
   ST.extraRevs.forEach(r=>{
     SR_DAYS.forEach(d=>{
-      const revDate=addDays(r.studiedOn,d);
-      const done=r.revDone?.[d]||false;
-      const diff=daysDiff(TODAY,revDate);
-      const obj={source:'extra',id:r.id,srDay:d,topic:r.topic,subject:r.subject,done,revDate,diff};
-      if(!done&&revDate<=TODAY)due.push(obj);
+      const rd=addDays(r.studiedOn,d),done=r.revDone?.[d]||false,diff=daysDiff(TODAY,rd);
+      const obj={source:'extra',id:r.id,srDay:d,topic:r.topic,subject:r.subject,done,revDate:rd,diff};
+      if(!done&&rd<=TODAY)due.push(obj);
       else if(!done&&diff>0&&diff<=7)upcoming.push(obj);
     });
   });
 
-  const revItem=(r,showDone)=>`
-    <div class="task ${r.done?'done':''}" onclick="markRevFromPage('${r.source}','${r.dateKey||''}','${r.id||''}',${r.srDay})">
-      <div class="tcb"></div>
-      <div class="task-txt">${r.topic}${r.subject?' <span style="color:var(--dim);font-size:11px">· '+r.subject+'</span>':''}
-        <small>Day +${r.srDay} review · ${fmt(r.revDate)}${r.revDate<TODAY&&!r.done?' — OVERDUE':''}</small>
-      </div>
-      <span class="tbadge ${r.done?'tb-g':r.revDate<TODAY?'tb-r':'tb-a'}">${r.done?'Done':r.revDate<TODAY?'Overdue':'Due'}</span>
-    </div>`;
+  document.getElementById('rev-due-list').innerHTML=due.length?due.map(revItem).join(''):'<div style="color:var(--dim);font-size:12px;padding:8px">No revisions due! 🎉</div>';
+  document.getElementById('rev-upcoming-list').innerHTML=upcoming.sort((a,b)=>a.diff-b.diff).map(revItem).join('')||'<div style="color:var(--dim);font-size:12px;padding:8px">None upcoming.</div>';
 
-  document.getElementById('rev-due-list').innerHTML=due.length?due.map(r=>revItem(r)):'<div style="color:var(--dim);font-size:12px;padding:8px">No revisions due today! 🎉</div>';
-  document.getElementById('rev-upcoming-list').innerHTML=upcoming.sort((a,b)=>a.diff-b.diff).map(r=>revItem(r)).join('')||'<div style="color:var(--dim);font-size:12px;padding:8px">None this week.</div>';
-
-  // All topics summary
-  const byTopic={};
+  const bySubj={};
   SCHEDULE.filter(s=>!s.isGT).forEach(s=>{
-    if(!byTopic[s.subject])byTopic[s.subject]={count:0,done:0};
-    byTopic[s.subject].count+=SR_DAYS.length;
-    const ss=getSchedState(s.date);
-    byTopic[s.subject].done+=Object.values(ss.rev||{}).filter(Boolean).length;
+    if(!bySubj[s.subject])bySubj[s.subject]={total:0,done:0};
+    bySubj[s.subject].total+=SR_DAYS.length;
+    bySubj[s.subject].done+=Object.values(getSchedState(s.date).rev||{}).filter(Boolean).length;
   });
-  document.getElementById('rev-all-list').innerHTML=Object.entries(byTopic).map(([subj,d])=>{
-    const p=d.count?Math.round(d.done/d.count*100):0;
-    return `<div class="pb-wrap"><div class="pb-lbl"><span>${subj}</span><span style="color:var(--dim)">${d.done}/${d.count} reviews · ${p}%</span></div><div class="pb"><div class="pb-fill" style="width:${p}%"></div></div></div>`;
+  document.getElementById('rev-all-list').innerHTML=Object.entries(bySubj).map(([s,d])=>{
+    const p=d.total?Math.round(d.done/d.total*100):0;
+    return`<div class="pb-wrap"><div class="pb-lbl"><span>${s}</span><span style="color:var(--dim)">${d.done}/${d.total} · ${p}%</span></div><div class="pb"><div class="pb-fill" style="width:${p}%"></div></div></div>`;
   }).join('');
 }
 
-function markRevFromPage(source,dateKey,extraId,srDay){
+window.markRevPage = function(source,dateKey,extraId,srDay) {
   if(source==='sched'){const ss=getSchedState(dateKey);ss.rev[srDay]=!ss.rev[srDay];}
   else{const r=ST.extraRevs.find(r=>r.id==extraId);if(r){if(!r.revDone)r.revDone={};r.revDone[srDay]=!r.revDone[srDay];}}
-  save();renderRevision();renderDashboard();notify('Revision updated!');
+  save();renderRevision();renderDashboard();notify('Updated!');
 }
 
-// ═══ MCQ LOG ═══
-function addMCQ(){
-  const subj=document.getElementById('m-subj').value.trim();
-  const type=document.getElementById('m-type').value.trim();
-  const total=+document.getElementById('m-total').value||0;
-  const correct=+document.getElementById('m-correct').value||0;
+// ── MCQ ──
+window.addMCQ = function() {
+  const subj=document.getElementById('m-subj').value.trim(),type=document.getElementById('m-type').value.trim();
+  const total=+document.getElementById('m-total').value||0,correct=+document.getElementById('m-correct').value||0;
   const notes=document.getElementById('m-notes').value.trim();
   if(!total)return;
   ST.mcqSessions.unshift({id:Date.now(),date:TODAY,subject:subj,type,total,correct,wrong:total-correct,notes});
@@ -792,35 +765,27 @@ function addMCQ(){
   ['m-subj','m-type','m-total','m-correct','m-notes'].forEach(id=>document.getElementById(id).value='');
   notify('MCQ session logged!');
 }
-function renderMCQ(){
-  const total=ST.mcqSessions.reduce((a,s)=>a+s.total,0);
-  const correct=ST.mcqSessions.reduce((a,s)=>a+s.correct,0);
+function renderMCQ() {
+  const total=ST.mcqSessions.reduce((a,s)=>a+s.total,0),correct=ST.mcqSessions.reduce((a,s)=>a+s.correct,0);
   document.getElementById('ms-total').textContent=total;
   document.getElementById('ms-correct').textContent=correct;
   document.getElementById('ms-wrong').textContent=total-correct;
   document.getElementById('ms-pct').textContent=(total?Math.round(correct/total*100):0)+'%';
   document.getElementById('mcq-list').innerHTML=ST.mcqSessions.length?ST.mcqSessions.map(s=>`
-    <div class="mcq-row">
-      <div style="color:var(--dim);font-size:10px">${fmt(s.date)}</div>
-      <div>${s.subject||'—'} <span style="color:var(--dim);font-size:10px">${s.type||''}</span>${s.notes?`<div style="font-size:10px;color:var(--dim)">${s.notes}</div>`:''}</div>
-      <div style="font-family:var(--font-h);font-weight:700">${s.total}</div>
-      <div style="color:var(--green)">✓${s.correct}</div>
-      <div style="color:var(--red)">✕${s.wrong}</div>
-      <div style="color:var(--amber)">${s.total?Math.round(s.correct/s.total*100):0}%</div>
-    </div>
-  `).join(''):'<div style="color:var(--dim);font-size:12px;padding:10px">No sessions logged yet.</div>';
+    <div class="mcq-row"><div style="color:var(--dim);font-size:10px">${fmt(s.date)}</div><div>${s.subject||'—'} <span style="color:var(--dim);font-size:10px">${s.type||''}</span>${s.notes?`<div style="font-size:10px;color:var(--dim)">${s.notes}</div>`:''}</div><div style="font-family:var(--font-h);font-weight:700">${s.total}</div><div style="color:var(--green)">✓${s.correct}</div><div style="color:var(--red)">✕${s.wrong}</div><div style="color:var(--amber)">${s.total?Math.round(s.correct/s.total*100):0}%</div></div>`).join('')
+    :'<div style="color:var(--dim);font-size:12px;padding:10px">No sessions yet.</div>';
 }
 
-// ═══ FOCUS TIMER ═══
-let tInterval=null,tSecs=25*60,tMode='study',tRunning=false,studyDur=25*60,brkDur=5*60,sessN=0;
-function setMode(name,study,brk){
+// ── FOCUS TIMER ──
+let tInterval=null,tSecs=25*60,tMode='study',tRunning=false,studyDur=25*60,brkDur=5*60;
+window.setMode = function(name,study,brk) {
   studyDur=study*60;brkDur=brk*60;tSecs=studyDur;tMode='study';tRunning=false;
   clearInterval(tInterval);
   document.querySelectorAll('.tmode').forEach(b=>b.classList.remove('active'));
   document.getElementById('tm-'+name).classList.add('active');
-  updateTDisp();
+  updateTD();
 }
-function tStart(){
+window.tStart = function() {
   if(tRunning)return;tRunning=true;
   document.getElementById('t-start').classList.add('on');
   tInterval=setInterval(()=>{
@@ -829,7 +794,6 @@ function tStart(){
       clearInterval(tInterval);tRunning=false;
       document.getElementById('t-start').classList.remove('on');
       if(tMode==='study'){
-        sessN++;
         if(ST.focusTime.date!==TODAY)ST.focusTime={total:0,sessions:0,date:TODAY};
         ST.focusTime.total+=studyDur;ST.focusTime.sessions=(ST.focusTime.sessions||0)+1;
         save();tMode='break';tSecs=brkDur;
@@ -844,67 +808,66 @@ function tStart(){
       }
       renderFocus();
     }
-    updateTDisp();
+    updateTD();
   },1000);
 }
-function tPause(){clearInterval(tInterval);tRunning=false;document.getElementById('t-start').classList.remove('on');}
-function tReset(){tPause();tSecs=studyDur;tMode='study';document.getElementById('t-lbl').textContent='📚 STUDY SESSION';document.getElementById('t-disp').style.color='var(--green)';updateTDisp();}
-function updateTDisp(){
-  const m=Math.floor(tSecs/60).toString().padStart(2,'0');
-  const s=(tSecs%60).toString().padStart(2,'0');
-  document.getElementById('t-disp').textContent=m+':'+s;
-}
+window.tPause=function(){clearInterval(tInterval);tRunning=false;document.getElementById('t-start').classList.remove('on');}
+window.tReset=function(){tPause();tSecs=studyDur;tMode='study';document.getElementById('t-lbl').textContent='📚 STUDY SESSION';document.getElementById('t-disp').style.color='var(--green)';updateTD();}
+function updateTD(){const m=Math.floor(tSecs/60).toString().padStart(2,'0'),s=(tSecs%60).toString().padStart(2,'0');document.getElementById('t-disp').textContent=m+':'+s;}
 function renderFocus(){
   if(ST.focusTime.date!==TODAY)ST.focusTime={total:0,sessions:0,date:TODAY};
   const mins=Math.round(ST.focusTime.total/60);
   document.getElementById('t-total').textContent=Math.floor(mins/60)+'h '+(mins%60)+'m';
   document.getElementById('t-sess-lbl').textContent=(ST.focusTime.sessions||0)+' sessions today';
-  const d=document.getElementById('t-dots');
-  d.innerHTML=Array.from({length:4},(_,i)=>`<span class="sdot ${i<(ST.focusTime.sessions||0)?'on':''}"></span>`).join('');
+  document.getElementById('t-dots').innerHTML=Array.from({length:4},(_,i)=>`<span class="sdot ${i<(ST.focusTime.sessions||0)?'on':''}"></span>`).join('');
 }
 
-// ═══ WEAK TOPICS ═══
-function addWeak(){
-  const name=document.getElementById('w-name').value.trim();
-  const subj=document.getElementById('w-subj').value.trim();
-  const reason=document.getElementById('w-reason').value;
+// ── WEAK TOPICS ──
+window.addWeak = function() {
+  const name=document.getElementById('w-name').value.trim(),subj=document.getElementById('w-subj').value.trim(),reason=document.getElementById('w-reason').value;
   if(!name)return;
   const ex=ST.weakTopics.find(w=>w.name.toLowerCase()===name.toLowerCase());
-  if(ex)ex.count++;
-  else ST.weakTopics.push({id:Date.now(),name,subject:subj||'General',reason,count:1});
+  if(ex)ex.count++;else ST.weakTopics.push({id:Date.now(),name,subject:subj||'General',reason,count:1});
   save();renderWeak();
   document.getElementById('w-name').value='';document.getElementById('w-subj').value='';
   notify(ex?name+' count: '+ex.count:'Flagged: '+name);
 }
-function removeWeak(id){ST.weakTopics=ST.weakTopics.filter(w=>w.id!=id);save();renderWeak();}
+window.removeWeak = function(id) {ST.weakTopics=ST.weakTopics.filter(w=>w.id!=id);save();renderWeak();}
 function renderWeak(){
-  const el=document.getElementById('weak-list');
   const s=[...ST.weakTopics].sort((a,b)=>b.count-a.count);
-  el.innerHTML=s.length?s.map(w=>`
-    <div class="weak-item" style="${w.count>=3?'border-color:rgba(255,82,82,0.35)':'border-color:rgba(255,171,0,0.2)'}">
+  document.getElementById('weak-list').innerHTML=s.length?s.map(w=>`
+    <div class="weak-item" style="border-color:${w.count>=3?'rgba(255,82,82,0.35)':'rgba(255,171,0,0.2)'}">
       <div class="wdot" style="background:${w.count>=3?'var(--red)':'var(--amber)'}"></div>
-      <div style="flex:1">
-        <div style="font-size:13px">${w.name}</div>
-        <div style="font-size:10px;color:var(--dim);margin-top:1px">${w.subject} · ${w.reason}</div>
-      </div>
+      <div style="flex:1"><div style="font-size:13px">${w.name}</div><div style="font-size:10px;color:var(--dim);margin-top:1px">${w.subject} · ${w.reason}</div></div>
       <div style="display:flex;align-items:center;gap:8px">
         <div style="font-family:var(--font-h);font-weight:700;font-size:14px;color:${w.count>=3?'var(--red)':'var(--amber)'}">${w.count}×</div>
-        ${w.count>=3?'<span style="font-size:9px;padding:2px 7px;border:1px solid rgba(255,82,82,0.4);color:var(--red);background:var(--red-bg);letter-spacing:1px;text-transform:uppercase">→ Block 1</span>':''}
-        <div style="cursor:pointer;color:var(--dim);font-size:12px;padding:0 4px" onclick="removeWeak(${w.id})">✕</div>
+        ${w.count>=3?'<span style="font-size:9px;padding:2px 7px;border:1px solid rgba(255,82,82,0.4);color:var(--red);background:var(--red-bg)">→ Block 1</span>':''}
+        <div style="cursor:pointer;color:var(--dim);padding:0 4px" onclick="removeWeak(${w.id})">✕</div>
       </div>
-    </div>
-  `).join(''):'<div style="color:var(--dim);font-size:12px;padding:10px">No weak topics flagged. Good work.</div>';
+    </div>`).join(''):'<div style="color:var(--dim);font-size:12px;padding:10px">No weak topics. Good work.</div>';
 }
 
-// ═══ RENDER ═══
-function render(){
-  renderDashboard();renderSchedule();renderRevision();renderMCQ();renderFocus();renderWeak();
-}
+// ── RENDER ALL ──
+function render(){renderDashboard();renderSchedule();renderRevision();renderMCQ();renderFocus();renderWeak();}
 
-// INIT
-document.getElementById('rev-date').value=TODAY;
-render();
-if(!ST.todayTasks['t-'+TODAY])genToday();
+// ── INIT ──
+window.showAF = showAF;
+document.getElementById('rev-date').value = TODAY;
+
+// Loading animation
+let loadPct=0;
+const loadInv=setInterval(()=>{
+  loadPct+=20;
+  document.getElementById('loading-fill').style.width=loadPct+'%';
+  if(loadPct>=100)clearInterval(loadInv);
+},150);
+
+loadFromFirestore().then(()=>{
+  document.getElementById('loading-screen').style.display='none';
+  if(!ST.todayTasks['t-'+TODAY])genToday();
+  render();
+});
+
 </script>
 </body>
 </html>
