@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrepOS — INI-CET Control Panel</title>
+<title>PrepOS v3 — INI-CET Control Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --bg:#080a09;--s1:#0f1410;--s2:#161c17;--s3:#1d261e;
   --border:#232e24;--border2:#2a3a2b;
-  --text:#e4ede5;--dim:#4a6b4c;--dim2:#3a503b;
-  --green:#00e676;--green2:#00c853;--green-bg:rgba(0,230,118,0.07);
+  --text:#e4ede5;--dim:#4a6b4c;
+  --green:#00e676;--green-bg:rgba(0,230,118,0.07);
   --amber:#ffab00;--amber-bg:rgba(255,171,0,0.07);
   --red:#ff5252;--red-bg:rgba(255,82,82,0.07);
   --blue:#40c4ff;--blue-bg:rgba(64,196,255,0.07);
@@ -22,56 +22,70 @@
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:14px;min-height:100vh;}
 
-/* SYNC INDICATOR */
-.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--dim);display:inline-block;margin-right:6px;transition:background 0.3s;}
+/* SYNC */
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--dim);display:inline-block;margin-right:5px;transition:background 0.3s;}
 .sync-dot.syncing{background:var(--amber);animation:pulse 1s infinite;}
 .sync-dot.synced{background:var(--green);}
 .sync-dot.error{background:var(--red);}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
 /* NAV */
-.nav{position:sticky;top:0;z-index:100;background:rgba(8,10,9,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:50px;gap:10px;}
-.nav-brand{font-family:var(--font-h);font-size:16px;font-weight:800;color:var(--green);letter-spacing:-0.5px;white-space:nowrap;}
-.nav-brand small{color:var(--dim);font-weight:400;font-size:11px;margin-left:5px;}
-.nav-tabs{display:flex;gap:1px;overflow-x:auto;}
-.nav-tab{padding:5px 12px;font-family:var(--font-b);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:var(--dim);white-space:nowrap;transition:all 0.15s;}
+.nav{position:sticky;top:0;z-index:200;background:rgba(8,10,9,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;height:50px;gap:8px;}
+.nav-brand{font-family:var(--font-h);font-size:16px;font-weight:800;color:var(--green);white-space:nowrap;margin-right:8px;}
+.nav-brand small{color:var(--dim);font-weight:400;font-size:10px;margin-left:4px;}
+.nav-tabs{display:flex;gap:1px;overflow-x:auto;flex:1;}
+.nav-tab{padding:5px 11px;font-family:var(--font-b);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:var(--dim);white-space:nowrap;transition:all 0.15s;}
 .nav-tab.active{background:var(--green-bg);color:var(--green);}
 .nav-tab:hover:not(.active){color:var(--text);}
-.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.nav-date{font-size:10px;color:var(--dim);white-space:nowrap;}
-.sync-label{font-size:10px;color:var(--dim);white-space:nowrap;display:flex;align-items:center;}
+.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.sync-label{font-size:10px;color:var(--dim);display:flex;align-items:center;white-space:nowrap;}
+.countdown-nav{font-family:var(--font-h);font-size:12px;font-weight:700;color:var(--red);white-space:nowrap;}
 
 /* LAYOUT */
-.app{max-width:1140px;margin:0 auto;padding:20px 16px;}
+.app{max-width:1160px;margin:0 auto;padding:20px 16px;}
 .page{display:none;}.page.active{display:block;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
 
-/* LOADING SCREEN */
+/* LOADING */
 .loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
-.loading-screen h2{font-family:var(--font-h);font-size:28px;font-weight:800;color:var(--green);}
-.loading-screen p{color:var(--dim);font-size:12px;letter-spacing:2px;text-transform:uppercase;}
-.loading-bar{width:200px;height:2px;background:var(--border);}
-.loading-fill{height:100%;background:var(--green);width:0%;transition:width 0.5s;}
+.loading-screen h2{font-family:var(--font-h);font-size:32px;font-weight:800;color:var(--green);}
+.loading-screen p{color:var(--dim);font-size:11px;letter-spacing:3px;text-transform:uppercase;}
+.loading-bar{width:220px;height:2px;background:var(--border);}
+.loading-fill{height:100%;background:var(--green);width:0%;transition:width 0.4s;}
 
 /* CARDS */
 .card{background:var(--s1);border:1px solid var(--border);padding:16px;margin-bottom:10px;}
 .card-ttl{font-family:var(--font-h);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
 
 /* STAT ROW */
-.stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:14px;}
-.stat-box{background:var(--s1);padding:12px 10px;}
+.stat-row{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:14px;}
+.stat-box{background:var(--s1);padding:11px 10px;}
 .stat-v{font-family:var(--font-h);font-size:20px;font-weight:800;color:var(--green);display:block;line-height:1;}
 .stat-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-top:4px;}
+
+/* STREAK */
+.streak-box{background:linear-gradient(135deg,rgba(255,171,0,0.12),rgba(255,171,0,0.04));border:1px solid rgba(255,171,0,0.35);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;gap:16px;}
+.streak-fire{font-size:32px;line-height:1;}
+.streak-num{font-family:var(--font-h);font-size:42px;font-weight:800;color:var(--amber);line-height:1;}
+.streak-lbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-top:4px;}
+.streak-best{font-size:11px;color:var(--dim);margin-left:auto;text-align:right;}
+
+/* COUNTDOWN */
+.countdown-box{background:linear-gradient(135deg,rgba(255,82,82,0.1),rgba(255,82,82,0.03));border:1px solid rgba(255,82,82,0.3);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;gap:16px;}
+.countdown-num{font-family:var(--font-h);font-size:42px;font-weight:800;color:var(--red);line-height:1;}
+.countdown-lbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-top:4px;}
 
 /* SEC LABEL */
 .sec{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--dim);margin-bottom:10px;margin-top:20px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .sec:first-child{margin-top:0;}
 
-/* TODAY REVIEW BOX */
+/* REV BOX */
 .today-rev-box{background:rgba(255,171,0,0.08);border:1px solid rgba(255,171,0,0.3);padding:14px;margin-bottom:12px;}
 .today-rev-title{font-family:var(--font-h);font-size:12px;font-weight:700;color:var(--amber);margin-bottom:10px;letter-spacing:2px;text-transform:uppercase;}
 .rev-chip{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border2);padding:5px 10px;margin:3px;font-size:12px;cursor:pointer;transition:all 0.12s;}
-.rev-chip:hover{border-color:var(--amber);color:var(--amber);}
+.rev-chip:hover{border-color:var(--amber);}
 .rev-chip.done{opacity:0.4;text-decoration:line-through;}
 .rev-chip-day{font-size:9px;color:var(--amber);letter-spacing:1px;}
 
@@ -90,8 +104,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:
 .tb-g{color:var(--green);border-color:rgba(0,230,118,0.3);background:var(--green-bg);}
 .tb-a{color:var(--amber);border-color:rgba(255,171,0,0.3);background:var(--amber-bg);}
 .tb-b{color:var(--blue);border-color:rgba(64,196,255,0.3);background:var(--blue-bg);}
+.tb-p{color:var(--purple);border-color:rgba(206,147,216,0.3);background:var(--purple-bg);}
 
-/* PROG BAR */
+/* PROGRESS BAR */
 .pb-wrap{margin-bottom:8px;}
 .pb-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-bottom:4px;}
 .pb{height:3px;background:var(--border2);}
@@ -100,13 +115,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:
 /* SCHEDULE TABLE */
 .sched-table{width:100%;border-collapse:collapse;font-size:12px;}
 .sched-table th{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
-.sched-table td{padding:7px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
+.sched-table td{padding:7px 10px;border-bottom:1px solid var(--border);white-space:nowrap;vertical-align:middle;}
 .sched-table tr:hover td{background:var(--s2);}
 .sched-table tr.today-row td{background:rgba(0,230,118,0.06);}
 .sched-table tr.gt-row td{background:rgba(255,82,82,0.06);}
 .sched-table tr.past-row td{opacity:0.45;}
 .gt-badge{font-size:9px;padding:2px 8px;background:var(--red-bg);border:1px solid rgba(255,82,82,0.4);color:var(--red);letter-spacing:1px;text-transform:uppercase;}
 .subj-badge{font-size:9px;padding:2px 8px;border:1px solid var(--border2);color:var(--dim);}
+.pyq-badge{font-size:9px;padding:1px 6px;border:1px solid;letter-spacing:1px;cursor:pointer;}
+.pyq-H{color:var(--red);border-color:rgba(255,82,82,0.4);background:var(--red-bg);}
+.pyq-M{color:var(--amber);border-color:rgba(255,171,0,0.4);background:var(--amber-bg);}
+.pyq-L{color:var(--dim);border-color:var(--border2);}
 .rev-date-cell{font-size:10px;color:var(--dim);cursor:pointer;}
 .rev-date-cell.due{color:var(--red);font-weight:600;}
 .rev-date-cell.today-rev{color:var(--amber);font-weight:600;}
@@ -115,12 +134,42 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:
 .bool-t{color:var(--green);font-size:11px;}
 .bool-f{color:var(--dim);font-size:11px;}
 
+/* CONFIDENCE STARS */
+.conf-stars{display:flex;gap:3px;cursor:pointer;}
+.star{font-size:13px;color:var(--border2);transition:color 0.1s;}
+.star.on{color:var(--amber);}
+
+/* GT GRAPH */
+.gt-graph{padding:16px 0 8px;position:relative;}
+.gt-bars{display:flex;align-items:flex-end;gap:12px;height:120px;padding:0 8px;}
+.gt-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
+.gt-bar{width:100%;background:var(--border2);position:relative;transition:height 0.5s;min-height:4px;cursor:pointer;}
+.gt-bar-fill{position:absolute;bottom:0;left:0;right:0;background:var(--green);transition:height 0.5s;}
+.gt-bar-val{font-family:var(--font-h);font-size:12px;font-weight:700;color:var(--green);}
+.gt-bar-lbl{font-size:10px;color:var(--dim);letter-spacing:1px;}
+.gt-axis{height:1px;background:var(--border);margin:4px 8px;}
+
+/* JOURNAL */
+.journal-entry{padding:12px;border:1px solid var(--border);margin-bottom:6px;background:var(--s1);}
+.journal-date{font-size:10px;color:var(--amber);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.journal-field{margin-bottom:6px;}
+.journal-field label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:3px;}
+.journal-field p{font-size:12px;color:var(--text);line-height:1.5;}
+
+/* SLEEP/EXERCISE */
+.health-row{display:flex;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--border);margin-bottom:4px;background:var(--s1);}
+.health-date{font-size:10px;color:var(--dim);min-width:70px;}
+.health-check{display:flex;align-items:center;gap:6px;cursor:pointer;padding:3px 8px;border:1px solid var(--border2);font-size:11px;transition:all 0.12s;}
+.health-check.on{border-color:var(--green);color:var(--green);background:var(--green-bg);}
+.health-check.sleep-on{border-color:var(--blue);color:var(--blue);background:var(--blue-bg);}
+
 /* INPUTS */
-.inp{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font-b);font-size:13px;padding:7px 10px;outline:none;transition:border-color 0.15s;}
+.inp{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font-b);font-size:13px;padding:7px 10px;outline:none;transition:border-color 0.15s;width:100%;}
 .inp:focus{border-color:var(--green);}
 .inp::placeholder{color:var(--dim);}
 select.inp{cursor:pointer;}
 .inp-sm{padding:5px 8px;font-size:12px;}
+textarea.inp{resize:vertical;min-height:60px;line-height:1.5;}
 
 /* BUTTONS */
 .btn{padding:8px 16px;font-family:var(--font-b);font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border:1px solid;transition:all 0.15s;}
@@ -128,93 +177,127 @@ select.inp{cursor:pointer;}
 .btn-g:hover,.btn-g.on{background:var(--green);color:#000;}
 .btn-r{border-color:var(--red);color:var(--red);background:transparent;}
 .btn-r:hover{background:var(--red);color:#000;}
+.btn-b{border-color:var(--blue);color:var(--blue);background:transparent;}
+.btn-b:hover{background:var(--blue);color:#000;}
 .btn-d{border-color:var(--border2);color:var(--dim);background:transparent;}
 .btn-d:hover{border-color:var(--text);color:var(--text);}
 
 /* TIMER */
 .timer-wrap{max-width:380px;margin:0 auto;padding-top:16px;}
-.timer-disp{font-family:var(--font-h);font-size:68px;font-weight:800;color:var(--green);text-align:center;padding:28px 0 12px;letter-spacing:-2px;line-height:1;}
-.timer-lbl{text-align:center;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--dim);margin-bottom:20px;}
-.timer-modes{display:flex;gap:4px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+.timer-disp{font-family:var(--font-h);font-size:68px;font-weight:800;color:var(--green);text-align:center;padding:24px 0 10px;letter-spacing:-2px;line-height:1;}
+.timer-lbl{text-align:center;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--dim);margin-bottom:18px;}
+.timer-modes{display:flex;gap:4px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
 .tmode{padding:5px 12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:1px solid var(--border2);color:var(--dim);background:transparent;font-family:var(--font-b);transition:all 0.12s;}
 .tmode.active{border-color:var(--green);color:var(--green);background:var(--green-bg);}
 .timer-btns{display:flex;gap:8px;justify-content:center;margin-bottom:16px;}
-.sess-dots{text-align:center;}
+.sess-dots{text-align:center;margin-bottom:16px;}
 .sdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--border2);margin:0 2px;}
 .sdot.on{background:var(--green);}
 
 /* WEAK */
-.weak-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--red-bg);background:var(--red-bg);margin-bottom:3px;}
+.weak-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid rgba(255,82,82,0.15);background:var(--red-bg);margin-bottom:3px;}
 .wdot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;}
 
 /* MCQ ROW */
-.mcq-row{display:grid;grid-template-columns:80px 1fr 50px 60px 60px 55px;gap:8px;align-items:center;padding:7px 10px;border:1px solid var(--border);margin-bottom:3px;background:var(--s1);font-size:12px;}
+.mcq-row{display:grid;grid-template-columns:75px 1fr 45px 55px 55px 50px;gap:8px;align-items:center;padding:7px 10px;border:1px solid var(--border);margin-bottom:3px;background:var(--s1);font-size:12px;}
 
 /* ADD FORM */
 .aform{background:var(--s2);border:1px solid var(--border2);padding:14px;margin-bottom:12px;display:none;}
 .aform-ttl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:10px;}
 .frow{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;}
+.frow>.inp,.frow>select.inp{flex:1;min-width:120px;}
 
 /* NOTIF */
 .notif{position:fixed;bottom:16px;right:16px;z-index:9999;background:var(--green);color:#000;padding:9px 16px;font-size:12px;font-weight:600;letter-spacing:1px;transform:translateY(60px);opacity:0;transition:all 0.3s;}
 .notif.show{transform:translateY(0);opacity:1;}
 
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--border2);}
+/* SEARCH */
+.search-bar{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font-b);font-size:13px;padding:8px 12px;outline:none;width:100%;margin-bottom:12px;}
+.search-bar:focus{border-color:var(--green);}
+.search-bar::placeholder{color:var(--dim);}
 
-@media(max-width:700px){
-  .grid2{grid-template-columns:1fr;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);}
+
+@media(max-width:720px){
+  .grid2,.grid3{grid-template-columns:1fr;}
   .stat-row{grid-template-columns:repeat(3,1fr);}
-  .nav-date{display:none;}
   .mcq-row{grid-template-columns:60px 1fr 40px 40px;}
+  .countdown-nav,.nav-right .streak-num{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div class="loading-screen" id="loading-screen">
   <h2>PrepOS</h2>
-  <p>Connecting to sync...</p>
+  <p>Loading your data...</p>
   <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
 </div>
 
 <nav class="nav">
-  <div class="nav-brand">PrepOS <small>INI-CET</small></div>
+  <div class="nav-brand">PrepOS <small>v3</small></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="go('dashboard')">Dashboard</button>
     <button class="nav-tab" onclick="go('schedule')">Schedule</button>
     <button class="nav-tab" onclick="go('revision')">Revision</button>
     <button class="nav-tab" onclick="go('mcq')">MCQ Log</button>
+    <button class="nav-tab" onclick="go('gt')">GT Scores</button>
+    <button class="nav-tab" onclick="go('journal')">Journal</button>
+    <button class="nav-tab" onclick="go('health')">Health</button>
     <button class="nav-tab" onclick="go('focus')">Focus</button>
-    <button class="nav-tab" onclick="go('weak')">Weak Topics</button>
+    <button class="nav-tab" onclick="go('weak')">Weak</button>
   </div>
   <div class="nav-right">
-    <div class="sync-label"><span class="sync-dot" id="sync-dot"></span><span id="sync-label">Connecting...</span></div>
-    <div class="nav-date" id="nav-date"></div>
+    <div class="countdown-nav" id="nav-countdown"></div>
+    <div class="sync-label"><span class="sync-dot" id="sync-dot"></span><span id="sync-label">...</span></div>
   </div>
 </nav>
 
 <div class="app">
 
-<!-- DASHBOARD -->
+<!-- ═══ DASHBOARD ═══ -->
 <div class="page active" id="page-dashboard">
+  <!-- Streak + Countdown -->
+  <div class="grid2" style="margin-bottom:12px">
+    <div class="streak-box">
+      <div class="streak-fire">🔥</div>
+      <div>
+        <div class="streak-num" id="streak-num">0</div>
+        <div class="streak-lbl">Day Streak</div>
+      </div>
+      <div class="streak-best" id="streak-best"></div>
+    </div>
+    <div class="countdown-box">
+      <div style="font-size:28px">⏳</div>
+      <div>
+        <div class="countdown-num" id="countdown-num">--</div>
+        <div class="countdown-lbl">Days to INI-CET</div>
+      </div>
+      <div style="margin-left:auto;text-align:right;font-size:11px;color:var(--dim)" id="exam-date-lbl"></div>
+    </div>
+  </div>
+
   <div class="stat-row" id="stat-row"></div>
+
   <div class="grid2">
     <div>
       <div class="today-rev-box" id="today-rev-box"></div>
-      <div class="sec">Today's Study Blocks <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="genToday()">↻ Generate</button></div>
+      <div class="sec">Today's Blocks <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="genToday()">↻ Generate</button></div>
       <div id="today-study-tasks"></div>
-      <div class="sec" style="margin-top:14px">MCQs</div>
+      <div class="sec" style="margin-top:12px">MCQs</div>
       <div id="today-mcq-tasks"></div>
-      <div class="sec" style="margin-top:14px">Anki</div>
+      <div class="sec" style="margin-top:12px">Anki</div>
       <div class="task" id="anki-task" onclick="toggleAnki()">
         <div class="tcb"></div>
-        <div class="task-txt">Complete all Anki due cards (300–400 reviews + 20–25 new)
-          <small>IF dinner ends → THEN open Anki immediately</small>
-        </div>
+        <div class="task-txt">Complete all Anki due cards (300–400 reviews + 20–25 new)<small>IF dinner ends → THEN Anki immediately</small></div>
         <span class="tbadge tb-r">Critical</span>
+      </div>
+      <!-- Sleep/Exercise Quick Log -->
+      <div class="sec" style="margin-top:12px">Today's Health</div>
+      <div style="display:flex;gap:8px">
+        <div class="health-check" id="q-sleep" onclick="quickHealth('sleep')">😴 Sleep 7.5h</div>
+        <div class="health-check" id="q-exercise" onclick="quickHealth('exercise')">🏃 Exercise done</div>
+        <div class="health-check" id="q-nophone" onclick="quickHealth('nophone')">📵 No phone AM</div>
       </div>
     </div>
     <div>
@@ -231,22 +314,66 @@ select.inp{cursor:pointer;}
           <div><div style="font-size:10px;color:var(--dim);margin-bottom:3px">Fact Bk</div><input class="inp inp-sm" type="number" id="i-fb" placeholder="0" oninput="updateNums()"></div>
         </div>
       </div>
-      <div class="sec">Weak Topics — Priority</div>
+      <div class="sec">Subject Confidence</div>
+      <div id="dash-confidence"></div>
+      <div class="sec" style="margin-top:12px">Weak Topics</div>
       <div id="dash-weak"></div>
-      <div class="sec" style="margin-top:14px">Subject Progress</div>
-      <div id="dash-progress"></div>
+    </div>
+  </div>
+
+  <!-- Quick Journal -->
+  <div class="sec" style="margin-top:16px">End-of-Day Journal <span style="color:var(--dim);font-size:10px">(Today)</span></div>
+  <div class="card">
+    <div class="grid3" style="gap:10px">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:5px">What I studied today</div>
+        <textarea class="inp" id="j-studied" placeholder="Topics covered..." style="min-height:70px"></textarea>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:5px">What was unclear</div>
+        <textarea class="inp" id="j-unclear" placeholder="Doubts, confusions..." style="min-height:70px"></textarea>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:5px">Tomorrow's plan</div>
+        <textarea class="inp" id="j-tomorrow" placeholder="Block 1 topic, focus areas..." style="min-height:70px"></textarea>
+      </div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="btn btn-g" style="font-size:10px;padding:6px 16px" onclick="saveJournal()">Save Journal Entry</button>
+      <span id="journal-saved" style="font-size:11px;color:var(--green);align-self:center;display:none">✓ Saved</span>
     </div>
   </div>
 </div>
 
-<!-- SCHEDULE -->
+<!-- ═══ SCHEDULE ═══ -->
 <div class="page" id="page-schedule">
-  <div class="sec">Full Schedule — Click revision dates to mark done</div>
+  <div class="sec">Full Schedule — Click to mark revisions & toggle fields
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-b" style="font-size:9px;padding:3px 10px" onclick="showAF('af-sched-edit')">✏️ Edit Schedule</button>
+    </div>
+  </div>
+
+  <!-- Schedule editor -->
+  <div class="aform" id="af-sched-edit">
+    <div class="aform-ttl">Edit Schedule Entry</div>
+    <div style="font-size:11px;color:var(--dim);margin-bottom:10px">Click any subject name in the table to edit it.</div>
+    <div class="frow">
+      <input class="inp" id="edit-date" placeholder="Date (YYYY-MM-DD)" style="max-width:160px">
+      <input class="inp" id="edit-subject" placeholder="New subject name">
+      <select class="inp" id="edit-isgt" style="max-width:120px">
+        <option value="false">Study Day</option>
+        <option value="true">GT Day</option>
+      </select>
+      <button class="btn btn-g" onclick="applySchedEdit()">Apply</button>
+      <button class="btn btn-d" onclick="showAF('af-sched-edit')">Cancel</button>
+    </div>
+  </div>
+
   <div style="overflow-x:auto">
     <table class="sched-table">
       <thead><tr>
-        <th>Date</th><th>Day</th><th>Subject</th>
-        <th>Day+1</th><th>Day+3</th><th>Day+7</th><th>Day+15</th><th>Day+30</th>
+        <th>Date</th><th>Day</th><th>Subject</th><th>PYQ</th>
+        <th>D+1</th><th>D+3</th><th>D+7</th><th>D+15</th><th>D+30</th>
         <th>MCQ</th><th>Anki</th><th>GT Rev</th><th>Weak Sub</th><th>Fact Bk</th>
       </tr></thead>
       <tbody id="sched-body"></tbody>
@@ -254,7 +381,7 @@ select.inp{cursor:pointer;}
   </div>
 </div>
 
-<!-- REVISION -->
+<!-- ═══ REVISION ═══ -->
 <div class="page" id="page-revision">
   <div class="sec">Due Today / Overdue <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="showAF('af-rev')">+ Log Study</button></div>
   <div class="aform" id="af-rev">
@@ -262,7 +389,7 @@ select.inp{cursor:pointer;}
     <div class="frow">
       <input class="inp" id="rev-topic" placeholder="Topic name" style="flex:2">
       <input class="inp" id="rev-subj" placeholder="Subject">
-      <input class="inp" type="date" id="rev-date">
+      <input class="inp" type="date" id="rev-date" style="max-width:160px">
       <button class="btn btn-g" onclick="addRevMan()">Schedule</button>
     </div>
     <div style="font-size:11px;color:var(--dim)">Auto-schedules Day 1 → 3 → 7 → 15 → 30</div>
@@ -274,22 +401,34 @@ select.inp{cursor:pointer;}
   <div id="rev-all-list"></div>
 </div>
 
-<!-- MCQ LOG -->
+<!-- ═══ MCQ LOG ═══ -->
 <div class="page" id="page-mcq">
-  <div class="sec">MCQ Log <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="showAF('af-mcq')">+ Log Session</button></div>
+  <div class="sec">MCQ Session Log <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="showAF('af-mcq')">+ Log Session</button></div>
   <div class="aform" id="af-mcq">
     <div class="aform-ttl">Log MCQ Session</div>
     <div class="frow">
       <input class="inp" id="m-subj" placeholder="Subject">
-      <input class="inp" id="m-type" placeholder="Type (PYQ/Mixed/Topic)">
-      <input class="inp inp-sm" type="number" id="m-total" placeholder="Total">
-      <input class="inp inp-sm" type="number" id="m-correct" placeholder="Correct">
-      <input class="inp" id="m-notes" placeholder="Notes / weak topics">
+      <input class="inp" id="m-type" placeholder="Type (PYQ / Mixed / Topic)">
+      <input class="inp inp-sm" type="number" id="m-total" placeholder="Total" style="max-width:90px">
+      <input class="inp inp-sm" type="number" id="m-correct" placeholder="Correct" style="max-width:90px">
+      <input class="inp" id="m-notes" placeholder="Notes / weak topics found">
       <button class="btn btn-g" onclick="addMCQ()">Save</button>
+    </div>
+    <!-- Confidence rating after MCQ -->
+    <div style="margin-top:10px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)">Confidence:</span>
+      <div class="conf-stars" id="mcq-conf-stars">
+        <span class="star" onclick="setMcqConf(1)">★</span>
+        <span class="star" onclick="setMcqConf(2)">★</span>
+        <span class="star" onclick="setMcqConf(3)">★</span>
+        <span class="star" onclick="setMcqConf(4)">★</span>
+        <span class="star" onclick="setMcqConf(5)">★</span>
+      </div>
+      <span style="font-size:11px;color:var(--dim)" id="mcq-conf-lbl">Not rated</span>
     </div>
   </div>
   <div class="card" style="margin-bottom:12px">
-    <div class="card-ttl">All-Time Accuracy</div>
+    <div class="card-ttl">All-Time Stats</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
       <div><div style="font-family:var(--font-h);font-size:22px;font-weight:800;color:var(--green)" id="ms-total">0</div><div style="font-size:9px;color:var(--dim);margin-top:3px;letter-spacing:2px;text-transform:uppercase">Total</div></div>
       <div><div style="font-family:var(--font-h);font-size:22px;font-weight:800;color:var(--green)" id="ms-correct">0</div><div style="font-size:9px;color:var(--dim);margin-top:3px;letter-spacing:2px;text-transform:uppercase">Correct</div></div>
@@ -300,10 +439,65 @@ select.inp{cursor:pointer;}
   <div id="mcq-list"></div>
 </div>
 
-<!-- FOCUS -->
+<!-- ═══ GT SCORES ═══ -->
+<div class="page" id="page-gt">
+  <div class="sec">Grand Test Score Tracker</div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-ttl">Score Trend</div>
+    <div class="gt-graph">
+      <div class="gt-bars" id="gt-bars"></div>
+      <div class="gt-axis"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;text-align:center">
+      <div><div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Best Score</div><div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:var(--green)" id="gt-best">--</div></div>
+      <div><div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Latest Score</div><div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:var(--amber)" id="gt-latest">--</div></div>
+      <div><div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Improvement</div><div style="font-family:var(--font-h);font-size:20px;font-weight:800" id="gt-improvement">--</div></div>
+    </div>
+  </div>
+
+  <div class="sec">Log GT Score <button class="btn btn-g" style="font-size:9px;padding:3px 10px" onclick="showAF('af-gt')">+ Add Score</button></div>
+  <div class="aform" id="af-gt">
+    <div class="aform-ttl">Log Grand Test Score</div>
+    <div class="frow">
+      <select class="inp" id="gt-num" style="max-width:100px">
+        <option>GT 1</option><option>GT 2</option><option>GT 3</option><option>GT 4</option><option>GT 5</option>
+      </select>
+      <input class="inp inp-sm" type="number" id="gt-score" placeholder="Score (e.g. 142)" style="max-width:120px">
+      <input class="inp inp-sm" type="number" id="gt-total" placeholder="Out of (e.g. 200)" style="max-width:120px">
+      <input class="inp inp-sm" type="number" id="gt-rank" placeholder="Rank (optional)" style="max-width:120px">
+      <input class="inp" id="gt-notes" placeholder="Notes / weak areas found">
+      <button class="btn btn-g" onclick="addGTScore()">Save</button>
+    </div>
+  </div>
+
+  <div id="gt-list"></div>
+</div>
+
+<!-- ═══ JOURNAL ═══ -->
+<div class="page" id="page-journal">
+  <div class="sec">Daily Journal <span style="color:var(--dim);font-size:9px">All entries</span></div>
+  <input class="search-bar" placeholder="Search journal entries..." oninput="searchJournal(this.value)">
+  <div id="journal-list"></div>
+</div>
+
+<!-- ═══ HEALTH ═══ -->
+<div class="page" id="page-health">
+  <div class="sec">Sleep & Exercise Log</div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-ttl">This Week</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
+      <div><div style="font-family:var(--font-h);font-size:22px;font-weight:800;color:var(--blue)" id="h-sleep-streak">0</div><div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px">Sleep Days</div></div>
+      <div><div style="font-family:var(--font-h);font-size:22px;font-weight:800;color:var(--green)" id="h-ex-streak">0</div><div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px">Exercise Days</div></div>
+      <div><div style="font-family:var(--font-h);font-size:22px;font-weight:800;color:var(--purple)" id="h-nophone-streak">0</div><div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px">No-Phone AM</div></div>
+    </div>
+  </div>
+  <div id="health-list"></div>
+</div>
+
+<!-- ═══ FOCUS ═══ -->
 <div class="page" id="page-focus">
   <div class="timer-wrap">
-    <div style="text-align:center;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--dim);margin-bottom:16px">Focus Mode</div>
+    <div style="text-align:center;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--dim);margin-bottom:14px">Focus Mode</div>
     <div class="timer-modes">
       <button class="tmode active" id="tm-pomo" onclick="setMode('pomo',25,5)">Pomodoro 25/5</button>
       <button class="tmode" id="tm-deep" onclick="setMode('deep',90,15)">Deep Work 90/15</button>
@@ -317,7 +511,7 @@ select.inp{cursor:pointer;}
       <button class="btn btn-d" onclick="tReset()">Reset</button>
     </div>
     <div class="sess-dots" id="t-dots"></div>
-    <div class="card" style="margin-top:20px;text-align:center">
+    <div class="card" style="text-align:center">
       <div class="card-ttl" style="justify-content:center">Today's Focus</div>
       <div style="font-family:var(--font-h);font-size:34px;font-weight:800;color:var(--green)" id="t-total">0h 0m</div>
       <div style="font-size:10px;color:var(--dim);margin-top:4px" id="t-sess-lbl">0 sessions</div>
@@ -334,7 +528,7 @@ select.inp{cursor:pointer;}
   </div>
 </div>
 
-<!-- WEAK TOPICS -->
+<!-- ═══ WEAK TOPICS ═══ -->
 <div class="page" id="page-weak">
   <div class="sec">Weak Topic Tracker <button class="btn btn-r" style="font-size:9px;padding:3px 10px" onclick="showAF('af-weak')">+ Flag Topic</button></div>
   <div class="aform" id="af-weak">
@@ -342,7 +536,7 @@ select.inp{cursor:pointer;}
     <div class="frow">
       <input class="inp" id="w-name" placeholder="Topic name">
       <input class="inp" id="w-subj" placeholder="Subject">
-      <select class="inp" id="w-reason">
+      <select class="inp" id="w-reason" style="max-width:180px">
         <option>Knowledge gap</option><option>Concept confusion</option>
         <option>Misread stem</option><option>Repeatedly wrong</option>
       </select>
@@ -352,8 +546,8 @@ select.inp{cursor:pointer;}
   <div class="card" style="margin-bottom:12px">
     <div class="card-ttl" style="color:var(--red)">Rule ⚡</div>
     <div style="font-size:12px;color:var(--dim);line-height:1.8">
-      Same topic wrong <span style="color:var(--red);font-weight:600">3× this week</span> → <span style="color:var(--text)">Block 1 topic next morning</span><br>
-      GT wrong 2+ times → <span style="color:var(--text)">add here immediately</span>
+      Same topic wrong <span style="color:var(--red);font-weight:600">3×</span> → <span style="color:var(--text)">becomes Block 1 topic next morning</span><br>
+      GT wrong 2+ times same topic → <span style="color:var(--text)">add here immediately</span>
     </div>
   </div>
   <div id="weak-list"></div>
@@ -362,10 +556,9 @@ select.inp{cursor:pointer;}
 </div><!-- .app -->
 <div class="notif" id="notif"></div>
 
-<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, addDoc, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2YEOaq87dOOeMJWToiIJWj_znW1lE4Ew",
@@ -378,9 +571,10 @@ const firebaseConfig = {
 
 const fbApp = initializeApp(firebaseConfig);
 const db = getFirestore(fbApp);
+const USER_DOC = 'users/mukesh';
 
 // ── SCHEDULE DATA ──
-const SCHEDULE = [
+let SCHEDULE = [
   {date:'2026-03-05',day:'Thursday',subject:'Pharma'},
   {date:'2026-03-06',day:'Friday',subject:'Pharma'},
   {date:'2026-03-07',day:'Saturday',subject:'Pharma'},
@@ -426,169 +620,157 @@ const SCHEDULE = [
   {date:'2026-04-16',day:'Thursday',subject:'ENT'},
 ];
 
-const SR_DAYS = [1,3,7,15,30];
-const TODAY = new Date().toISOString().split('T')[0];
+const SR_DAYS=[1,3,7,15,30];
+const TODAY=new Date().toISOString().split('T')[0];
+const EXAM_DATE='2026-05-08'; // INI-CET May 2026 — update if needed
 
-// ── SYNC STATUS ──
-function setSyncStatus(status) {
-  const dot = document.getElementById('sync-dot');
-  const lbl = document.getElementById('sync-label');
-  dot.className = 'sync-dot ' + status;
-  lbl.textContent = status==='synced'?'Synced':status==='syncing'?'Saving...':status==='error'?'Offline':'Connecting...';
-}
-
-// ── STATE (in memory, synced to Firestore) ──
-let ST = {
-  schedState: {},
-  extraRevs: [],
-  mcqSessions: [],
-  weakTopics: [],
-  todayTasks: {},
-  dailyNums: {pyq:0,mcq:0,anki:0,fb:0,date:''},
-  focusTime: {total:0,sessions:0,date:''},
+// ── STATE ──
+let ST={
+  schedState:{},schedEdits:{},pyqWeight:{},
+  extraRevs:[],mcqSessions:[],weakTopics:[],
+  todayTasks:{},dailyNums:{pyq:0,mcq:0,anki:0,fb:0,date:''},
+  focusTime:{total:0,sessions:0,date:''},
+  gtScores:[],journalEntries:[],
+  healthLog:{},confidence:{},
+  streak:{current:0,best:0,lastDate:''},
+  examDate:EXAM_DATE,
 };
 
-// ── FIRESTORE HELPERS ──
-const USER_DOC = 'users/mukesh'; // single user doc
+// ── SYNC ──
+function setSyncStatus(s){
+  document.getElementById('sync-dot').className='sync-dot '+s;
+  document.getElementById('sync-label').textContent=s==='synced'?'Synced':s==='syncing'?'Saving...':'Offline';
+}
 
-async function loadFromFirestore() {
-  try {
+async function loadFromFirestore(){
+  try{
     setSyncStatus('syncing');
-    const snap = await getDoc(doc(db, USER_DOC));
-    if (snap.exists()) {
-      const data = snap.data();
-      ST.schedState = data.schedState || {};
-      ST.extraRevs = data.extraRevs || [];
-      ST.mcqSessions = data.mcqSessions || [];
-      ST.weakTopics = data.weakTopics || [];
-      ST.todayTasks = data.todayTasks || {};
-      ST.dailyNums = data.dailyNums || {pyq:0,mcq:0,anki:0,fb:0,date:''};
-      ST.focusTime = data.focusTime || {total:0,sessions:0,date:''};
-    }
+    const snap=await getDoc(doc(db,USER_DOC));
+    if(snap.exists()){const d=snap.data();Object.keys(d).forEach(k=>{if(k in ST)ST[k]=d[k]||ST[k];});}
     setSyncStatus('synced');
-  } catch(e) {
-    console.error(e);
+  }catch(e){
     setSyncStatus('error');
-    // fallback to localStorage
-    const local = localStorage.getItem('prepos_backup');
-    if (local) { try { Object.assign(ST, JSON.parse(local)); } catch(e2){} }
+    const local=localStorage.getItem('prepos_v3_backup');
+    if(local){try{Object.assign(ST,JSON.parse(local));}catch(e2){}}
   }
 }
 
-let saveTimer = null;
-async function save() {
-  // Local backup immediately
-  localStorage.setItem('prepos_backup', JSON.stringify(ST));
-  // Debounce Firestore save 800ms
-  clearTimeout(saveTimer);
-  setSyncStatus('syncing');
-  saveTimer = setTimeout(async () => {
-    try {
-      await setDoc(doc(db, USER_DOC), ST);
-      setSyncStatus('synced');
-    } catch(e) {
-      console.error(e);
-      setSyncStatus('error');
-    }
-  }, 800);
+let saveTimer=null;
+async function save(){
+  localStorage.setItem('prepos_v3_backup',JSON.stringify(ST));
+  clearTimeout(saveTimer);setSyncStatus('syncing');
+  saveTimer=setTimeout(async()=>{
+    try{await setDoc(doc(db,USER_DOC),ST);setSyncStatus('synced');}
+    catch(e){setSyncStatus('error');}
+  },800);
 }
 
-// Real-time listener — updates UI when another device saves
-onSnapshot(doc(db, USER_DOC), (snap) => {
-  if (snap.exists() && !saveTimer) {
-    const data = snap.data();
-    Object.assign(ST, data);
-    render();
-    setSyncStatus('synced');
-  }
+onSnapshot(doc(db,USER_DOC),(snap)=>{
+  if(snap.exists()&&!saveTimer){Object.assign(ST,snap.data());render();setSyncStatus('synced');}
 });
 
 // ── HELPERS ──
-function addDays(dateStr, n) {
-  const d = new Date(dateStr+'T00:00:00');
-  d.setDate(d.getDate()+n);
-  return d.toISOString().split('T')[0];
-}
-function fmt(d) {
-  return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});
-}
-function daysDiff(a,b) { return Math.round((new Date(b)-new Date(a))/86400000); }
+function addDays(d,n){const dt=new Date(d+'T00:00:00');dt.setDate(dt.getDate()+n);return dt.toISOString().split('T')[0];}
+function fmt(d){return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});}
+function daysDiff(a,b){return Math.round((new Date(b)-new Date(a))/86400000);}
+function getSchedState(date){if(!ST.schedState[date])ST.schedState[date]={mcq:false,anki:false,gtReview:false,gt2Weak:false,fact:false,rev:{}};return ST.schedState[date];}
+function notify(msg){const n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),2200);}
+function showAF(id){const f=document.getElementById(id);f.style.display=f.style.display==='none'||!f.style.display?'block':'none';}
 
-function getSchedState(date) {
-  if (!ST.schedState[date]) ST.schedState[date] = {mcq:false,anki:false,gtReview:false,gt2Weak:false,fact:false,rev:{}};
-  return ST.schedState[date];
-}
-
-function notify(msg) {
-  const n=document.getElementById('notif');
-  n.textContent=msg; n.classList.add('show');
-  setTimeout(()=>n.classList.remove('show'),2200);
-}
-function showAF(id) {
-  const f=document.getElementById(id);
-  f.style.display=f.style.display==='none'||!f.style.display?'block':'none';
+// Merge schedule edits
+function getSchedule(){
+  return SCHEDULE.map(s=>{
+    const edit=ST.schedEdits?.[s.date];
+    return edit?{...s,...edit}:s;
+  });
 }
 
 // ── NAV ──
-document.getElementById('nav-date').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'long'});
+document.getElementById('nav-date') && (document.getElementById('nav-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'long'}));
 
-window.go = function(id) {
+window.go=function(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   const tabs=document.querySelectorAll('.nav-tab');
-  ['dashboard','schedule','revision','mcq','focus','weak'].forEach((p,i)=>{ if(p===id)tabs[i].classList.add('active'); });
+  ['dashboard','schedule','revision','mcq','gt','journal','health','focus','weak'].forEach((p,i)=>{if(p===id)tabs[i].classList.add('active');});
   render();
 }
 
+// ── COUNTDOWN ──
+function renderCountdown(){
+  const days=daysDiff(TODAY,ST.examDate||EXAM_DATE);
+  document.getElementById('countdown-num').textContent=days>0?days:'EXAM DAY';
+  document.getElementById('nav-countdown').textContent=days>0?days+'d to exam':'';
+  document.getElementById('exam-date-lbl').textContent='INI-CET\n'+fmt(ST.examDate||EXAM_DATE);
+}
+
+// ── STREAK ──
+function updateStreak(){
+  const s=ST.streak;
+  if(s.lastDate===TODAY)return;
+  const yesterday=addDays(TODAY,-1);
+  if(s.lastDate===yesterday){s.current++;} else if(s.lastDate!==TODAY){s.current=1;}
+  s.best=Math.max(s.best||0,s.current);
+  s.lastDate=TODAY;
+  save();
+}
+function renderStreak(){
+  const s=ST.streak;
+  document.getElementById('streak-num').textContent=s.current||0;
+  document.getElementById('streak-best').innerHTML=`Best: <span style="color:var(--amber);font-family:var(--font-h);font-weight:700">${s.best||0}</span> days`;
+}
+
 // ── TODAY REVISIONS ──
-function getTodayRevs() {
-  const due = [];
-  SCHEDULE.filter(s=>!s.isGT).forEach(s=>{
+function getTodayRevs(){
+  const sched=getSchedule();const due=[];
+  sched.filter(s=>!s.isGT).forEach(s=>{
     SR_DAYS.forEach(d=>{
-      if (addDays(s.date,d)===TODAY) {
-        const ss=getSchedState(s.date);
-        due.push({source:'sched',dateKey:s.date,srDay:d,topic:s.subject,done:ss.rev[d]||false});
-      }
+      if(addDays(s.date,d)===TODAY){const ss=getSchedState(s.date);due.push({source:'sched',dateKey:s.date,srDay:d,topic:s.subject,done:ss.rev[d]||false});}
     });
   });
   ST.extraRevs.forEach(r=>{
     SR_DAYS.forEach(d=>{
-      if (addDays(r.studiedOn,d)===TODAY) {
-        due.push({source:'extra',id:r.id,srDay:d,topic:r.topic,subject:r.subject,done:r.revDone?.[d]||false});
-      }
+      if(addDays(r.studiedOn,d)===TODAY)due.push({source:'extra',id:r.id,srDay:d,topic:r.topic,subject:r.subject,done:r.revDone?.[d]||false});
     });
   });
   return due;
 }
 
+window.markRevDone=function(idx){
+  const r=window._todayRevs[idx];if(!r)return;
+  if(r.source==='sched'){const ss=getSchedState(r.dateKey);ss.rev[r.srDay]=!ss.rev[r.srDay];}
+  else{const ex=ST.extraRevs.find(x=>x.id==r.id);if(ex){if(!ex.revDone)ex.revDone={};ex.revDone[r.srDay]=!ex.revDone[r.srDay];}}
+  save();renderDashboard();notify('Revision updated ✓');
+}
+
 // ── DASHBOARD ──
-function renderDashboard() {
-  const studiedDays=SCHEDULE.filter(s=>!s.isGT&&s.date<=TODAY).length;
-  const totalDays=SCHEDULE.filter(s=>!s.isGT).length;
+function renderDashboard(){
+  renderCountdown();renderStreak();
+  const sched=getSchedule();
+  const studiedDays=sched.filter(s=>!s.isGT&&s.date<=TODAY).length;
+  const totalDays=sched.filter(s=>!s.isGT).length;
   const todayRevs=getTodayRevs();
   const doneRevs=todayRevs.filter(r=>r.done).length;
   const totalMCQ=ST.mcqSessions.reduce((a,s)=>a+s.total,0);
   const pct=totalDays?Math.round(studiedDays/totalDays*100):0;
+  const accAll=ST.mcqSessions.reduce((a,s)=>a+s.correct,0);
+  const acc=totalMCQ?Math.round(accAll/totalMCQ*100):0;
 
   document.getElementById('stat-row').innerHTML=`
-    <div class="stat-box"><span class="stat-v">${pct}%</span><div class="stat-l">Schedule Done</div></div>
-    <div class="stat-box"><span class="stat-v" style="color:var(--amber)">${todayRevs.length}</span><div class="stat-l">Reviews Today</div></div>
+    <div class="stat-box"><span class="stat-v">${pct}%</span><div class="stat-l">Schedule</div></div>
+    <div class="stat-box"><span class="stat-v" style="color:var(--amber)">${todayRevs.length}</span><div class="stat-l">Revisions Today</div></div>
     <div class="stat-box"><span class="stat-v" style="color:var(--green)">${doneRevs}/${todayRevs.length}</span><div class="stat-l">Rev Done</div></div>
     <div class="stat-box"><span class="stat-v" style="color:var(--blue)">${totalMCQ}</span><div class="stat-l">Total MCQs</div></div>
+    <div class="stat-box"><span class="stat-v" style="color:var(--amber)">${acc}%</span><div class="stat-l">Accuracy</div></div>
     <div class="stat-box"><span class="stat-v" style="color:var(--purple)">${ST.weakTopics.length}</span><div class="stat-l">Weak Topics</div></div>
   `;
 
-  // Today's revisions box
-  const trbEl=document.getElementById('today-rev-box');
-  trbEl.innerHTML=`<div class="today-rev-title">🔁 Revisions Due Today ${todayRevs.length?`(${doneRevs}/${todayRevs.length} done)`:'— All clear ✓'}</div>
-    <div>${todayRevs.length?todayRevs.map((r,i)=>`
-      <span class="rev-chip ${r.done?'done':''}" onclick="markRevDone(${i})">
-        <span class="rev-chip-day">D+${r.srDay}</span>${r.topic}${r.subject?` · ${r.subject}`:''}${r.done?' ✓':''}
-      </span>`).join(''):'<span style="color:var(--dim);font-size:12px">No revisions scheduled today. Good!</span>'}</div>`;
-
-  // Store today's revs for onclick
-  window._todayRevs = todayRevs;
+  // Today's revisions
+  window._todayRevs=todayRevs;
+  document.getElementById('today-rev-box').innerHTML=`
+    <div class="today-rev-title">🔁 Revisions Due Today ${todayRevs.length?`(${doneRevs}/${todayRevs.length})`:'— All clear ✓'}</div>
+    <div>${todayRevs.length?todayRevs.map((r,i)=>`<span class="rev-chip ${r.done?'done':''}" onclick="markRevDone(${i})"><span class="rev-chip-day">D+${r.srDay}</span>${r.topic}${r.subject?` · ${r.subject}`:''}${r.done?' ✓':''}</span>`).join(''):'<span style="color:var(--dim);font-size:12px">No revisions today!</span>'}</div>`;
 
   renderTodayPlan();
 
@@ -599,33 +781,54 @@ function renderDashboard() {
   setPB('pyq',n.pyq,100);setPB('mcq',n.mcq,100);setPB('anki',n.anki,400);setPB('fb',n.fb,20);
   ['pyq','mcq','anki','fb'].forEach(k=>{document.getElementById('i-'+k).value=n[k]||'';});
 
+  // Confidence ratings
+  const subjects=[...new Set(sched.filter(s=>!s.isGT).map(s=>s.subject))];
+  document.getElementById('dash-confidence').innerHTML=subjects.map(subj=>{
+    const conf=ST.confidence[subj]||0;
+    const stars='★'.repeat(conf)+'☆'.repeat(5-conf);
+    const col=conf>=4?'var(--green)':conf>=3?'var(--amber)':'var(--red)';
+    return`<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:1;font-size:12px">${subj}</div>
+      <div class="conf-stars">${[1,2,3,4,5].map(i=>`<span class="star ${i<=conf?'on':''}" onclick="setConfidence('${subj}',${i})">★</span>`).join('')}</div>
+      <div style="font-size:10px;color:${col};min-width:60px;text-align:right">${conf?['','Very Low','Low','Okay','Good','Strong'][conf]:'-'}</div>
+    </div>`;
+  }).join('');
+
   // Weak topics
   const sw=[...ST.weakTopics].sort((a,b)=>b.count-a.count).slice(0,5);
   document.getElementById('dash-weak').innerHTML=sw.length?sw.map(w=>`<div class="weak-item"><div class="wdot"></div><div style="flex:1">${w.name} <span style="color:var(--dim);font-size:11px">· ${w.subject}</span></div><div style="color:var(--red);font-size:11px;font-family:var(--font-h);font-weight:700">${w.count}×</div></div>`).join('')
-    :'<div style="color:var(--dim);font-size:12px;padding:6px">No weak topics flagged yet.</div>';
+    :'<div style="color:var(--dim);font-size:12px;padding:6px">No weak topics yet.</div>';
 
-  // Subject progress
-  const subj={};
-  SCHEDULE.filter(s=>!s.isGT).forEach(s=>{
-    if(!subj[s.subject])subj[s.subject]={total:0,done:0};
-    subj[s.subject].total++;
-    if(s.date<=TODAY)subj[s.subject].done++;
+  // Health quick log
+  const h=ST.healthLog[TODAY]||{};
+  ['sleep','exercise','nophone'].forEach(k=>{
+    const el=document.getElementById('q-'+k);
+    if(el){el.classList.toggle('on',!!h[k]);el.classList.toggle('sleep-on',k==='sleep'&&!!h[k]);}
   });
-  document.getElementById('dash-progress').innerHTML=Object.entries(subj).map(([s,d])=>{
-    const p=Math.round(d.done/d.total*100);
-    return `<div class="pb-wrap"><div class="pb-lbl"><span>${s}</span><span>${d.done}/${d.total} · ${p}%</span></div><div class="pb"><div class="pb-fill" style="width:${p}%"></div></div></div>`;
-  }).join('');
+
+  // Load today's journal
+  const je=ST.journalEntries.find(j=>j.date===TODAY);
+  if(je){
+    document.getElementById('j-studied').value=je.studied||'';
+    document.getElementById('j-unclear').value=je.unclear||'';
+    document.getElementById('j-tomorrow').value=je.tomorrow||'';
+  }
 }
 
-window.markRevDone = function(idx) {
-  const r=window._todayRevs[idx];
-  if(!r)return;
-  if(r.source==='sched'){const ss=getSchedState(r.dateKey);ss.rev[r.srDay]=!ss.rev[r.srDay];}
-  else{const ex=ST.extraRevs.find(x=>x.id==r.id);if(ex){if(!ex.revDone)ex.revDone={};ex.revDone[r.srDay]=!ex.revDone[r.srDay];}}
-  save();renderDashboard();notify(r.done?'Revision unmarked.':'Revision marked done! ✓');
+window.setConfidence=function(subj,val){
+  if(!ST.confidence)ST.confidence={};
+  ST.confidence[subj]=ST.confidence[subj]===val?0:val;
+  save();renderDashboard();notify(`${subj} confidence: ${'★'.repeat(ST.confidence[subj])}`);
 }
 
-function renderTodayPlan() {
+window.quickHealth=function(key){
+  if(!ST.healthLog[TODAY])ST.healthLog[TODAY]={};
+  ST.healthLog[TODAY][key]=!ST.healthLog[TODAY][key];
+  save();renderDashboard();renderHealth();
+}
+
+// ── TODAY PLAN ──
+function renderTodayPlan(){
   const tid='t-'+TODAY;
   if(!ST.todayTasks[tid])genToday();
   const tasks=ST.todayTasks[tid]||{study:[],mcq:[],ankiDone:false};
@@ -641,14 +844,13 @@ function renderTodayPlan() {
   tasks.ankiDone?at.classList.add('done'):at.classList.remove('done');
 }
 
-window.genToday = function() {
-  const tid='t-'+TODAY;
-  const entry=SCHEDULE.find(s=>s.date===TODAY);
-  const study=[];
-  if(entry&&!entry.isGT)study.push({text:entry.subject+' – Today\'s Subject',sub:'PYQ → concept → Anki → fact book. Open PYQ first.',badge:'Block 1',done:false});
-  const future=SCHEDULE.filter(s=>!s.isGT&&s.date>TODAY);
+window.genToday=function(){
+  const sched=getSchedule();const tid='t-'+TODAY;
+  const entry=sched.find(s=>s.date===TODAY);const study=[];
+  if(entry&&!entry.isGT)study.push({text:entry.subject+' – Today\'s Subject',sub:'PYQ → concept → Anki → fact book. PYQ first.',badge:'Block 1',done:false});
+  const future=sched.filter(s=>!s.isGT&&s.date>TODAY);
   const next=future.find(s=>s.subject!==(entry?.subject));
-  if(next)study.push({text:next.subject+' – Weak Area / Preview',sub:'Block 3 slot',badge:'Block 3',done:false});
+  if(next)study.push({text:next.subject+' – Next / Weak Area',sub:'Block 3 slot',badge:'Block 3',done:false});
   ST.todayTasks[tid]={study,mcq:[
     {text:'40 topic MCQs – '+(entry?.subject||'Today\'s subject'),sub:'Same subject as Block 1. Wrong → Anki + tag.',done:false},
     {text:'60 mixed MCQs – Cross-subject simulation',sub:'Tag weak topics. 3× this week → Block 1 tomorrow.',done:false},
@@ -656,88 +858,100 @@ window.genToday = function() {
   save();renderTodayPlan();notify('Today\'s plan generated!');
 }
 
-window.toggleTask = function(type,idx) {
-  const tid='t-'+TODAY;
-  if(!ST.todayTasks[tid])return;
+window.toggleTask=function(type,idx){
+  const tid='t-'+TODAY;if(!ST.todayTasks[tid])return;
   ST.todayTasks[tid][type][idx].done=!ST.todayTasks[tid][type][idx].done;
   save();renderTodayPlan();
 }
-window.toggleAnki = function() {
-  const tid='t-'+TODAY;
-  if(!ST.todayTasks[tid])return;
-  ST.todayTasks[tid].ankiDone=!ST.todayTasks[tid].ankiDone;
-  save();renderTodayPlan();
+window.toggleAnki=function(){
+  const tid='t-'+TODAY;if(!ST.todayTasks[tid])return;
+  ST.todayTasks[tid].ankiDone=!ST.todayTasks[tid].ankiDone;save();renderTodayPlan();
 }
-window.updateNums = function() {
+window.updateNums=function(){
   ST.dailyNums={pyq:+document.getElementById('i-pyq').value||0,mcq:+document.getElementById('i-mcq').value||0,anki:+document.getElementById('i-anki').value||0,fb:+document.getElementById('i-fb').value||0,date:TODAY};
   save();renderDashboard();
 }
 
 // ── SCHEDULE ──
-function renderSchedule() {
-  const tbody=document.getElementById('sched-body');
-  tbody.innerHTML=SCHEDULE.map(s=>{
-    const isToday=s.date===TODAY,isPast=s.date<TODAY;
-    const ss=getSchedState(s.date);
+function renderSchedule(){
+  const sched=getSchedule();
+  document.getElementById('sched-body').innerHTML=sched.map(s=>{
+    const isToday=s.date===TODAY,isPast=s.date<TODAY,ss=getSchedState(s.date);
     let cls=isPast?'past-row':'';if(isToday)cls='today-row';if(s.isGT)cls='gt-row';
-    if(s.isGT)return`<tr class="${cls}"><td>${fmt(s.date)}</td><td style="color:var(--dim)">${s.day}</td><td><span class="gt-badge">${s.subject}</span></td><td colspan="5" style="color:var(--dim);font-size:11px">Grand Test</td><td class="bool-cell" onclick="toggleBool('${s.date}','gtReview')"><span class="${ss.gtReview?'bool-t':'bool-f'}">${ss.gtReview?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','anki')"><span class="${ss.anki?'bool-t':'bool-f'}">${ss.anki?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gt2Weak')"><span class="${ss.gt2Weak?'bool-t':'bool-f'}">${ss.gt2Weak?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','fact')"><span class="${ss.fact?'bool-t':'bool-f'}">${ss.fact?'✓':'–'}</span></td></tr>`;
+    const pyq=ST.pyqWeight?.[s.date]||'';
+    const pyqBadge=pyq?`<span class="pyq-badge pyq-${pyq}" onclick="cyclePYQ('${s.date}')">${pyq}</span>`:`<span class="pyq-badge pyq-L" onclick="cyclePYQ('${s.date}')">–</span>`;
+
+    if(s.isGT)return`<tr class="${cls}"><td>${fmt(s.date)}</td><td style="color:var(--dim)">${s.day}</td><td><span class="gt-badge" onclick="editSched('${s.date}','${s.subject}',true)" style="cursor:pointer">${s.subject}</span></td><td>–</td><td colspan="5" style="color:var(--dim);font-size:11px">Grand Test</td><td class="bool-cell" onclick="toggleBool('${s.date}','gtReview')"><span class="${ss.gtReview?'bool-t':'bool-f'}">${ss.gtReview?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','anki')"><span class="${ss.anki?'bool-t':'bool-f'}">${ss.anki?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gt2Weak')"><span class="${ss.gt2Weak?'bool-t':'bool-f'}">${ss.gt2Weak?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','fact')"><span class="${ss.fact?'bool-t':'bool-f'}">${ss.fact?'✓':'–'}</span></td></tr>`;
+
     const revCells=SR_DAYS.map(d=>{
       const rd=addDays(s.date,d),done=ss.rev[d]||false;
       let c='rev-date-cell';if(done)c+=' done-rev';else if(rd<TODAY)c+=' due';else if(rd===TODAY)c+=' today-rev';
       return`<td class="${c}" onclick="toggleRev('${s.date}',${d})">${done?'✓ ':''} ${fmt(rd)}</td>`;
     }).join('');
-    return`<tr class="${cls}" ${isToday?'id="tsr"':''}><td style="${isToday?'color:var(--green);font-weight:700':''}">${fmt(s.date)}${isToday?' ◀':''}</td><td style="color:var(--dim)">${s.day}</td><td><span class="subj-badge">${s.subject}</span></td>${revCells}<td class="bool-cell" onclick="toggleBool('${s.date}','mcq')"><span class="${ss.mcq?'bool-t':'bool-f'}">${ss.mcq?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','anki')"><span class="${ss.anki?'bool-t':'bool-f'}">${ss.anki?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gtReview')"><span class="${ss.gtReview?'bool-t':'bool-f'}">${ss.gtReview?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gt2Weak')"><span class="${ss.gt2Weak?'bool-t':'bool-f'}">${ss.gt2Weak?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','fact')"><span class="${ss.fact?'bool-t':'bool-f'}">${ss.fact?'✓':'–'}</span></td></tr>`;
+
+    return`<tr class="${cls}" ${isToday?'id="tsr"':''}><td style="${isToday?'color:var(--green);font-weight:700':''}">${fmt(s.date)}${isToday?' ◀':''}</td><td style="color:var(--dim)">${s.day}</td><td><span class="subj-badge" onclick="editSched('${s.date}','${s.subject}',false)" style="cursor:pointer" title="Click to edit">${s.subject} ✏️</span></td><td>${pyqBadge}</td>${revCells}<td class="bool-cell" onclick="toggleBool('${s.date}','mcq')"><span class="${ss.mcq?'bool-t':'bool-f'}">${ss.mcq?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','anki')"><span class="${ss.anki?'bool-t':'bool-f'}">${ss.anki?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gtReview')"><span class="${ss.gtReview?'bool-t':'bool-f'}">${ss.gtReview?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','gt2Weak')"><span class="${ss.gt2Weak?'bool-t':'bool-f'}">${ss.gt2Weak?'✓':'–'}</span></td><td class="bool-cell" onclick="toggleBool('${s.date}','fact')"><span class="${ss.fact?'bool-t':'bool-f'}">${ss.fact?'✓':'–'}</span></td></tr>`;
   }).join('');
-  setTimeout(()=>{const r=document.getElementById('tsr');if(r)r.scrollIntoView({behavior:'smooth',block:'center'});},100);
+  setTimeout(()=>{const r=document.getElementById('tsr');if(r)r.scrollIntoView({behavior:'smooth',block:'center'});},150);
 }
 
-window.toggleRev = function(date,day) {
-  const ss=getSchedState(date);ss.rev[day]=!ss.rev[day];
-  save();renderSchedule();renderDashboard();notify(ss.rev[day]?'Revision done ✓':'Unmarked.');
+window.editSched=function(date,subject,isGT){
+  document.getElementById('af-sched-edit').style.display='block';
+  document.getElementById('edit-date').value=date;
+  document.getElementById('edit-subject').value=subject;
+  document.getElementById('edit-isgt').value=isGT?'true':'false';
+  document.getElementById('edit-subject').focus();
 }
-window.toggleBool = function(date,key) {
-  const ss=getSchedState(date);ss[key]=!ss[key];save();renderSchedule();
+window.applySchedEdit=function(){
+  const date=document.getElementById('edit-date').value;
+  const subject=document.getElementById('edit-subject').value.trim();
+  const isGT=document.getElementById('edit-isgt').value==='true';
+  if(!date||!subject)return;
+  if(!ST.schedEdits)ST.schedEdits={};
+  ST.schedEdits[date]={subject,isGT};
+  save();renderSchedule();showAF('af-sched-edit');notify('Schedule updated: '+subject);
 }
+
+window.cyclePYQ=function(date){
+  if(!ST.pyqWeight)ST.pyqWeight={};
+  const cur=ST.pyqWeight[date]||'';
+  ST.pyqWeight[date]=cur===''?'H':cur==='H'?'M':cur==='M'?'L':'';
+  save();renderSchedule();
+}
+window.toggleRev=function(date,day){const ss=getSchedState(date);ss.rev[day]=!ss.rev[day];save();renderSchedule();renderDashboard();notify(ss.rev[day]?'Revision done ✓':'Unmarked.');}
+window.toggleBool=function(date,key){const ss=getSchedState(date);ss[key]=!ss[key];save();renderSchedule();}
 
 // ── REVISION ──
-window.addRevMan = function() {
-  const topic=document.getElementById('rev-topic').value.trim();
-  const subj=document.getElementById('rev-subj').value.trim();
-  const date=document.getElementById('rev-date').value;
+window.addRevMan=function(){
+  const topic=document.getElementById('rev-topic').value.trim(),subj=document.getElementById('rev-subj').value.trim(),date=document.getElementById('rev-date').value;
   if(!topic||!date)return;
   ST.extraRevs.push({id:Date.now(),topic,subject:subj||'General',studiedOn:date,revDone:{}});
-  save();renderRevision();
-  document.getElementById('rev-topic').value='';document.getElementById('rev-subj').value='';
-  notify('Revision scheduled: '+topic);
+  save();renderRevision();document.getElementById('rev-topic').value='';document.getElementById('rev-subj').value='';notify('Scheduled: '+topic);
 }
-
-function renderRevision() {
+function renderRevision(){
+  const sched=getSchedule();
   const due=[],upcoming=[];
-  const markFn=(source,dateKey,extraId,srDay)=>`onclick="markRevPage('${source}','${dateKey||''}','${extraId||''}',${srDay})"`;
-  const revItem=r=>`<div class="task ${r.done?'done':''}" ${markFn(r.source,r.dateKey,r.id,r.srDay)}><div class="tcb"></div><div class="task-txt">${r.topic}${r.subject?` <span style="color:var(--dim);font-size:11px">· ${r.subject}</span>`:''}<small>Day +${r.srDay} · ${fmt(r.revDate)}${r.revDate<TODAY&&!r.done?' — OVERDUE':''}</small></div><span class="tbadge ${r.done?'tb-g':r.revDate<TODAY?'tb-r':'tb-a'}">${r.done?'Done':r.revDate<TODAY?'Overdue':'Due'}</span></div>`;
+  const revItem=r=>`<div class="task ${r.done?'done':''}" onclick="markRevPage('${r.source}','${r.dateKey||''}','${r.id||''}',${r.srDay})"><div class="tcb"></div><div class="task-txt">${r.topic}${r.subject?` <span style="color:var(--dim);font-size:11px">· ${r.subject}</span>`:''}<small>Day +${r.srDay} · ${fmt(r.revDate)}${r.revDate<TODAY&&!r.done?' — OVERDUE':''}</small></div><span class="tbadge ${r.done?'tb-g':r.revDate<TODAY?'tb-r':'tb-a'}">${r.done?'Done':r.revDate<TODAY?'Overdue':'Due'}</span></div>`;
 
-  SCHEDULE.filter(s=>!s.isGT).forEach(s=>{
+  sched.filter(s=>!s.isGT).forEach(s=>{
     SR_DAYS.forEach(d=>{
       const rd=addDays(s.date,d),ss=getSchedState(s.date),done=ss.rev[d]||false,diff=daysDiff(TODAY,rd);
       const obj={source:'sched',dateKey:s.date,srDay:d,topic:s.subject,done,revDate:rd,diff};
-      if(!done&&rd<=TODAY)due.push(obj);
-      else if(!done&&diff>0&&diff<=7)upcoming.push(obj);
+      if(!done&&rd<=TODAY)due.push(obj);else if(!done&&diff>0&&diff<=7)upcoming.push(obj);
     });
   });
   ST.extraRevs.forEach(r=>{
     SR_DAYS.forEach(d=>{
       const rd=addDays(r.studiedOn,d),done=r.revDone?.[d]||false,diff=daysDiff(TODAY,rd);
       const obj={source:'extra',id:r.id,srDay:d,topic:r.topic,subject:r.subject,done,revDate:rd,diff};
-      if(!done&&rd<=TODAY)due.push(obj);
-      else if(!done&&diff>0&&diff<=7)upcoming.push(obj);
+      if(!done&&rd<=TODAY)due.push(obj);else if(!done&&diff>0&&diff<=7)upcoming.push(obj);
     });
   });
 
-  document.getElementById('rev-due-list').innerHTML=due.length?due.map(revItem).join(''):'<div style="color:var(--dim);font-size:12px;padding:8px">No revisions due! 🎉</div>';
+  document.getElementById('rev-due-list').innerHTML=due.length?due.map(revItem).join(''):'<div style="color:var(--dim);font-size:12px;padding:8px">No revisions due 🎉</div>';
   document.getElementById('rev-upcoming-list').innerHTML=upcoming.sort((a,b)=>a.diff-b.diff).map(revItem).join('')||'<div style="color:var(--dim);font-size:12px;padding:8px">None upcoming.</div>';
 
   const bySubj={};
-  SCHEDULE.filter(s=>!s.isGT).forEach(s=>{
+  sched.filter(s=>!s.isGT).forEach(s=>{
     if(!bySubj[s.subject])bySubj[s.subject]={total:0,done:0};
     bySubj[s.subject].total+=SR_DAYS.length;
     bySubj[s.subject].done+=Object.values(getSchedState(s.date).rev||{}).filter(Boolean).length;
@@ -747,28 +961,34 @@ function renderRevision() {
     return`<div class="pb-wrap"><div class="pb-lbl"><span>${s}</span><span style="color:var(--dim)">${d.done}/${d.total} · ${p}%</span></div><div class="pb"><div class="pb-fill" style="width:${p}%"></div></div></div>`;
   }).join('');
 }
-
-window.markRevPage = function(source,dateKey,extraId,srDay) {
+window.markRevPage=function(source,dateKey,extraId,srDay){
   if(source==='sched'){const ss=getSchedState(dateKey);ss.rev[srDay]=!ss.rev[srDay];}
   else{const r=ST.extraRevs.find(r=>r.id==extraId);if(r){if(!r.revDone)r.revDone={};r.revDone[srDay]=!r.revDone[srDay];}}
   save();renderRevision();renderDashboard();notify('Updated!');
 }
 
 // ── MCQ ──
-window.addMCQ = function() {
+let _mcqConf=0;
+window.setMcqConf=function(v){
+  _mcqConf=_mcqConf===v?0:v;
+  document.querySelectorAll('#mcq-conf-stars .star').forEach((s,i)=>{s.classList.toggle('on',i<_mcqConf);});
+  document.getElementById('mcq-conf-lbl').textContent=_mcqConf?['','Very Low','Low','Okay','Good','Strong'][_mcqConf]:'Not rated';
+}
+window.addMCQ=function(){
   const subj=document.getElementById('m-subj').value.trim(),type=document.getElementById('m-type').value.trim();
   const total=+document.getElementById('m-total').value||0,correct=+document.getElementById('m-correct').value||0;
   const notes=document.getElementById('m-notes').value.trim();
   if(!total)return;
-  ST.mcqSessions.unshift({id:Date.now(),date:TODAY,subject:subj,type,total,correct,wrong:total-correct,notes});
+  ST.mcqSessions.unshift({id:Date.now(),date:TODAY,subject:subj,type,total,correct,wrong:total-correct,notes,confidence:_mcqConf});
+  // Update subject confidence
+  if(subj&&_mcqConf){if(!ST.confidence)ST.confidence={};ST.confidence[subj]=_mcqConf;}
   save();renderMCQ();
   ['m-subj','m-type','m-total','m-correct','m-notes'].forEach(id=>document.getElementById(id).value='');
-  notify('MCQ session logged!');
+  setMcqConf(0);notify('MCQ session logged!');
 }
-function renderMCQ() {
+function renderMCQ(){
   const total=ST.mcqSessions.reduce((a,s)=>a+s.total,0),correct=ST.mcqSessions.reduce((a,s)=>a+s.correct,0);
-  document.getElementById('ms-total').textContent=total;
-  document.getElementById('ms-correct').textContent=correct;
+  document.getElementById('ms-total').textContent=total;document.getElementById('ms-correct').textContent=correct;
   document.getElementById('ms-wrong').textContent=total-correct;
   document.getElementById('ms-pct').textContent=(total?Math.round(correct/total*100):0)+'%';
   document.getElementById('mcq-list').innerHTML=ST.mcqSessions.length?ST.mcqSessions.map(s=>`
@@ -776,39 +996,149 @@ function renderMCQ() {
     :'<div style="color:var(--dim);font-size:12px;padding:10px">No sessions yet.</div>';
 }
 
+// ── GT SCORES ──
+window.addGTScore=function(){
+  const num=document.getElementById('gt-num').value;
+  const score=+document.getElementById('gt-score').value||0;
+  const total=+document.getElementById('gt-total').value||200;
+  const rank=+document.getElementById('gt-rank').value||0;
+  const notes=document.getElementById('gt-notes').value.trim();
+  if(!score)return;
+  const existing=ST.gtScores.findIndex(g=>g.num===num);
+  const entry={id:Date.now(),num,score,total,pct:Math.round(score/total*100),rank,notes,date:TODAY};
+  if(existing>=0)ST.gtScores[existing]=entry;else ST.gtScores.push(entry);
+  ST.gtScores.sort((a,b)=>a.num.localeCompare(b.num));
+  save();renderGT();showAF('af-gt');
+  ['gt-score','gt-total','gt-rank','gt-notes'].forEach(id=>document.getElementById(id).value='');
+  notify('GT score saved!');
+}
+function renderGT(){
+  const scores=ST.gtScores;
+  const allGTs=['GT 1','GT 2','GT 3','GT 4','GT 5'];
+  const maxPct=scores.length?Math.max(...scores.map(g=>g.pct)):100;
+
+  // Graph
+  document.getElementById('gt-bars').innerHTML=allGTs.map(g=>{
+    const s=scores.find(x=>x.num===g);
+    const pct=s?s.pct:0;
+    const h=s?Math.max(8,Math.round(pct/maxPct*100)):8;
+    const col=pct>=60?'var(--green)':pct>=40?'var(--amber)':'var(--red)';
+    return`<div class="gt-bar-wrap">
+      <div class="gt-bar-val" style="color:${s?col:'var(--dim)'}">${s?pct+'%':'–'}</div>
+      <div class="gt-bar" style="flex:1;width:100%;position:relative;background:var(--border2)">
+        <div class="gt-bar-fill" style="height:${h}%;background:${col}"></div>
+      </div>
+      <div class="gt-bar-lbl">${g}</div>
+      ${s?`<div style="font-size:10px;color:var(--dim)">${s.score}/${s.total}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // Stats
+  if(scores.length){
+    const best=scores.reduce((a,b)=>b.pct>a.pct?b:a);
+    const latest=scores[scores.length-1];
+    const first=scores[0];
+    const improvement=latest.pct-first.pct;
+    document.getElementById('gt-best').textContent=best.pct+'%';
+    document.getElementById('gt-latest').textContent=latest.pct+'%';
+    const impEl=document.getElementById('gt-improvement');
+    impEl.textContent=(improvement>=0?'+':'')+improvement+'%';
+    impEl.style.color=improvement>=0?'var(--green)':'var(--red)';
+  }
+
+  // List
+  document.getElementById('gt-list').innerHTML=scores.length?scores.map(s=>`
+    <div class="card" style="margin-bottom:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="gt-badge">${s.num}</span>
+          <span style="font-size:11px;color:var(--dim)">${fmt(s.date)}</span>
+          ${s.rank?`<span style="font-size:11px;color:var(--purple)">Rank ${s.rank}</span>`:''}
+        </div>
+        <div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:${s.pct>=60?'var(--green)':s.pct>=40?'var(--amber)':'var(--red)'}">${s.pct}%</div>
+      </div>
+      <div class="pb"><div class="pb-fill" style="width:${s.pct}%;background:${s.pct>=60?'var(--green)':s.pct>=40?'var(--amber)':'var(--red)'}"></div></div>
+      <div style="margin-top:8px;font-size:11px;color:var(--dim)">${s.score} / ${s.total}${s.notes?' · '+s.notes:''}</div>
+    </div>`).join(''):'<div style="color:var(--dim);font-size:12px;padding:10px">No GT scores logged yet. Give your first GT and log the score here.</div>';
+}
+
+// ── JOURNAL ──
+window.saveJournal=function(){
+  const studied=document.getElementById('j-studied').value.trim();
+  const unclear=document.getElementById('j-unclear').value.trim();
+  const tomorrow=document.getElementById('j-tomorrow').value.trim();
+  if(!studied&&!unclear&&!tomorrow)return;
+  const idx=ST.journalEntries.findIndex(j=>j.date===TODAY);
+  const entry={date:TODAY,studied,unclear,tomorrow};
+  if(idx>=0)ST.journalEntries[idx]=entry;else ST.journalEntries.unshift(entry);
+  save();renderJournal();
+  const saved=document.getElementById('journal-saved');
+  saved.style.display='inline';setTimeout(()=>saved.style.display='none',2000);
+  notify('Journal saved ✓');
+}
+function renderJournal(filter=''){
+  const entries=[...ST.journalEntries].filter(j=>!filter||JSON.stringify(j).toLowerCase().includes(filter.toLowerCase()));
+  document.getElementById('journal-list').innerHTML=entries.length?entries.map(j=>`
+    <div class="journal-entry">
+      <div class="journal-date">${fmt(j.date)} · ${new Date(j.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'long'})}</div>
+      ${j.studied?`<div class="journal-field"><label>Studied</label><p>${j.studied}</p></div>`:''}
+      ${j.unclear?`<div class="journal-field"><label>Unclear</label><p style="color:var(--amber)">${j.unclear}</p></div>`:''}
+      ${j.tomorrow?`<div class="journal-field"><label>Tomorrow</label><p style="color:var(--blue)">${j.tomorrow}</p></div>`:''}
+    </div>`).join(''):'<div style="color:var(--dim);font-size:12px;padding:12px">No journal entries yet.</div>';
+}
+window.searchJournal=function(v){renderJournal(v);}
+
+// ── HEALTH ──
+function renderHealth(){
+  const today=new Date();
+  const days=Array.from({length:14},(_,i)=>{const d=new Date(today);d.setDate(d.getDate()-i);return d.toISOString().split('T')[0];}).reverse();
+  const thisWeek=days.slice(7);
+  document.getElementById('h-sleep-streak').textContent=thisWeek.filter(d=>ST.healthLog[d]?.sleep).length;
+  document.getElementById('h-ex-streak').textContent=thisWeek.filter(d=>ST.healthLog[d]?.exercise).length;
+  document.getElementById('h-nophone-streak').textContent=thisWeek.filter(d=>ST.healthLog[d]?.nophone).length;
+
+  document.getElementById('health-list').innerHTML=`
+    <div class="card">
+      <div class="card-ttl">Last 14 Days</div>
+      ${days.map(d=>{
+        const h=ST.healthLog[d]||{};
+        return`<div class="health-row">
+          <div class="health-date">${fmt(d)}${d===TODAY?' ◀':''}</div>
+          <div class="health-check ${h.sleep?'sleep-on':''}" onclick="toggleHealth('${d}','sleep')">😴 Sleep</div>
+          <div class="health-check ${h.exercise?'on':''}" onclick="toggleHealth('${d}','exercise')">🏃 Exercise</div>
+          <div class="health-check ${h.nophone?'on':''}" onclick="toggleHealth('${d}','nophone')">📵 No Phone AM</div>
+          ${h.sleep&&h.exercise&&h.nophone?'<span style="color:var(--green);font-size:11px;margin-left:auto">✓ Perfect day</span>':''}
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+window.toggleHealth=function(date,key){
+  if(!ST.healthLog[date])ST.healthLog[date]={};
+  ST.healthLog[date][key]=!ST.healthLog[date][key];
+  save();renderHealth();renderDashboard();
+}
+
 // ── FOCUS TIMER ──
 let tInterval=null,tSecs=25*60,tMode='study',tRunning=false,studyDur=25*60,brkDur=5*60;
-window.setMode = function(name,study,brk) {
-  studyDur=study*60;brkDur=brk*60;tSecs=studyDur;tMode='study';tRunning=false;
-  clearInterval(tInterval);
+window.setMode=function(name,study,brk){
+  studyDur=study*60;brkDur=brk*60;tSecs=studyDur;tMode='study';tRunning=false;clearInterval(tInterval);
   document.querySelectorAll('.tmode').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tm-'+name).classList.add('active');
-  updateTD();
+  document.getElementById('tm-'+name).classList.add('active');updateTD();
 }
-window.tStart = function() {
-  if(tRunning)return;tRunning=true;
-  document.getElementById('t-start').classList.add('on');
+window.tStart=function(){
+  if(tRunning)return;tRunning=true;document.getElementById('t-start').classList.add('on');
   tInterval=setInterval(()=>{
     tSecs--;
     if(tSecs<=0){
-      clearInterval(tInterval);tRunning=false;
-      document.getElementById('t-start').classList.remove('on');
+      clearInterval(tInterval);tRunning=false;document.getElementById('t-start').classList.remove('on');
       if(tMode==='study'){
         if(ST.focusTime.date!==TODAY)ST.focusTime={total:0,sessions:0,date:TODAY};
         ST.focusTime.total+=studyDur;ST.focusTime.sessions=(ST.focusTime.sessions||0)+1;
         save();tMode='break';tSecs=brkDur;
-        document.getElementById('t-lbl').textContent='☕ BREAK TIME';
-        document.getElementById('t-disp').style.color='var(--blue)';
-        notify('Session done! Take a break.');
-      } else {
-        tMode='study';tSecs=studyDur;
-        document.getElementById('t-lbl').textContent='📚 STUDY SESSION';
-        document.getElementById('t-disp').style.color='var(--green)';
-        notify('Break over! Start studying.');
-      }
+        document.getElementById('t-lbl').textContent='☕ BREAK TIME';document.getElementById('t-disp').style.color='var(--blue)';notify('Session done! Break time.');
+      }else{tMode='study';tSecs=studyDur;document.getElementById('t-lbl').textContent='📚 STUDY SESSION';document.getElementById('t-disp').style.color='var(--green)';notify('Break over! Study.');}
       renderFocus();
-    }
-    updateTD();
+    }updateTD();
   },1000);
 }
 window.tPause=function(){clearInterval(tInterval);tRunning=false;document.getElementById('t-start').classList.remove('on');}
@@ -823,20 +1153,19 @@ function renderFocus(){
 }
 
 // ── WEAK TOPICS ──
-window.addWeak = function() {
+window.addWeak=function(){
   const name=document.getElementById('w-name').value.trim(),subj=document.getElementById('w-subj').value.trim(),reason=document.getElementById('w-reason').value;
   if(!name)return;
   const ex=ST.weakTopics.find(w=>w.name.toLowerCase()===name.toLowerCase());
   if(ex)ex.count++;else ST.weakTopics.push({id:Date.now(),name,subject:subj||'General',reason,count:1});
-  save();renderWeak();
-  document.getElementById('w-name').value='';document.getElementById('w-subj').value='';
+  save();renderWeak();document.getElementById('w-name').value='';document.getElementById('w-subj').value='';
   notify(ex?name+' count: '+ex.count:'Flagged: '+name);
 }
-window.removeWeak = function(id) {ST.weakTopics=ST.weakTopics.filter(w=>w.id!=id);save();renderWeak();}
+window.removeWeak=function(id){ST.weakTopics=ST.weakTopics.filter(w=>w.id!=id);save();renderWeak();}
 function renderWeak(){
   const s=[...ST.weakTopics].sort((a,b)=>b.count-a.count);
   document.getElementById('weak-list').innerHTML=s.length?s.map(w=>`
-    <div class="weak-item" style="border-color:${w.count>=3?'rgba(255,82,82,0.35)':'rgba(255,171,0,0.2)'}">
+    <div class="weak-item" style="border-color:${w.count>=3?'rgba(255,82,82,0.4)':'rgba(255,171,0,0.2)'}">
       <div class="wdot" style="background:${w.count>=3?'var(--red)':'var(--amber)'}"></div>
       <div style="flex:1"><div style="font-size:13px">${w.name}</div><div style="font-size:10px;color:var(--dim);margin-top:1px">${w.subject} · ${w.reason}</div></div>
       <div style="display:flex;align-items:center;gap:8px">
@@ -844,30 +1173,27 @@ function renderWeak(){
         ${w.count>=3?'<span style="font-size:9px;padding:2px 7px;border:1px solid rgba(255,82,82,0.4);color:var(--red);background:var(--red-bg)">→ Block 1</span>':''}
         <div style="cursor:pointer;color:var(--dim);padding:0 4px" onclick="removeWeak(${w.id})">✕</div>
       </div>
-    </div>`).join(''):'<div style="color:var(--dim);font-size:12px;padding:10px">No weak topics. Good work.</div>';
+    </div>`).join(''):'<div style="color:var(--dim);font-size:12px;padding:10px">No weak topics. 💪</div>';
 }
 
 // ── RENDER ALL ──
-function render(){renderDashboard();renderSchedule();renderRevision();renderMCQ();renderFocus();renderWeak();}
+function render(){
+  renderDashboard();renderSchedule();renderRevision();
+  renderMCQ();renderGT();renderJournal();renderHealth();renderFocus();renderWeak();
+}
 
 // ── INIT ──
-window.showAF = showAF;
-document.getElementById('rev-date').value = TODAY;
+window.showAF=showAF;
+document.getElementById('rev-date').value=TODAY;
 
-// Loading animation
-let loadPct=0;
-const loadInv=setInterval(()=>{
-  loadPct+=20;
-  document.getElementById('loading-fill').style.width=loadPct+'%';
-  if(loadPct>=100)clearInterval(loadInv);
-},150);
+let loadPct=0;const loadInv=setInterval(()=>{loadPct+=20;document.getElementById('loading-fill').style.width=loadPct+'%';if(loadPct>=100)clearInterval(loadInv);},120);
 
 loadFromFirestore().then(()=>{
+  updateStreak();
   document.getElementById('loading-screen').style.display='none';
   if(!ST.todayTasks['t-'+TODAY])genToday();
   render();
 });
-
 </script>
 </body>
 </html>
