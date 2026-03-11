@@ -6,500 +6,442 @@
 <title>PrepOS v4 · INI-CET Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --bg2: #10101a;
-    --bg3: #16162a;
-    --card: #12121e;
-    --border: #1e1e3a;
-    --accent: #6c63ff;
-    --accent2: #ff6584;
-    --accent3: #43e97b;
-    --accent4: #f7971e;
-    --text: #e8e8f0;
-    --muted: #6b6b8a;
-    --dim: #2a2a4a;
-    --glow: rgba(108,99,255,0.15);
-    --red: #ff4d6d;
-    --orange: #ff8c42;
-    --yellow: #ffd60a;
-    --green: #43e97b;
-    --blue: #4cc9f0;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'JetBrains Mono', monospace;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+:root {
+  --bg:#0a0a0f; --bg2:#10101a; --bg3:#16162a; --card:#12121e;
+  --border:#1e1e3a; --accent:#6c63ff; --accent2:#ff6584; --accent3:#43e97b;
+  --text:#e8e8f0; --muted:#6b6b8a; --dim:#2a2a4a;
+  --red:#ff4d6d; --orange:#ff8c42; --yellow:#ffd60a;
+  --green:#2ecc71; --green-dark:#27ae60;
+  --blue:#4cc9f0;
+  --r1:#ff4d6d; --r2:#ff8c42; --r3:#ffd60a; --r4:#7bed9f; --r5:#2ecc71;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse 800px 600px at 20% 10%,rgba(108,99,255,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 600px 400px at 80% 80%,rgba(255,101,132,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 400px 300px at 60% 30%,rgba(67,233,123,.04) 0%,transparent 50%);
+  pointer-events:none;z-index:0;}
 
-  /* ANIMATED BACKGROUND */
-  body::before {
-    content: '';
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background:
-      radial-gradient(ellipse 800px 600px at 20% 10%, rgba(108,99,255,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 600px 400px at 80% 80%, rgba(255,101,132,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 400px 300px at 60% 30%, rgba(67,233,123,0.04) 0%, transparent 50%);
-    pointer-events: none; z-index: 0;
-  }
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.9);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);padding:0 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;height:54px;gap:1rem;}
+.nav-brand{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--accent);
+  letter-spacing:.1em;white-space:nowrap;}
+.nav-brand span{color:var(--muted);font-weight:400;}
+.nav-tabs{display:flex;gap:.2rem;overflow-x:auto;flex:1;justify-content:center;}
+.nav-tabs::-webkit-scrollbar{height:0;}
+.nav-tab{padding:.3rem .8rem;border-radius:6px;font-size:.68rem;font-weight:500;cursor:pointer;
+  border:none;background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;
+  transition:all .2s;letter-spacing:.05em;white-space:nowrap;}
+.nav-tab:hover{color:var(--text);background:var(--dim);}
+.nav-tab.active{background:var(--accent);color:#fff;}
+.exam-badge{font-size:.6rem;color:var(--accent2);border:1px solid var(--accent2);
+  padding:.2rem .5rem;border-radius:20px;animation:pulse 2s infinite;white-space:nowrap;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
-  /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 56px;
-  }
-  .nav-brand {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem; font-weight: 800;
-    color: var(--accent);
-    letter-spacing: 0.1em;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-  .nav-brand span { color: var(--muted); font-weight: 400; }
-  .nav-tabs { display: flex; gap: 0.25rem; }
-  .nav-tab {
-    padding: 0.35rem 0.9rem;
-    border-radius: 6px;
-    font-size: 0.7rem; font-weight: 500;
-    cursor: pointer; border: none;
-    background: transparent;
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    transition: all 0.2s;
-    letter-spacing: 0.05em;
-  }
-  .nav-tab:hover { color: var(--text); background: var(--dim); }
-  .nav-tab.active { background: var(--accent); color: white; }
-  .nav-right { display: flex; align-items: center; gap: 1rem; }
-  .exam-badge {
-    font-size: 0.65rem; color: var(--accent2);
-    border: 1px solid var(--accent2);
-    padding: 0.2rem 0.6rem; border-radius: 20px;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+/* PAGES */
+.page{display:none;padding:1.5rem;max-width:1400px;margin:0 auto;position:relative;z-index:1;}
+.page.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-  /* PAGES */
-  .page { display: none; padding: 2rem; max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
-  .page.active { display: block; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+/* GRIDS */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.25rem;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem;}
+.grid-65{display:grid;grid-template-columns:1fr .55fr;gap:1rem;margin-bottom:1.25rem;}
 
-  /* SECTION HEADING */
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.65rem; font-weight: 700;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 1rem;
-  }
+/* STAT CARDS */
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:1.1rem 1.25rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+.stat-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity .2s;}
+.stat-card:hover::before{opacity:1;}
+.stat-label{font-size:.58rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.4rem;}
+.stat-value{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;line-height:1;}
+.stat-sub{font-size:.6rem;color:var(--muted);margin-top:.25rem;}
 
-  /* GRID HELPERS */
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-  .grid-65 { display: grid; grid-template-columns: 1fr 0.55fr; gap: 1rem; margin-bottom: 1.5rem; }
+/* PANEL */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:1.25rem;margin-bottom:1.25rem;}
+.panel-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;
+  letter-spacing:.08em;color:var(--text);margin-bottom:1rem;
+  display:flex;align-items:center;gap:.5rem;text-transform:uppercase;}
+.panel-title .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
 
-  /* STAT CARDS */
-  .stat-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    position: relative; overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .stat-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    opacity: 0; transition: opacity 0.2s;
-  }
-  .stat-card:hover::before { opacity: 1; }
-  .stat-label { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
-  .stat-value { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; line-height: 1; }
-  .stat-sub { font-size: 0.62rem; color: var(--muted); margin-top: 0.3rem; }
-  .stat-accent { color: var(--accent); }
-  .stat-green { color: var(--green); }
-  .stat-orange { color: var(--orange); }
-  .stat-red { color: var(--red); }
-  .stat-blue { color: var(--blue); }
+/* COUNTDOWN BAR */
+.countdown-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:.9rem 1.5rem;display:flex;align-items:center;gap:1.5rem;margin-bottom:1.25rem;
+  flex-wrap:wrap;}
+.cbar-item{text-align:center;flex-shrink:0;}
+.cbar-num{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--accent);line-height:1;}
+.cbar-label{font-size:.52rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.cbar-div{width:1px;height:28px;background:var(--border);}
+.cbar-progress{flex:1;min-width:120px;}
+.cbar-bar-wrap{height:5px;background:var(--dim);border-radius:3px;overflow:hidden;margin-top:.3rem;}
+.cbar-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;}
+.cbar-pct{font-size:.58rem;color:var(--muted);display:flex;justify-content:space-between;}
 
-  /* PANEL */
-  .panel {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-  .panel-title {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 0.8rem; letter-spacing: 0.08em;
-    color: var(--text); margin-bottom: 1.25rem;
-    display: flex; align-items: center; gap: 0.5rem;
-    text-transform: uppercase;
-  }
-  .panel-title .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent);
-  }
+/* TODAY COMMAND CENTER */
+.today-subject{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.2rem;}
+.today-meta{font-size:.68rem;color:var(--muted);}
 
-  /* TODAY COMMAND CENTER */
-  .today-subject {
-    font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    margin-bottom: 0.25rem;
-  }
-  .today-meta { font-size: 0.7rem; color: var(--muted); }
-  .today-type {
-    display: inline-block;
-    padding: 0.25rem 0.75rem; border-radius: 20px;
-    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em;
-    margin-top: 0.5rem;
-  }
-  .type-study { background: rgba(67,233,123,0.15); color: var(--green); border: 1px solid rgba(67,233,123,0.3); }
-  .type-gt { background: rgba(255,77,109,0.15); color: var(--red); border: 1px solid rgba(255,77,109,0.3); }
+/* RATING SYSTEM */
+.rating-wrap{display:flex;gap:.4rem;align-items:center;margin-top:.75rem;}
+.rating-label{font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-right:.25rem;}
+.r-btn{width:32px;height:32px;border-radius:6px;border:1.5px solid var(--border);
+  background:var(--dim);color:var(--muted);font-family:'Syne',sans-serif;
+  font-size:.8rem;font-weight:700;cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;justify-content:center;}
+.r-btn:hover{transform:scale(1.1);}
+.r-btn.active-1{background:rgba(255,77,109,.25);border-color:var(--r1);color:var(--r1);}
+.r-btn.active-2{background:rgba(255,140,66,.25);border-color:var(--r2);color:var(--r2);}
+.r-btn.active-3{background:rgba(255,214,10,.25);border-color:var(--r3);color:var(--r3);}
+.r-btn.active-4{background:rgba(123,237,159,.2);border-color:var(--r4);color:var(--r4);}
+.r-btn.active-5{background:rgba(46,204,113,.25);border-color:var(--r5);color:var(--r5);}
+.rating-desc{font-size:.6rem;color:var(--muted);margin-left:.5rem;}
 
-  /* PROGRESS TARGETS */
-  .target-row {
-    display: flex; align-items: center;
-    padding: 0.6rem 0;
-    border-bottom: 1px solid var(--border);
-    gap: 1rem;
-  }
-  .target-row:last-child { border-bottom: none; }
-  .target-icon { font-size: 1rem; width: 1.5rem; text-align: center; }
-  .target-name { font-size: 0.72rem; flex: 1; color: var(--text); }
-  .target-bar-wrap { width: 120px; height: 4px; background: var(--dim); border-radius: 2px; overflow: hidden; }
-  .target-bar { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.5s; }
-  .target-count { font-size: 0.65rem; color: var(--muted); width: 70px; text-align: right; }
-  .edit-btn {
-    background: var(--dim); border: none; color: var(--muted);
-    font-size: 0.6rem; padding: 0.2rem 0.5rem; border-radius: 4px;
-    cursor: pointer; font-family: 'JetBrains Mono', monospace;
-    transition: all 0.15s;
-  }
-  .edit-btn:hover { background: var(--accent); color: white; }
+/* TARGETS */
+.target-row{display:flex;align-items:center;padding:.55rem 0;
+  border-bottom:1px solid var(--border);gap:.75rem;}
+.target-row:last-child{border-bottom:none;}
+.target-icon{font-size:.9rem;width:1.4rem;text-align:center;}
+.target-name{font-size:.68rem;flex:1;}
+.target-bar-wrap{width:100px;height:3px;background:var(--dim);border-radius:2px;overflow:hidden;}
+.target-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.target-count{font-size:.62rem;color:var(--muted);width:65px;text-align:right;}
+.edit-btn{background:var(--dim);border:none;color:var(--muted);font-size:.58rem;
+  padding:.15rem .4rem;border-radius:4px;cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .15s;}
+.edit-btn:hover{background:var(--accent);color:#fff;}
 
-  /* SPACED REP TABLE */
-  .sr-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
-  .sr-table th {
-    text-align: left; padding: 0.5rem 0.75rem;
-    font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--muted); border-bottom: 1px solid var(--border);
-  }
-  .sr-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(30,30,58,0.5); }
-  .sr-table tr:last-child td { border-bottom: none; }
-  .sr-table tr:hover td { background: rgba(108,99,255,0.05); }
-  .gap-badge {
-    display: inline-block; padding: 0.15rem 0.5rem;
-    border-radius: 4px; font-size: 0.62rem; font-weight: 600;
-  }
-  .gap-d1 { background: rgba(255,77,109,0.15); color: var(--red); }
-  .gap-d3 { background: rgba(255,140,66,0.15); color: var(--orange); }
-  .gap-d7 { background: rgba(255,214,10,0.15); color: var(--yellow); }
-  .gap-d15 { background: rgba(76,201,240,0.15); color: var(--blue); }
-  .gap-d30 { background: rgba(108,99,255,0.15); color: var(--accent); }
+/* SPACED REP */
+.sr-table{width:100%;border-collapse:collapse;font-size:.68rem;}
+.sr-table th{text-align:left;padding:.45rem .6rem;font-size:.56rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);}
+.sr-table td{padding:.55rem .6rem;border-bottom:1px solid rgba(30,30,58,.5);}
+.sr-table tr:last-child td{border-bottom:none;}
+.sr-table tr:hover td{background:rgba(108,99,255,.05);}
+.gap-badge{display:inline-block;padding:.12rem .45rem;border-radius:4px;font-size:.6rem;font-weight:600;}
+.gap-d1{background:rgba(255,77,109,.15);color:var(--r1);}
+.gap-d3{background:rgba(255,140,66,.15);color:var(--r2);}
+.gap-d7{background:rgba(255,214,10,.15);color:var(--r3);}
+.gap-d15{background:rgba(76,201,240,.15);color:var(--blue);}
+.gap-d30{background:rgba(108,99,255,.15);color:var(--accent);}
 
-  /* SUBJECT CONFIDENCE GRID */
-  .conf-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 0.75rem;
-  }
-  .conf-card {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 8px; padding: 0.9rem 1rem;
-    cursor: pointer; transition: all 0.2s;
-    position: relative; overflow: hidden;
-  }
-  .conf-card:hover { border-color: var(--accent); transform: scale(1.02); }
-  .conf-card-name { font-size: 0.72rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 500; }
-  .conf-stars { display: flex; gap: 3px; margin-bottom: 0.4rem; }
-  .conf-star { width: 12px; height: 12px; border-radius: 2px; }
-  .conf-grade { font-size: 0.6rem; letter-spacing: 0.08em; }
-  .grade-vweak { color: var(--red); }
-  .grade-weak { color: var(--orange); }
-  .grade-avg { color: var(--yellow); }
-  .grade-good { color: var(--green); }
-  .grade-exc { color: var(--blue); }
-  .conf-edit-overlay {
-    position: absolute; inset: 0; background: rgba(108,99,255,0.9);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; transition: opacity 0.2s;
-    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
-    flex-direction: column; gap: 0.5rem;
-  }
-  .conf-card:hover .conf-edit-overlay { opacity: 1; }
-  .conf-btn {
-    background: white; color: var(--accent);
-    border: none; padding: 0.2rem 0.8rem; border-radius: 4px;
-    cursor: pointer; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; font-weight: 700;
-  }
+/* CONF GRID */
+.conf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.65rem;}
+.conf-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:.8rem .9rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.conf-card:hover{border-color:var(--accent);transform:scale(1.02);}
+.conf-card-name{font-size:.68rem;margin-bottom:.45rem;font-weight:500;}
+.conf-stars{display:flex;gap:3px;margin-bottom:.35rem;}
+.conf-star{width:11px;height:11px;border-radius:2px;}
+.conf-grade{font-size:.58rem;letter-spacing:.06em;}
+.conf-edit-overlay{position:absolute;inset:0;background:rgba(108,99,255,.9);
+  display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;
+  flex-direction:column;gap:.4rem;}
+.conf-card:hover .conf-edit-overlay{opacity:1;}
+.conf-overlay-btn{background:#fff;color:var(--accent);border:none;padding:.18rem .7rem;
+  border-radius:4px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;}
+.grade-vweak{color:var(--r1);}
+.grade-weak{color:var(--r2);}
+.grade-avg{color:var(--r3);}
+.grade-good{color:var(--r4);}
+.grade-exc{color:var(--r5);}
 
-  /* GT SCORES */
-  .gt-row {
-    display: flex; align-items: center;
-    padding: 0.65rem 1rem;
-    border-radius: 8px; margin-bottom: 0.4rem;
-    background: var(--bg3); border: 1px solid var(--border);
-    transition: all 0.2s; gap: 1rem;
-    cursor: default;
-  }
-  .gt-row:hover { border-color: var(--accent); }
-  .gt-num { width: 28px; font-size: 0.62rem; color: var(--muted); text-align: center; }
-  .gt-name { flex: 1; font-size: 0.72rem; }
-  .gt-date { font-size: 0.62rem; color: var(--muted); width: 90px; }
-  .gt-score { font-size: 0.75rem; font-weight: 600; width: 80px; text-align: right; }
-  .gt-acc {
-    font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
-    width: 70px; text-align: right;
-  }
-  .gt-bar-wrap { width: 80px; height: 4px; background: var(--dim); border-radius: 2px; }
-  .gt-bar { height: 100%; border-radius: 2px; }
-  .gt-trend { font-size: 0.7rem; width: 20px; text-align: center; }
-  .gt-edit-row {
-    background: var(--bg3); border: 1px solid var(--accent);
-    border-radius: 8px; padding: 1rem;
-    display: none; margin-bottom: 0.5rem;
-  }
-  .gt-edit-row.open { display: block; }
-  .gt-inputs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+/* ========================
+   SCHEDULE TAB
+   ======================== */
+.sched-section{margin-bottom:1.5rem;}
+.sched-section-header{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.6rem 1rem;border-radius:10px 10px 0 0;
+  font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;}
+.sched-section-header .badge{
+  font-size:.58rem;padding:.15rem .5rem;border-radius:20px;
+  font-family:'JetBrains Mono',monospace;font-weight:500;}
 
-  /* SCHEDULE TABLE */
-  .sched-wrap { overflow-x: auto; }
-  .sched-table {
-    width: 100%; border-collapse: collapse; font-size: 0.68rem;
-    min-width: 900px;
-  }
-  .sched-table th {
-    background: var(--bg3); padding: 0.6rem 0.75rem;
-    text-align: left; font-size: 0.58rem;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); border-bottom: 2px solid var(--border);
-    position: sticky; top: 0; z-index: 10;
-    white-space: nowrap;
-  }
-  .sched-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(30,30,58,0.4); vertical-align: middle; }
-  .sched-table tr.row-today td { background: rgba(108,99,255,0.08); }
-  .sched-table tr.row-past td { opacity: 0.5; }
-  .sched-table tr.row-revdue td { background: rgba(67,233,123,0.05); }
-  .sched-table tr.row-gt td { background: rgba(255,77,109,0.05); }
-  .sched-table tr:hover td { background: rgba(108,99,255,0.04); }
-  .sched-table input[type="number"], .sched-table input[type="text"] {
-    background: var(--dim); border: 1px solid var(--border);
-    color: var(--text); font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; padding: 0.2rem 0.4rem; border-radius: 4px;
-    width: 45px; text-align: center;
-    transition: border-color 0.15s;
-  }
-  .sched-table input:focus { outline: none; border-color: var(--accent); }
-  .sched-table input.wide { width: 70px; }
-  .sched-status {
-    display: inline-block; padding: 0.15rem 0.5rem;
-    border-radius: 4px; font-size: 0.6rem; white-space: nowrap;
-  }
-  .status-today { background: rgba(108,99,255,0.2); color: var(--accent); border: 1px solid rgba(108,99,255,0.4); }
-  .status-done { background: rgba(67,233,123,0.15); color: var(--green); }
-  .status-revise { background: rgba(67,233,123,0.1); color: var(--green); border: 1px solid rgba(67,233,123,0.3); }
-  .status-d1 { background: rgba(255,77,109,0.15); color: var(--red); }
-  .status-d3 { background: rgba(255,140,66,0.15); color: var(--orange); }
-  .status-upcoming { color: var(--muted); }
-  .status-gt { background: rgba(255,77,109,0.1); color: var(--red); border: 1px solid rgba(255,77,109,0.3); }
+/* Section color themes */
+.sh-study{background:rgba(108,99,255,.15);color:var(--accent);border:1px solid rgba(108,99,255,.3);}
+.sh-study .badge{background:rgba(108,99,255,.3);color:var(--accent);}
+.sh-revise{background:rgba(67,233,123,.12);color:var(--green);border:1px solid rgba(67,233,123,.3);}
+.sh-revise .badge{background:rgba(67,233,123,.25);color:var(--green);}
+.sh-done{background:rgba(78,78,120,.12);color:var(--muted);border:1px solid rgba(78,78,120,.3);}
+.sh-done .badge{background:rgba(78,78,120,.25);color:var(--muted);}
+.sh-upcoming{background:rgba(76,201,240,.08);color:var(--blue);border:1px solid rgba(76,201,240,.25);}
+.sh-upcoming .badge{background:rgba(76,201,240,.2);color:var(--blue);}
 
-  /* JOURNAL */
-  .journal-entry {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem;
-    transition: border-color 0.2s;
-  }
-  .journal-entry:hover { border-color: var(--accent); }
-  .journal-entry.today-entry { border-color: var(--accent); background: rgba(108,99,255,0.05); }
-  .journal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
-  .journal-date { font-size: 0.7rem; color: var(--accent); font-weight: 600; }
-  .journal-day { font-size: 0.6rem; color: var(--muted); }
-  .journal-mood { display: flex; gap: 0.5rem; align-items: center; }
-  .mood-circle {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: var(--dim); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.65rem; font-weight: 700; cursor: pointer; transition: all 0.15s;
-  }
-  .mood-circle.sel { background: var(--accent); border-color: var(--accent); color: white; }
-  .journal-textarea {
-    width: 100%; background: var(--dim); border: 1px solid var(--border);
-    color: var(--text); font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; padding: 0.6rem 0.75rem; border-radius: 6px;
-    resize: none; transition: border-color 0.15s; line-height: 1.6;
-  }
-  .journal-textarea:focus { outline: none; border-color: var(--accent); }
-  .journal-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem; }
+.sched-wrap{overflow-x:auto;border-radius:0 0 10px 10px;
+  border:1px solid var(--border);border-top:none;margin-bottom:.25rem;}
+.sched-table{width:100%;border-collapse:collapse;font-size:.66rem;min-width:820px;}
+.sched-table th{background:var(--bg3);padding:.5rem .65rem;text-align:left;
+  font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  border-bottom:1.5px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:5;}
+.sched-table td{padding:.42rem .65rem;border-bottom:1px solid rgba(30,30,58,.4);
+  vertical-align:middle;}
+.sched-table tr:last-child td{border-bottom:none;}
+.sched-table tr:hover td{background:rgba(108,99,255,.04);}
+/* Row accents by section */
+.row-study td{background:rgba(108,99,255,.04);}
+.row-revise td{background:rgba(67,233,123,.03);}
+.row-done td{opacity:.6;}
+.row-upcoming td{}
+.row-gt td{background:rgba(255,77,109,.04);}
 
-  /* WEAK TOPICS */
-  .weak-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
-  .weak-table th {
-    text-align: left; padding: 0.5rem 0.75rem;
-    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); border-bottom: 1px solid var(--border);
-  }
-  .weak-table td { padding: 0.65rem 0.75rem; border-bottom: 1px solid rgba(30,30,58,0.5); }
-  .weak-table tr:hover td { background: rgba(255,77,109,0.03); }
-  .add-btn {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border: none; color: white;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
-    padding: 0.5rem 1.25rem; border-radius: 6px; cursor: pointer;
-    font-weight: 600; letter-spacing: 0.05em; transition: opacity 0.2s;
-  }
-  .add-btn:hover { opacity: 0.85; }
-  .del-btn {
-    background: rgba(255,77,109,0.15); border: 1px solid rgba(255,77,109,0.3);
-    color: var(--red); font-size: 0.65rem; padding: 0.15rem 0.5rem;
-    border-radius: 4px; cursor: pointer; transition: all 0.15s;
-  }
-  .del-btn:hover { background: var(--red); color: white; }
+.sched-table input[type="number"],.sched-table input[type="text"]{
+  background:var(--dim);border:1px solid transparent;color:var(--text);
+  font-family:'JetBrains Mono',monospace;font-size:.63rem;padding:.18rem .35rem;
+  border-radius:4px;width:42px;text-align:center;transition:border-color .15s;}
+.sched-table input[type="text"].wide{width:65px;}
+.sched-table input:focus{outline:none;border-color:var(--accent);}
+.sched-table input:hover{border-color:var(--dim);}
 
-  /* MCQ LOG */
-  .mcq-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
-  .mcq-table th {
-    text-align: left; padding: 0.5rem 0.75rem;
-    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); border-bottom: 1px solid var(--border);
-  }
-  .mcq-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(30,30,58,0.5); }
-  .mcq-input {
-    background: var(--dim); border: 1px solid var(--border);
-    color: var(--text); font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem; padding: 0.25rem 0.5rem; border-radius: 4px;
-    transition: border-color 0.15s;
-  }
-  .mcq-input:focus { outline: none; border-color: var(--accent); }
-  .mcq-input.num { width: 55px; text-align: center; }
-  .mcq-input.wide { width: 110px; }
+/* Rating pill in schedule */
+.sched-rating{display:flex;gap:.25rem;}
+.sched-r{width:18px;height:18px;border-radius:3px;border:1px solid var(--border);
+  background:var(--dim);cursor:pointer;transition:all .15s;font-size:.55rem;
+  display:flex;align-items:center;justify-content:center;color:var(--muted);}
+.sched-r:hover{transform:scale(1.15);}
+.sched-r.sr1{background:rgba(255,77,109,.3);border-color:var(--r1);color:var(--r1);}
+.sched-r.sr2{background:rgba(255,140,66,.3);border-color:var(--r2);color:var(--r2);}
+.sched-r.sr3{background:rgba(255,214,10,.3);border-color:var(--r3);color:var(--r3);}
+.sched-r.sr4{background:rgba(123,237,159,.25);border-color:var(--r4);color:var(--r4);}
+.sched-r.sr5{background:rgba(46,204,113,.3);border-color:var(--r5);color:var(--r5);}
 
-  /* MODAL */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    z-index: 200; display: none; align-items: center; justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 2rem; max-width: 420px; width: 90%;
-    animation: fadeIn 0.2s ease;
-  }
-  .modal-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; }
-  .modal-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
-  .modal-input {
-    width: 100%; background: var(--bg3); border: 1px solid var(--border);
-    color: var(--text); font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem; padding: 0.6rem 0.75rem; border-radius: 8px;
-    margin-bottom: 1rem; transition: border-color 0.15s;
-  }
-  .modal-input:focus { outline: none; border-color: var(--accent); }
-  .modal-btns { display: flex; gap: 0.75rem; justify-content: flex-end; }
-  .modal-cancel {
-    background: var(--dim); border: none; color: var(--muted);
-    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
-    padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;
-  }
+.sched-status{display:inline-block;padding:.12rem .45rem;border-radius:4px;font-size:.58rem;white-space:nowrap;}
+.status-today{background:rgba(108,99,255,.2);color:var(--accent);border:1px solid rgba(108,99,255,.4);}
+.status-done{background:rgba(67,233,123,.15);color:var(--green);}
+.status-revise{background:rgba(67,233,123,.1);color:var(--green);border:1px solid rgba(67,233,123,.3);}
+.status-d1{background:rgba(255,77,109,.15);color:var(--r1);}
+.status-d3{background:rgba(255,140,66,.15);color:var(--r2);}
+.status-upcoming{color:var(--muted);}
+.status-gt{background:rgba(255,77,109,.1);color:var(--r1);border:1px solid rgba(255,77,109,.3);}
 
-  /* COUNTDOWN BAR */
-  .countdown-bar {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1rem 1.5rem;
-    display: flex; align-items: center; gap: 2rem; margin-bottom: 1.5rem;
-    overflow: hidden; position: relative;
-  }
-  .countdown-bar::after {
-    content: 'INI-CET 2026';
-    position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%);
-    font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 700;
-    letter-spacing: 0.2em; color: var(--muted);
-  }
-  .cbar-item { text-align: center; }
-  .cbar-num { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); line-height: 1; }
-  .cbar-label { font-size: 0.55rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
-  .cbar-div { width: 1px; height: 30px; background: var(--border); }
-  .cbar-progress { flex: 1; }
-  .cbar-bar-wrap { height: 6px; background: var(--dim); border-radius: 3px; overflow: hidden; margin-top: 0.3rem; }
-  .cbar-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; }
-  .cbar-pct { font-size: 0.62rem; color: var(--muted); display: flex; justify-content: space-between; }
+/* SR PILL STRIP */
+.sr-cell{padding:.35rem .65rem !important;}
+.sr-strip{display:flex;gap:3px;align-items:center;margin-bottom:4px;}
+.sr-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;font-weight:700;cursor:pointer;transition:all .15s ease;
+  font-family:'Syne',sans-serif;border:1.5px solid transparent;user-select:none;}
+.sr-dot:hover{transform:scale(1.15);}
+.sr-pending{background:transparent;border-color:var(--dim);color:var(--muted);}
+.sr-pending:hover{border-color:var(--accent);color:var(--accent);}
+.sr-done{background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-color:transparent;color:#fff;box-shadow:0 0 6px rgba(108,99,255,.4);}
+.sr-progress-bar{height:3px;background:var(--dim);border-radius:2px;overflow:hidden;}
+.sr-progress-fill{height:100%;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s ease;}
+.sr-all-done .sr-progress-bar{box-shadow:0 0 4px rgba(108,99,255,.6);}
 
-  /* GT CHART */
-  .gt-chart-wrap { height: 180px; position: relative; margin-bottom: 1rem; }
-  .gt-chart-wrap svg { width: 100%; height: 100%; }
+/* ACCORDION SECTION HEADERS */
+.sched-section-header{cursor:pointer;transition:opacity .15s;}
+.sched-section-header:hover{opacity:.85;}
+.sched-section-header .toggle-arrow{margin-left:auto;font-size:.75rem;transition:transform .2s;}
+.sched-section-header.collapsed .toggle-arrow{transform:rotate(-90deg);}
+.sched-section-body{transition:all .2s;}
+.sched-section-body.collapsed{display:none;}
 
-  /* TOAST */
-  .toast {
-    position: fixed; bottom: 2rem; right: 2rem;
-    background: var(--accent); color: white;
-    padding: 0.7rem 1.25rem; border-radius: 8px;
-    font-size: 0.72rem; font-weight: 600;
-    z-index: 500; transform: translateY(100px); opacity: 0;
-    transition: all 0.3s;
-  }
-  .toast.show { transform: translateY(0); opacity: 1; }
+/* JOURNAL SLEEP/EXERCISE */
+.j-inline-row{display:flex;gap:.75rem;margin-bottom:.65rem;flex-wrap:wrap;}
+.j-inline-field{display:flex;flex-direction:column;gap:.2rem;flex:1;min-width:100px;}
+.j-input{background:var(--dim);border:1px solid var(--border);color:var(--text);
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:.35rem .55rem;
+  border-radius:6px;transition:border-color .15s;width:100%;}
+.j-input:focus{outline:none;border-color:var(--accent);}
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+/* SCHEDULE HEADER BAR */
+.sched-topbar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;}
+.sched-live-pill{background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);
+  color:var(--accent);font-size:.62rem;padding:.25rem .65rem;border-radius:20px;
+  font-weight:600;white-space:nowrap;}
+.sched-live-pill span{color:var(--text);}
 
-  /* INPUT STYLES for inline editing */
-  .inline-val {
-    cursor: pointer; border-bottom: 1px dashed var(--muted);
-    padding-bottom: 1px; transition: border-color 0.15s;
-  }
-  .inline-val:hover { border-color: var(--accent); color: var(--accent); }
+/* SCHEDULE ROW JOURNAL EMOJI */
+.row-journal-tip{font-size:.65rem;margin-left:.35rem;opacity:.7;}
 
-  @media (max-width: 768px) {
-    .grid-4 { grid-template-columns: repeat(2,1fr); }
-    .grid-3 { grid-template-columns: 1fr 1fr; }
-    .grid-2, .grid-65 { grid-template-columns: 1fr; }
-    .conf-grid { grid-template-columns: repeat(2,1fr); }
-  }
+/* ========================
+   GT SCORES TAB
+   ======================== */
+.gt-summary-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;}
+.gt-chart-wrap{height:170px;position:relative;margin-bottom:.75rem;}
+.gt-chart-wrap svg{width:100%;height:100%;}
+
+.gt-list-header{
+  display:grid;
+  grid-template-columns:36px 1.8fr 90px 70px 65px 65px 50px 80px 1fr;
+  gap:.5rem;padding:.5rem .75rem;
+  font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);border-bottom:1px solid var(--border);}
+.gt-row{
+  display:grid;
+  grid-template-columns:36px 1.8fr 90px 70px 65px 65px 50px 80px 1fr;
+  gap:.5rem;padding:.6rem .75rem;
+  border-radius:8px;margin-bottom:.3rem;
+  background:var(--bg3);border:1px solid var(--border);
+  transition:all .2s;align-items:center;cursor:pointer;}
+.gt-row:hover{border-color:var(--accent);}
+.gt-num{font-size:.62rem;color:var(--muted);text-align:center;}
+.gt-name{font-size:.7rem;font-weight:500;}
+.gt-date{font-size:.62rem;color:var(--muted);}
+.gt-cws{font-size:.65rem;color:var(--muted);}
+.gt-acc{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;}
+.gt-pct{font-size:.65rem;color:var(--muted);}
+.gt-trend{font-size:.72rem;text-align:center;}
+.gt-notes-cell{font-size:.62rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.gt-edit-panel{
+  background:var(--bg3);border:1px solid var(--accent);border-radius:8px;
+  padding:1rem 1.25rem;margin-bottom:.5rem;display:none;}
+.gt-edit-panel.open{display:block;animation:fadeIn .2s ease;}
+.gt-edit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.65rem;}
+.field-group{display:flex;flex-direction:column;gap:.25rem;}
+.field-label{font-size:.54rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.field-input{background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.4rem .6rem;
+  border-radius:6px;width:100%;transition:border-color .15s;}
+.field-input:focus{outline:none;border-color:var(--accent);}
+.field-input.wide{grid-column:span 2;}
+
+/* CORRECTS/WRONGS BAR */
+.cw-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:.3rem;gap:1px;}
+.cw-correct{background:var(--green);}
+.cw-wrong{background:var(--r1);}
+.cw-skip{background:var(--dim);}
+
+/* ========================
+   JOURNAL
+   ======================== */
+.journal-entry{background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:1.1rem;margin-bottom:.9rem;transition:border-color .2s;}
+.journal-entry:hover{border-color:rgba(108,99,255,.4);}
+.journal-entry.today-entry{border-color:var(--accent);background:rgba(108,99,255,.05);}
+.journal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.75rem;gap:.75rem;flex-wrap:wrap;}
+.journal-date{font-size:.68rem;color:var(--accent);font-weight:600;}
+.journal-day{font-size:.58rem;color:var(--muted);}
+.journal-mood{display:flex;gap:.3rem;}
+.mood-circle{width:26px;height:26px;border-radius:50%;background:var(--dim);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+  font-size:.62rem;font-weight:700;cursor:pointer;transition:all .15s;}
+.mood-circle.sel{background:var(--accent);border-color:var(--accent);color:#fff;}
+.journal-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:.5rem;}
+.j-label{font-size:.54rem;color:var(--muted);margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.1em;}
+.journal-textarea{width:100%;background:var(--dim);border:1px solid var(--border);
+  color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  padding:.5rem .65rem;border-radius:6px;resize:none;line-height:1.6;transition:border-color .15s;}
+.journal-textarea:focus{outline:none;border-color:var(--accent);}
+
+/* WEAK TOPICS */
+.weak-table{width:100%;border-collapse:collapse;font-size:.68rem;}
+.weak-table th{text-align:left;padding:.45rem .65rem;font-size:.55rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);}
+.weak-table td{padding:.6rem .65rem;border-bottom:1px solid rgba(30,30,58,.5);}
+.weak-table tr:hover td{background:rgba(255,77,109,.03);}
+
+/* MCQ LOG */
+.mcq-table{width:100%;border-collapse:collapse;font-size:.68rem;}
+.mcq-table th{text-align:left;padding:.45rem .65rem;font-size:.55rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);}
+.mcq-table td{padding:.45rem .65rem;border-bottom:1px solid rgba(30,30,58,.5);}
+.mcq-input{background:var(--dim);border:1px solid transparent;color:var(--text);
+  font-family:'JetBrains Mono',monospace;font-size:.66rem;padding:.22rem .45rem;
+  border-radius:4px;transition:border-color .15s;}
+.mcq-input:focus{outline:none;border-color:var(--accent);}
+.mcq-input.num{width:52px;text-align:center;}
+.mcq-input.wide{width:105px;}
+
+/* BUTTONS */
+.add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.45rem 1.1rem;
+  border-radius:6px;cursor:pointer;font-weight:600;letter-spacing:.05em;transition:opacity .2s;}
+.add-btn:hover{opacity:.85;}
+.del-btn{background:rgba(255,77,109,.15);border:1px solid rgba(255,77,109,.3);
+  color:var(--r1);font-size:.62rem;padding:.12rem .45rem;border-radius:4px;
+  cursor:pointer;transition:all .15s;}
+.del-btn:hover{background:var(--r1);color:#fff;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
+  display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:1.75rem;max-width:400px;width:100%;animation:fadeIn .2s ease;}
+.modal-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1.1rem;}
+.modal-label{font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem;display:block;}
+.modal-input{width:100%;background:var(--bg3);border:1px solid var(--border);
+  color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.78rem;
+  padding:.55rem .7rem;border-radius:8px;margin-bottom:.85rem;transition:border-color .15s;}
+.modal-input:focus{outline:none;border-color:var(--accent);}
+.modal-btns{display:flex;gap:.65rem;justify-content:flex-end;}
+.modal-cancel{background:var(--dim);border:none;color:var(--muted);
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:.45rem .9rem;
+  border-radius:6px;cursor:pointer;}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.75rem;right:1.75rem;background:var(--accent);color:#fff;
+  padding:.65rem 1.1rem;border-radius:8px;font-size:.7rem;font-weight:600;
+  z-index:500;transform:translateY(80px);opacity:0;transition:all .3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--accent);}
+
+/* MOBILE */
+@media(max-width:768px){
+  nav{padding:0 .75rem;}
+  .nav-brand{font-size:.8rem;}
+  .nav-tab{padding:.28rem .55rem;font-size:.6rem;}
+  .page{padding:.9rem;}
+  .grid-4{grid-template-columns:repeat(2,1fr);}
+  .grid-3{grid-template-columns:1fr 1fr;}
+  .grid-2,.grid-65{grid-template-columns:1fr;}
+  .conf-grid{grid-template-columns:repeat(2,1fr);}
+  .gt-summary-cards{grid-template-columns:repeat(2,1fr);}
+  .journal-grid{grid-template-columns:1fr;}
+  .gt-list-header,.gt-row{grid-template-columns:28px 1fr 75px 60px 55px 60px;}
+  .gt-row .gt-pct,.gt-row .gt-notes-cell,.gt-list-header>*:nth-child(7),
+  .gt-list-header>*:nth-child(8),.gt-list-header>*:nth-child(9){display:none;}
+  .countdown-bar{gap:.75rem;}
+  .cbar-div{display:none;}
+}
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <div class="nav-brand">PREP<span>OS</span> v4</div>
+  <div class="nav-brand">PREP<span>OS</span> <span style="color:var(--accent2);font-size:.7rem;">v4</span></div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchPage('dashboard')">⚡ Dashboard</button>
-    <button class="nav-tab" onclick="switchPage('schedule')">📅 Schedule</button>
-    <button class="nav-tab" onclick="switchPage('gt')">🏆 GT Scores</button>
-    <button class="nav-tab" onclick="switchPage('journal')">📔 Journal</button>
-    <button class="nav-tab" onclick="switchPage('weak')">⚠️ Weak Topics</button>
-    <button class="nav-tab" onclick="switchPage('mcq')">📝 MCQ Log</button>
+    <button class="nav-tab active" onclick="switchPage('dashboard',this)">⚡ Dashboard</button>
+    <button class="nav-tab" onclick="switchPage('schedule',this)">📅 Schedule</button>
+    <button class="nav-tab" onclick="switchPage('gt',this)">🏆 GT Scores</button>
+    <button class="nav-tab" onclick="switchPage('journal',this)">📔 Journal</button>
+    <button class="nav-tab" onclick="switchPage('weak',this)">⚠️ Weak</button>
+    <button class="nav-tab" onclick="switchPage('mcq',this)">📝 MCQ Log</button>
   </div>
-  <div class="nav-right">
-    <span class="exam-badge">● INI-CET May 8, 2026</span>
-  </div>
+  <div class="exam-badge">● INI-CET May 8</div>
 </nav>
 
 <!-- TOAST -->
 <div class="toast" id="toast">Saved ✓</div>
 
-<!-- MODAL FOR CONFIDENCE EDIT -->
+<!-- CONF MODAL -->
 <div class="modal-overlay" id="confModal">
   <div class="modal">
     <div class="modal-title" id="confModalTitle">Edit Confidence</div>
-    <label class="modal-label">Confidence Level (1–5)</label>
+    <label class="modal-label">Confidence (1–5)</label>
     <input class="modal-input" id="confModalInput" type="number" min="1" max="5">
-    <label class="modal-label">Last Revised (optional)</label>
-    <input class="modal-input" id="confModalRevised" type="text" placeholder="e.g. 2026-03-10">
+    <label class="modal-label">Last Revised</label>
+    <input class="modal-input" id="confModalRevised" type="text" placeholder="e.g. 11-Mar">
     <label class="modal-label">PYQ Accuracy %</label>
     <input class="modal-input" id="confModalPYQ" type="number" min="0" max="100">
     <label class="modal-label">MCQ Accuracy %</label>
@@ -511,21 +453,13 @@
   </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- DASHBOARD PAGE -->
-<!-- ============================================================ -->
+<!-- ==================== DASHBOARD ==================== -->
 <div class="page active" id="page-dashboard">
 
-  <!-- Countdown Bar -->
   <div class="countdown-bar">
     <div class="cbar-item">
       <div class="cbar-num" id="daysLeft">51</div>
       <div class="cbar-label">Days Left</div>
-    </div>
-    <div class="cbar-div"></div>
-    <div class="cbar-item">
-      <div class="cbar-num" id="todayDay">5</div>
-      <div class="cbar-label">Today Day #</div>
     </div>
     <div class="cbar-div"></div>
     <div class="cbar-item">
@@ -534,49 +468,54 @@
     </div>
     <div class="cbar-div"></div>
     <div class="cbar-item">
-      <div class="cbar-num" style="color:var(--green)" id="gtAvg">43.5%</div>
+      <div class="cbar-num" style="color:var(--green)" id="gtAvgStat">43.5%</div>
       <div class="cbar-label">GT Avg Acc.</div>
     </div>
     <div class="cbar-div"></div>
+    <div class="cbar-item">
+      <div class="cbar-num" style="color:var(--blue)">Day 5</div>
+      <div class="cbar-label">Today</div>
+    </div>
+    <div class="cbar-div"></div>
     <div class="cbar-progress">
-      <div class="cbar-pct">
-        <span>Day 5 of 56</span>
-        <span id="progressPct">9%</span>
-      </div>
-      <div class="cbar-bar-wrap">
-        <div class="cbar-bar" id="progressBar" style="width:9%"></div>
-      </div>
+      <div class="cbar-pct"><span>Day 5 of 56</span><span>9%</span></div>
+      <div class="cbar-bar-wrap"><div class="cbar-bar" style="width:9%"></div></div>
     </div>
   </div>
 
-  <!-- Top row: Today + Spaced Rep -->
   <div class="grid-65">
     <!-- Today's Command Center -->
     <div class="panel">
-      <div class="panel-title"><span class="dot"></span> Today's Command Center · Day 5</div>
+      <div class="panel-title"><span class="dot"></span>Today's Command Center · Day 5</div>
       <div class="today-subject">Dermatology</div>
-      <div class="today-meta">Wed, 11 Mar 2026 · Study Day</div>
-      <div class="today-type type-study">✅ Regular Study Day</div>
+      <div class="today-meta">Wed, 11 Mar 2026 · Regular Study Day</div>
 
-      <div style="margin-top:1.25rem;">
-        <div class="section-title">Daily Targets — click to update</div>
-        <div id="targetsWrap">
-          <!-- rendered by JS -->
-        </div>
+      <!-- 1–5 Rating -->
+      <div class="rating-wrap">
+        <span class="rating-label">Today's Rating</span>
+        <button class="r-btn" id="rb1" onclick="setRating(1)">1</button>
+        <button class="r-btn" id="rb2" onclick="setRating(2)">2</button>
+        <button class="r-btn" id="rb3" onclick="setRating(3)">3</button>
+        <button class="r-btn" id="rb4" onclick="setRating(4)">4</button>
+        <button class="r-btn" id="rb5" onclick="setRating(5)">5</button>
+        <span class="rating-desc" id="ratingDesc">Not set</span>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <div style="font-size:.58rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.65rem;">Daily Targets</div>
+        <div id="targetsWrap"></div>
       </div>
     </div>
 
-    <!-- Spaced Rep Due Today -->
+    <!-- Spaced Rep Due -->
     <div class="panel">
-      <div class="panel-title"><span class="dot" style="background:var(--green)"></span> Spaced Rep Due</div>
-      <div style="margin-bottom:0.75rem; font-size:0.65rem; color:var(--muted);">
-        <span style="color:var(--accent); font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800;">2</span>
-        &nbsp;revision topics today
+      <div class="panel-title"><span class="dot" style="background:var(--green)"></span>Spaced Rep Due</div>
+      <div style="margin-bottom:.65rem;">
+        <span style="color:var(--accent);font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;">2</span>
+        <span style="font-size:.62rem;color:var(--muted);"> topics today</span>
       </div>
       <table class="sr-table">
-        <thead>
-          <tr><th>Gap</th><th>Topic</th><th>✅</th></tr>
-        </thead>
+        <thead><tr><th>Gap</th><th>Topic</th><th>✅</th></tr></thead>
         <tbody id="srBody"></tbody>
       </table>
     </div>
@@ -584,60 +523,56 @@
 
   <!-- Subject Confidence -->
   <div class="panel">
-    <div class="panel-title"><span class="dot" style="background:var(--yellow)"></span> Subject Confidence · Click any card to edit</div>
+    <div class="panel-title"><span class="dot" style="background:var(--yellow)"></span>Subject Confidence · Click to Edit</div>
     <div class="conf-grid" id="confGrid"></div>
   </div>
 
 </div>
 
-<!-- ============================================================ -->
-<!-- SCHEDULE PAGE -->
-<!-- ============================================================ -->
+<!-- ==================== SCHEDULE ==================== -->
 <div class="page" id="page-schedule">
-  <div class="panel">
-    <div class="panel-title"><span class="dot"></span> Integrated Study Schedule · Days 1–44</div>
-    <div style="font-size:0.65rem; color:var(--muted); margin-bottom:1rem; display:flex; gap:1.5rem; flex-wrap:wrap;">
-      <span><span style="color:var(--accent)">■</span> TODAY</span>
-      <span><span style="color:var(--green)">■</span> REVISION DUE</span>
-      <span><span style="color:var(--red)">■</span> GT DAY</span>
-      <span style="color:var(--muted)">■ PAST / UPCOMING</span>
+
+  <div class="sched-topbar">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;">Study Schedule</div>
+      <div style="font-size:.62rem;color:var(--muted);">46-day plan · INI-CET May 8, 2026 · Click any cell to edit inline</div>
     </div>
-    <div class="sched-wrap">
-      <table class="sched-table">
-        <thead>
-          <tr>
-            <th>Date</th><th>Day</th><th>Subject</th><th>Status</th>
-            <th>D+1 ✅</th><th>D+3 ✅</th><th>D+7 ✅</th><th>D+15 ✅</th><th>D+30 ✅</th>
-            <th>PYQ 📖</th><th>MCQ 📝</th><th>Mix 🔀</th><th>Anki 💡</th><th>Anki New 🆕</th>
-            <th>Fact 📔</th><th>GT 🏆</th><th>Video 🎥</th><th>Sleep 😴</th><th>Exer 🏃</th>
-          </tr>
-        </thead>
-        <tbody id="schedBody"></tbody>
-      </table>
+    <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+      <div class="sched-live-pill">💡 Anki today: <span id="ankiTodayLive">—</span></div>
+      <span style="font-size:.58rem;padding:.12rem .45rem;border-radius:4px;background:rgba(255,77,109,.15);color:var(--r1);">1=Not done</span>
+      <span style="font-size:.58rem;padding:.12rem .45rem;border-radius:4px;background:rgba(255,214,10,.15);color:var(--r3);">3=Partial</span>
+      <span style="font-size:.58rem;padding:.12rem .45rem;border-radius:4px;background:rgba(46,204,113,.2);color:var(--r5);">5=Done ✓</span>
     </div>
   </div>
+
+  <!-- STUDY NOW section -->
+  <div class="sched-section" id="sched-study"></div>
+  <!-- REVISE NOW section -->
+  <div class="sched-section" id="sched-revise"></div>
+  <!-- DONE section -->
+  <div class="sched-section" id="sched-done"></div>
+  <!-- UPCOMING section -->
+  <div class="sched-section" id="sched-upcoming"></div>
+
 </div>
 
-<!-- ============================================================ -->
-<!-- GT SCORES PAGE -->
-<!-- ============================================================ -->
+<!-- ==================== GT SCORES ==================== -->
 <div class="page" id="page-gt">
 
-  <!-- Summary stats -->
-  <div class="grid-4" style="margin-bottom:1.5rem;">
+  <div class="gt-summary-cards">
     <div class="stat-card">
       <div class="stat-label">Best Corrects</div>
-      <div class="stat-value stat-green">115</div>
+      <div class="stat-value" style="color:var(--green)">115</div>
       <div class="stat-sub">NEET 2023 Recall</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Latest Corrects</div>
-      <div class="stat-value stat-accent">87</div>
+      <div class="stat-value" style="color:var(--accent)">87</div>
       <div class="stat-sub">GT#22 · Mar 7</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Avg Accuracy</div>
-      <div class="stat-value stat-orange">43.5%</div>
+      <div class="stat-value" style="color:var(--orange)">43.5%</div>
       <div class="stat-sub">Over 22 GTs</div>
     </div>
     <div class="stat-card">
@@ -647,656 +582,790 @@
     </div>
   </div>
 
-  <!-- Chart -->
+  <!-- Accuracy + C/W/S chart -->
   <div class="panel">
-    <div class="panel-title"><span class="dot" style="background:var(--accent2)"></span> Accuracy Trend</div>
-    <div class="gt-chart-wrap">
-      <svg id="gtChart" viewBox="0 0 800 160" preserveAspectRatio="none"></svg>
+    <div class="panel-title"><span class="dot" style="background:var(--accent2)"></span>Accuracy Trend · Corrects / Wrongs / Skips</div>
+    <div class="gt-chart-wrap"><svg id="gtChart" viewBox="0 0 820 160" preserveAspectRatio="none"></svg></div>
+    <!-- Corrects/Wrongs stacked bars -->
+    <div style="overflow-x:auto;margin-top:.5rem;">
+      <div id="cwBars" style="display:flex;gap:2px;min-width:600px;align-items:flex-end;height:60px;"></div>
+      <div style="display:flex;gap:1.5rem;margin-top:.5rem;font-size:.6rem;">
+        <span><span style="color:var(--green)">■</span> Correct</span>
+        <span><span style="color:var(--r1)">■</span> Wrong</span>
+        <span><span style="color:var(--muted)">■</span> Skip</span>
+      </div>
     </div>
   </div>
 
   <!-- GT Entries -->
   <div class="panel">
-    <div class="panel-title"><span class="dot"></span> All Grand Tests · Click row to edit</div>
-    <div style="display:flex; justify-content:flex-end; margin-bottom:0.75rem;">
+    <div class="panel-title"><span class="dot"></span>All Grand Tests · Click row to expand &amp; edit</div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:.75rem;">
       <button class="add-btn" onclick="addGTRow()">+ Add GT</button>
+    </div>
+    <!-- Column headers -->
+    <div class="gt-list-header">
+      <div>#</div><div>Test Name</div><div>Date</div>
+      <div>C / W / S</div><div>Accuracy</div><div>Percentile</div>
+      <div>Trend</div><div>Rank</div><div>Weak Areas / Notes</div>
     </div>
     <div id="gtList"></div>
   </div>
+
 </div>
 
-<!-- ============================================================ -->
-<!-- JOURNAL PAGE -->
-<!-- ============================================================ -->
+<!-- ==================== JOURNAL ==================== -->
 <div class="page" id="page-journal">
   <div class="panel">
-    <div class="panel-title"><span class="dot" style="background:var(--accent2)"></span> End-of-Day Journal</div>
+    <div class="panel-title"><span class="dot" style="background:var(--accent2)"></span>End-of-Day Journal</div>
     <div id="journalWrap"></div>
+    <div style="text-align:center;margin-top:1rem;">
+      <button class="add-btn" id="loadMoreBtn" onclick="showMoreJournal()">Load More ↓</button>
+    </div>
   </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- WEAK TOPICS PAGE -->
-<!-- ============================================================ -->
+<!-- ==================== WEAK TOPICS ==================== -->
 <div class="page" id="page-weak">
   <div class="panel">
-    <div class="panel-title"><span class="dot" style="background:var(--red)"></span> Weak Topic Tracker</div>
-    <div style="font-size:0.65rem; color:var(--muted); margin-bottom:1rem;">
-      Rule ⚡: Same topic wrong 3× → Block 1 next morning &nbsp;|&nbsp; GT wrong 2+ times → add immediately
+    <div class="panel-title"><span class="dot" style="background:var(--r1)"></span>Weak Topic Tracker</div>
+    <div style="font-size:.62rem;color:var(--muted);margin-bottom:.75rem;">
+      ⚡ Wrong 3× → Block 1 next morning &nbsp;|&nbsp; GT wrong 2+ same topic → add immediately
     </div>
-    <div style="display:flex; justify-content:flex-end; margin-bottom:0.75rem;">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem;">
       <button class="add-btn" onclick="addWeakTopic()">+ Add Topic</button>
     </div>
+    <div style="overflow-x:auto;">
     <table class="weak-table">
-      <thead>
-        <tr><th>#</th><th>Subject</th><th>Topic</th><th>Reason</th><th>Times Wrong</th><th>Date Flagged</th><th>Rev 1</th><th>Rev 2</th><th>Resolved</th><th></th></tr>
-      </thead>
+      <thead><tr>
+        <th>#</th><th>Subject</th><th>Topic</th><th>Reason</th>
+        <th>Times ✗</th><th>Flagged</th><th>Rev 1</th><th>Rev 2</th><th>Resolved</th><th></th>
+      </tr></thead>
       <tbody id="weakBody"></tbody>
     </table>
+    </div>
   </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MCQ LOG PAGE -->
-<!-- ============================================================ -->
+<!-- ==================== MCQ LOG ==================== -->
 <div class="page" id="page-mcq">
-
-  <div class="grid-4" style="margin-bottom:1.5rem;">
+  <div class="grid-4" style="margin-bottom:1rem;">
     <div class="stat-card">
-      <div class="stat-label">Total MCQs Today</div>
-      <div class="stat-value stat-accent" id="mcqTotalToday">0</div>
+      <div class="stat-label">Total MCQs</div>
+      <div class="stat-value" style="color:var(--accent)" id="mcqTotal">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Overall Accuracy</div>
-      <div class="stat-value stat-green" id="mcqAccuracy">—</div>
+      <div class="stat-label">Overall Acc.</div>
+      <div class="stat-value" style="color:var(--green)" id="mcqAcc">—</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Total Correct</div>
-      <div class="stat-value" style="color:var(--green)" id="mcqCorrectTotal">0</div>
+      <div class="stat-value" style="color:var(--green)" id="mcqCorrect">0</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Total Wrong</div>
-      <div class="stat-value stat-red" id="mcqWrongTotal">0</div>
+      <div class="stat-value" style="color:var(--r1)" id="mcqWrong">0</div>
     </div>
   </div>
-
   <div class="panel">
-    <div class="panel-title"><span class="dot"></span> MCQ Sessions · Fill daily</div>
-    <div style="display:flex; justify-content:flex-end; margin-bottom:0.75rem;">
+    <div class="panel-title"><span class="dot"></span>MCQ Sessions</div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem;">
       <button class="add-btn" onclick="addMCQRow()">+ Add Session</button>
     </div>
     <div style="overflow-x:auto;">
-      <table class="mcq-table">
-        <thead>
-          <tr><th>#</th><th>Date</th><th>Source</th><th>Total</th><th>Correct</th><th>Wrong</th><th>Skip</th><th>Acc%</th><th>Subject</th><th>Topic</th><th>Conf★</th><th></th></tr>
-        </thead>
-        <tbody id="mcqBody"></tbody>
-      </table>
+    <table class="mcq-table">
+      <thead><tr>
+        <th>#</th><th>Date</th><th>Source</th><th>Total</th>
+        <th>Correct</th><th>Wrong</th><th>Skip</th><th>Acc%</th>
+        <th>Subject</th><th>Topic</th><th>Conf★</th><th></th>
+      </tr></thead>
+      <tbody id="mcqBody"></tbody>
+    </table>
     </div>
   </div>
 </div>
 
-
+<!-- ==================== JS ==================== -->
 <script>
-// ==============================
-// DATA STORE (localStorage-backed)
-// ==============================
+// ============================================================
+// DATA
+// ============================================================
 const EXAM_DATE = new Date('2026-05-08');
-const TODAY = new Date('2026-03-11');
+const TODAY_DATE = new Date('2026-03-11');
 
-function getDaysLeft() {
-  return Math.ceil((EXAM_DATE - TODAY) / 86400000);
-}
-
-// ---- SUBJECTS ----
+/* ---------- SUBJECTS ---------- */
 let subjects = [
-  {name:'Anatomy', conf:2, revised:'', pyq:'', mcq:''},
-  {name:'Physiology', conf:3, revised:'', pyq:'', mcq:''},
-  {name:'Biochemistry', conf:1, revised:'', pyq:'', mcq:''},
-  {name:'Pathology', conf:2, revised:'', pyq:'', mcq:''},
-  {name:'Pharmacology', conf:1, revised:'', pyq:'', mcq:''},
-  {name:'Microbiology', conf:3, revised:'', pyq:'', mcq:''},
-  {name:'FMT/FM', conf:2, revised:'', pyq:'', mcq:''},
-  {name:'PSM/Comm. Med', conf:2, revised:'', pyq:'', mcq:''},
-  {name:'Surgery', conf:2, revised:'', pyq:'', mcq:''},
-  {name:'Medicine', conf:1, revised:'', pyq:'', mcq:''},
-  {name:'OBG', conf:3, revised:'', pyq:'', mcq:''},
-  {name:'Pediatrics', conf:2, revised:'', pyq:'', mcq:''},
-  {name:'Radiology', conf:1, revised:'', pyq:'', mcq:''},
-  {name:'Anesthesia', conf:4, revised:'', pyq:'', mcq:''},
-  {name:'Ophthalmology', conf:2, revised:'', pyq:'', mcq:''},
-  {name:'ENT', conf:2, revised:'', pyq:'', mcq:''},
-  {name:'Dermatology', conf:1, revised:'', pyq:'', mcq:''},
-  {name:'Psychiatry', conf:4, revised:'', pyq:'', mcq:''},
-  {name:'Orthopedics', conf:4, revised:'', pyq:'', mcq:''},
+  {name:'Anatomy',conf:2,revised:'',pyq:'',mcq:''},
+  {name:'Physiology',conf:3,revised:'',pyq:'',mcq:''},
+  {name:'Biochemistry',conf:1,revised:'',pyq:'',mcq:''},
+  {name:'Pathology',conf:2,revised:'',pyq:'',mcq:''},
+  {name:'Pharmacology',conf:1,revised:'',pyq:'',mcq:''},
+  {name:'Microbiology',conf:3,revised:'',pyq:'',mcq:''},
+  {name:'FMT/FM',conf:2,revised:'',pyq:'',mcq:''},
+  {name:'PSM/Comm.Med',conf:2,revised:'',pyq:'',mcq:''},
+  {name:'Surgery',conf:2,revised:'',pyq:'',mcq:''},
+  {name:'Medicine',conf:1,revised:'',pyq:'',mcq:''},
+  {name:'OBG',conf:3,revised:'',pyq:'',mcq:''},
+  {name:'Pediatrics',conf:2,revised:'',pyq:'',mcq:''},
+  {name:'Radiology',conf:1,revised:'',pyq:'',mcq:''},
+  {name:'Anesthesia',conf:4,revised:'',pyq:'',mcq:''},
+  {name:'Ophthalmology',conf:2,revised:'',pyq:'',mcq:''},
+  {name:'ENT',conf:2,revised:'',pyq:'',mcq:''},
+  {name:'Dermatology',conf:1,revised:'',pyq:'',mcq:''},
+  {name:'Psychiatry',conf:4,revised:'',pyq:'',mcq:''},
+  {name:'Orthopedics',conf:4,revised:'',pyq:'',mcq:''},
 ];
 
-// ---- TARGETS ----
+/* ---------- TARGETS ---------- */
 let targets = [
-  {icon:'📖', name:'PYQs (Today\'s Topic)', target:50, done:0},
-  {icon:'📝', name:'MCQ Topic', target:50, done:0},
-  {icon:'🔀', name:'MCQ Mixed', target:50, done:0},
-  {icon:'💡', name:'Anki Reviews', target:400, done:0},
-  {icon:'📔', name:'Fact Book Entries', target:20, done:0},
-  {icon:'🏆', name:'GT Review', target:1, done:0},
-  {icon:'🎥', name:'Revision Video', target:1, done:0},
+  {icon:'📖',name:'PYQs (Today\'s Topic)',target:50,done:0},
+  {icon:'📝',name:'MCQ Topic',target:50,done:0},
+  {icon:'🔀',name:'MCQ Mixed',target:50,done:0},
+  {icon:'💡',name:'Anki Reviews',target:400,done:0},
+  {icon:'📔',name:'Fact Book Entries',target:20,done:0},
+  {icon:'🎥',name:'Revision Video',target:1,done:0},
 ];
 
-// ---- SPACED REP ----
+/* ---------- SPACED REP ---------- */
 const srData = [
-  {gap:'⚡ D+1', topic:'Pharma', ticked:false},
-  {gap:'✨ D+3', topic:'Pharma', ticked:true},
-  {gap:'💥 D+7', topic:'—', ticked:false},
-  {gap:'🔥 D+15', topic:'—', ticked:false},
-  {gap:'♻️ D+30', topic:'—', ticked:false},
+  {gap:'⚡ D+1',topic:'Pharma',ticked:false},
+  {gap:'✨ D+3',topic:'Pharma',ticked:true},
+  {gap:'💥 D+7',topic:'—',ticked:false},
+  {gap:'🔥 D+15',topic:'—',ticked:false},
+  {gap:'♻️ D+30',topic:'—',ticked:false},
 ];
 
-// ---- SCHEDULE ----
-const scheduleData = [
-  {date:'07-Mar',day:1,subject:'GT 1',d1:'08-Mar',d3:'10-Mar',d7:'14-Mar',d15:'22-Mar',d30:'06-Apr',status:'done',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'08-Mar',day:2,subject:'Pharma',d1:'09-Mar',d3:'11-Mar',d7:'15-Mar',d15:'23-Mar',d30:'07-Apr',status:'revise-d3',d1t:true,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'✅',mcq:'✅',mix:'',anki:'',ankiN:'✅',fact:'',gt:'',vid:'✅',sleep:'✅',exer:'✅'},
-  {date:'09-Mar',day:3,subject:'Pharma',d1:'10-Mar',d3:'12-Mar',d7:'16-Mar',d15:'24-Mar',d30:'08-Apr',status:'done',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'✅',mcq:'✅',mix:'✅',anki:'',ankiN:'✅',fact:'',gt:'✅',vid:'✅',sleep:'✅',exer:'✅'},
-  {date:'10-Mar',day:4,subject:'Pharma',d1:'11-Mar',d3:'13-Mar',d7:'17-Mar',d15:'25-Mar',d30:'09-Apr',status:'revise-d1',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'11-Mar',day:5,subject:'Derma',d1:'12-Mar',d3:'14-Mar',d7:'18-Mar',d15:'26-Mar',d30:'10-Apr',status:'today',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'12-Mar',day:6,subject:'Micro',d1:'13-Mar',d3:'15-Mar',d7:'19-Mar',d15:'27-Mar',d30:'11-Apr',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'13-Mar',day:7,subject:'Micro',d1:'14-Mar',d3:'16-Mar',d7:'20-Mar',d15:'28-Mar',d30:'12-Apr',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'14-Mar',day:8,subject:'GT 2',d1:'15-Mar',d3:'17-Mar',d7:'21-Mar',d15:'29-Mar',d30:'13-Apr',status:'gt-upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'15-Mar',day:9,subject:'Surgery',d1:'16-Mar',d3:'18-Mar',d7:'22-Mar',d15:'30-Mar',d30:'14-Apr',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'16-Mar',day:10,subject:'Surgery',d1:'17-Mar',d3:'19-Mar',d7:'23-Mar',d15:'31-Mar',d30:'15-Apr',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'17-Mar',day:11,subject:'Surgery',d1:'18-Mar',d3:'20-Mar',d7:'24-Mar',d15:'01-Apr',d30:'16-Apr',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'18-Mar',day:12,subject:'Radiology',d1:'19-Mar',d3:'21-Mar',d7:'25-Mar',d15:'02-Apr',d30:'17-Apr',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'19-Mar',day:13,subject:'Pedia',d1:'20-Mar',d3:'22-Mar',d7:'26-Mar',d15:'03-Apr',d30:'18-Apr',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'20-Mar',day:14,subject:'Pedia',d1:'21-Mar',d3:'23-Mar',d7:'27-Mar',d15:'04-Apr',d30:'19-Apr',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'21-Mar',day:15,subject:'GT 3',d1:'22-Mar',d3:'24-Mar',d7:'28-Mar',d15:'05-Apr',d30:'20-Apr',status:'gt-upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'22-Mar',day:16,subject:'Biochem',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'23-Mar',day:17,subject:'Biochem',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'24-Mar',day:18,subject:'Medicine',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'25-Mar',day:19,subject:'Medicine',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'26-Mar',day:20,subject:'Medicine',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'27-Mar',day:21,subject:'Medicine',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'28-Mar',day:22,subject:'GT 4',status:'gt-upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'29-Mar',day:23,subject:'Patho',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'30-Mar',day:24,subject:'Patho',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'31-Mar',day:25,subject:'Patho',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'01-Apr',day:26,subject:'Anatomy',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'02-Apr',day:27,subject:'Anatomy',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'03-Apr',day:28,subject:'Anatomy',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'04-Apr',day:29,subject:'GT 5',status:'gt-upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'05-Apr',day:30,subject:'ENT',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'06-Apr',day:31,subject:'OBG',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'07-Apr',day:32,subject:'OBG',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'08-Apr',day:33,subject:'OBG',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'09-Apr',day:34,subject:'OBG',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'10-Apr',day:35,subject:'Ophthal',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'11-Apr',day:36,subject:'GT 6',status:'gt-upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'12-Apr',day:37,subject:'Psychiatry',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'13-Apr',day:38,subject:'Physio',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'14-Apr',day:39,subject:'Physio',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'15-Apr',day:40,subject:'Orthopedics',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'16-Apr',day:41,subject:'PSM',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'17-Apr',day:42,subject:'PSM',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'18-Apr',day:43,subject:'Anesthesia',status:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
-  {date:'19-Apr',day:44,subject:'GT 7',status:'gt-upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',ankiN:'',fact:'',gt:'',vid:'',sleep:'',exer:''},
+/* ---------- SCHEDULE ----------
+   Columns: date,day,subject,section,d1t,d3t,d7t,d15t,d30t,
+            pyq,mcq,mix,anki,rating
+   section: 'study'|'revise'|'done'|'upcoming'|'gt'
+   rating: 0-5
+*/
+let scheduleData = [
+  {date:'07-Mar',day:1,subject:'GT 1',section:'done',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'08-Mar',day:2,subject:'Pharma',section:'done',d1t:true,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'✅',mcq:'✅',mix:'',anki:'',rating:4},
+  {date:'09-Mar',day:3,subject:'Pharma',section:'done',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'✅',mcq:'✅',mix:'✅',anki:'',rating:4},
+  {date:'10-Mar',day:4,subject:'Pharma',section:'revise',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0,reviseNote:'⚡ D+1: Pharma'},
+  {date:'11-Mar',day:5,subject:'Derma',section:'study',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'12-Mar',day:6,subject:'Micro',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'13-Mar',day:7,subject:'Micro',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'14-Mar',day:8,subject:'GT 2',section:'gt',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'15-Mar',day:9,subject:'Surgery',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'16-Mar',day:10,subject:'Surgery',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'17-Mar',day:11,subject:'Surgery',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'18-Mar',day:12,subject:'Radiology',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'19-Mar',day:13,subject:'Pedia',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'20-Mar',day:14,subject:'Pedia',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'21-Mar',day:15,subject:'GT 3',section:'gt',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'22-Mar',day:16,subject:'Biochem',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'23-Mar',day:17,subject:'Biochem',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'24-Mar',day:18,subject:'Medicine',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'25-Mar',day:19,subject:'Medicine',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'26-Mar',day:20,subject:'Medicine',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'27-Mar',day:21,subject:'Medicine',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'28-Mar',day:22,subject:'GT 4',section:'gt',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'29-Mar',day:23,subject:'Patho',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'30-Mar',day:24,subject:'Patho',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'31-Mar',day:25,subject:'Patho',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'01-Apr',day:26,subject:'Anatomy',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'02-Apr',day:27,subject:'Anatomy',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'03-Apr',day:28,subject:'Anatomy',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'04-Apr',day:29,subject:'GT 5',section:'gt',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'05-Apr',day:30,subject:'ENT',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'06-Apr',day:31,subject:'OBG',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'07-Apr',day:32,subject:'OBG',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'08-Apr',day:33,subject:'OBG',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'09-Apr',day:34,subject:'OBG',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'10-Apr',day:35,subject:'Ophthal',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'11-Apr',day:36,subject:'GT 6',section:'gt',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'12-Apr',day:37,subject:'Psychiatry',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'13-Apr',day:38,subject:'Physio',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'14-Apr',day:39,subject:'Physio',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'15-Apr',day:40,subject:'Orthopedics',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'16-Apr',day:41,subject:'PSM',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'17-Apr',day:42,subject:'PSM',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'18-Apr',day:43,subject:'Anesthesia',section:'upcoming',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
+  {date:'19-Apr',day:44,subject:'GT 7',section:'gt',d1t:false,d3t:false,d7t:false,d15t:false,d30t:false,pyq:'',mcq:'',mix:'',anki:'',rating:0},
 ];
 
-// ---- GT SCORES ----
+/* ---------- GT SCORES ---------- */
 let gtScores = [
-  {num:1,name:'GT 20 NEET Pattern',date:'09-Sep-24',scoreText:'104/800',correct:59,wrong:132,skip:9,scoreNum:104,maxMarks:800,acc:30.9},
-  {num:2,name:'NEET 2022 Recall',date:'13-Sep-24',scoreText:'217/800',correct:81,wrong:103,skip:17,scoreNum:217,maxMarks:800,acc:44.0},
-  {num:3,name:'INI-CET 2025',date:'03-May-25',scoreText:'05/200',correct:40,wrong:107,skip:53,scoreNum:5,maxMarks:200,acc:27.2},
-  {num:4,name:'NEET 2024',date:'05-May-25',scoreText:'159/800',correct:69,wrong:117,skip:14,scoreNum:159,maxMarks:800,acc:37.1},
-  {num:5,name:'INICET May 2025',date:'17-May-25',scoreText:'34/200',correct:71,wrong:109,skip:20,scoreNum:34,maxMarks:200,acc:39.4},
-  {num:6,name:'NEET National Mock 2025',date:'10-Jun-25',scoreText:'165/800',correct:64,wrong:107,skip:29,scoreNum:165,maxMarks:800,acc:37.4},
-  {num:7,name:'GT 12',date:'24-Jun-25',scoreText:'180/800',correct:71,wrong:104,skip:25,scoreNum:180,maxMarks:800,acc:40.6},
-  {num:8,name:'NEET National Mock 2024',date:'15-Jul-25',scoreText:'278/800',correct:92,wrong:90,skip:18,scoreNum:278,maxMarks:800,acc:50.5},
-  {num:9,name:'NEET PG 2025',date:'03-Aug-25',scoreText:'320/800',correct:98,wrong:72,skip:30,scoreNum:320,maxMarks:800,acc:57.6},
-  {num:10,name:'NEET 2023 Recall',date:'14-Aug-25',scoreText:'381/800',correct:115,wrong:79,skip:6,scoreNum:381,maxMarks:800,acc:59.3},
-  {num:11,name:'NEET PG-INICET GT-28',date:'24-Aug-25',scoreText:'220/800',correct:80,wrong:100,skip:20,scoreNum:220,maxMarks:800,acc:44.4},
-  {num:12,name:'INICET May 2024 Recall',date:'04-Sep-25',scoreText:'54/200',correct:86,wrong:98,skip:16,scoreNum:54,maxMarks:200,acc:46.7},
-  {num:13,name:'INICET NOV 2024',date:'23-Sep-25',scoreText:'91/200',correct:111,wrong:62,skip:27,scoreNum:91,maxMarks:200,acc:64.2},
-  {num:14,name:'GT 3 INICET Pattern 3',date:'13-Oct-25',scoreText:'29/200',correct:63,wrong:106,skip:34,scoreNum:29,maxMarks:200,acc:37.3},
-  {num:15,name:'INICET NOV',date:'09-Nov-25',scoreText:'51.67/200',correct:80,wrong:85,skip:35,scoreNum:51.67,maxMarks:200,acc:48.5},
-  {num:16,name:'NEET GT 4',date:'21-Nov-25',scoreText:'192/800',correct:72,wrong:96,skip:32,scoreNum:192,maxMarks:800,acc:42.9},
-  {num:17,name:'NEET GT 5',date:'01-Dec-25',scoreText:'163/800',correct:66,wrong:101,skip:33,scoreNum:163,maxMarks:800,acc:39.5},
-  {num:18,name:'NEET GT 6',date:'21-Dec-25',scoreText:'172/800',correct:69,wrong:104,skip:27,scoreNum:172,maxMarks:800,acc:39.9},
-  {num:19,name:'NEET GT 7',date:'05-Jan-26',scoreText:'240/800',correct:87,wrong:108,skip:5,scoreNum:240,maxMarks:800,acc:44.6},
-  {num:20,name:'NEET GT 9',date:'28-Jan-26',scoreText:'210/800',correct:82,wrong:110,skip:0,scoreNum:210,maxMarks:800,acc:42.7},
-  {num:21,name:'INICET GT 10',date:'20-Feb-26',scoreText:'32/200',correct:73,wrong:124,skip:3,scoreNum:32,maxMarks:200,acc:37.1},
-  {num:22,name:'NEET Cerebellum 38',date:'07-Mar-26',scoreText:'247/800',correct:87,wrong:105,skip:7,scoreNum:247,maxMarks:800,acc:45.3},
+  {num:1,name:'GT 20 NEET Pattern',date:'09-Sep-24',correct:59,wrong:132,skip:9,maxMarks:800,acc:30.9,percentile:13.23,rank:'',notes:''},
+  {num:2,name:'NEET 2022 Recall',date:'13-Sep-24',correct:81,wrong:103,skip:17,maxMarks:800,acc:44.0,percentile:24.72,rank:'',notes:''},
+  {num:3,name:'INI-CET 2025',date:'03-May-25',correct:40,wrong:107,skip:53,maxMarks:200,acc:27.2,percentile:6.1,rank:'',notes:''},
+  {num:4,name:'NEET 2024',date:'05-May-25',correct:69,wrong:117,skip:14,maxMarks:800,acc:37.1,percentile:22.7,rank:'',notes:''},
+  {num:5,name:'INICET May 2025',date:'17-May-25',correct:71,wrong:109,skip:20,maxMarks:200,acc:39.4,percentile:9.694,rank:'',notes:''},
+  {num:6,name:'NEET National Mock 2025',date:'10-Jun-25',correct:64,wrong:107,skip:29,maxMarks:800,acc:37.4,percentile:25.13,rank:'',notes:''},
+  {num:7,name:'GT 12',date:'24-Jun-25',correct:71,wrong:104,skip:25,maxMarks:800,acc:40.6,percentile:23.77,rank:'',notes:''},
+  {num:8,name:'NEET National Mock 2024',date:'15-Jul-25',correct:92,wrong:90,skip:18,maxMarks:800,acc:50.5,percentile:45.58,rank:'',notes:''},
+  {num:9,name:'NEET PG 2025',date:'03-Aug-25',correct:98,wrong:72,skip:30,maxMarks:800,acc:57.6,percentile:0,rank:'',notes:''},
+  {num:10,name:'NEET 2023 Recall',date:'14-Aug-25',correct:115,wrong:79,skip:6,maxMarks:800,acc:59.3,percentile:58,rank:'',notes:''},
+  {num:11,name:'NEET PG-INICET GT-28',date:'24-Aug-25',correct:80,wrong:100,skip:20,maxMarks:800,acc:44.4,percentile:0,rank:'',notes:''},
+  {num:12,name:'INICET May 2024 Recall',date:'04-Sep-25',correct:86,wrong:98,skip:16,maxMarks:200,acc:46.7,percentile:35,rank:'',notes:''},
+  {num:13,name:'INICET NOV 2024',date:'23-Sep-25',correct:111,wrong:62,skip:27,maxMarks:200,acc:64.2,percentile:60,rank:'',notes:''},
+  {num:14,name:'GT 3 INICET Pattern 3',date:'13-Oct-25',correct:63,wrong:106,skip:34,maxMarks:200,acc:37.3,percentile:24.68,rank:'',notes:''},
+  {num:15,name:'INICET NOV',date:'09-Nov-25',correct:80,wrong:85,skip:35,maxMarks:200,acc:48.5,percentile:23.5,rank:'',notes:''},
+  {num:16,name:'NEET GT 4',date:'21-Nov-25',correct:72,wrong:96,skip:32,maxMarks:800,acc:42.9,percentile:51.41,rank:'',notes:''},
+  {num:17,name:'NEET GT 5',date:'01-Dec-25',correct:66,wrong:101,skip:33,maxMarks:800,acc:39.5,percentile:42.21,rank:'',notes:''},
+  {num:18,name:'NEET GT 6',date:'21-Dec-25',correct:69,wrong:104,skip:27,maxMarks:800,acc:39.9,percentile:37.18,rank:'',notes:''},
+  {num:19,name:'NEET GT 7',date:'05-Jan-26',correct:87,wrong:108,skip:5,maxMarks:800,acc:44.6,percentile:48,rank:'',notes:''},
+  {num:20,name:'NEET GT 9',date:'28-Jan-26',correct:82,wrong:110,skip:0,maxMarks:800,acc:42.7,percentile:46.85,rank:'',notes:''},
+  {num:21,name:'INICET GT 10',date:'20-Feb-26',correct:73,wrong:124,skip:3,maxMarks:200,acc:37.1,percentile:22.84,rank:'',notes:''},
+  {num:22,name:'NEET Cerebellum 38',date:'07-Mar-26',correct:87,wrong:105,skip:7,maxMarks:800,acc:45.3,percentile:40,rank:'',notes:'Easiest ever — should have scored more'},
 ];
 
-// ---- JOURNAL ----
-let journalEntries = Array.from({length:63},(_, i) => ({
-  day: i+1,
-  date: new Date(new Date('2026-03-07').getTime() + i*86400000).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),
-  studied: i===0 ? 'Solved GT and felt bad — very easy GT, Cerebellum 38 — 87 corrects. Just very bad, lets improve.' : '',
-  unclear: i===0 ? 'Knew where it was from but couldn\'t recall fast enough. Work hard.' : '',
-  tomorrow: i===0 ? 'Work hard according to plan — no changes till INI-CET.' : '',
-  mood: i===0 ? 2 : 0,
-  energy: i===0 ? 2 : 0,
+/* ---------- JOURNAL ---------- */
+let journalEntries = Array.from({length:63},(_,i)=>({
+  day:i+1,
+  date:new Date(new Date('2026-03-07').getTime()+i*86400000)
+    .toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),
+  studied:i===0?'Solved GT and felt bad — very easy GT, Cerebellum 38 — 87 corrects. Just very bad, lets improve.':'',
+  unclear:i===0?'Knew where it was from but couldn\'t recall fast enough.':'',
+  tomorrow:i===0?'Work hard according to plan — no changes till INI-CET.':'',
+  mood:i===0?2:0,energy:i===0?2:0,
+  sleep:i===0?7:'',
+  exercise:i===0?'Rest':'',
 }));
 
-// ---- WEAK TOPICS ----
+/* ---------- WEAK TOPICS ---------- */
 let weakTopics = [];
 
-// ---- MCQ LOG ----
+/* ---------- MCQ LOG ---------- */
 let mcqLog = [];
 
-// ==============================
-// LOAD FROM STORAGE
-// ==============================
-function loadAll() {
-  try {
-    const s = sessionStorage.getItem('prepos_v4');
-    if (s) {
-      const d = JSON.parse(s);
-      if (d.subjects) subjects = d.subjects;
-      if (d.targets) targets = d.targets;
-      if (d.gtScores) gtScores = d.gtScores;
-      if (d.journalEntries) journalEntries = d.journalEntries;
-      if (d.weakTopics) weakTopics = d.weakTopics;
-      if (d.mcqLog) mcqLog = d.mcqLog;
-      if (d.scheduleData) scheduleData.forEach((row,i) => { if(d.scheduleData[i]) Object.assign(row, d.scheduleData[i]); });
-    }
-  } catch(e){}
+/* ---------- STATE ---------- */
+let todayRating = 0;
+let editingConf = -1;
+let journalShown = 8;
+
+// ============================================================
+// STORAGE
+// ============================================================
+function save(){
+  try{
+    sessionStorage.setItem('prepos_v4',JSON.stringify({
+      subjects,targets,gtScores,journalEntries,weakTopics,mcqLog,
+      scheduleData:scheduleData.map(r=>({...r})),todayRating
+    }));
+  }catch(e){}
+  toast('Saved ✓');
 }
 
-function saveAll() {
-  try {
-    sessionStorage.setItem('prepos_v4', JSON.stringify({subjects,targets,gtScores,journalEntries,weakTopics,mcqLog,scheduleData}));
-  } catch(e){}
-  showToast('Saved ✓');
+function load(){
+  try{
+    const s=sessionStorage.getItem('prepos_v4');
+    if(!s)return;
+    const d=JSON.parse(s);
+    if(d.subjects)subjects=d.subjects;
+    if(d.targets)targets=d.targets;
+    if(d.gtScores)gtScores=d.gtScores;
+    if(d.journalEntries)journalEntries=d.journalEntries;
+    if(d.weakTopics)weakTopics=d.weakTopics;
+    if(d.mcqLog)mcqLog=d.mcqLog;
+    if(d.todayRating)todayRating=d.todayRating;
+    if(d.scheduleData)d.scheduleData.forEach((r,i)=>{if(scheduleData[i])Object.assign(scheduleData[i],r);});
+  }catch(e){}
 }
 
-function showToast(msg='Saved ✓') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
+function toast(msg='Saved ✓'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-// ==============================
-// NAVIGATION
-// ==============================
-function switchPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+// ============================================================
+// NAV
+// ============================================================
+function switchPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  event.target.classList.add('active');
+  btn.classList.add('active');
 }
 
-// ==============================
+// ============================================================
 // DASHBOARD
-// ==============================
-function renderDashboard() {
+// ============================================================
+function renderDashboard(){
   renderTargets();
   renderSR();
   renderConf();
-  // Progress
-  const pct = Math.round((5/56)*100);
-  document.getElementById('progressBar').style.width = pct+'%';
-  document.getElementById('progressPct').textContent = pct+'%';
+  renderRating(todayRating);
 }
 
-function renderTargets() {
-  const wrap = document.getElementById('targetsWrap');
-  wrap.innerHTML = targets.map((t,i) => {
-    const pct = t.target > 0 ? Math.min(100, Math.round((t.done/t.target)*100)) : 0;
+/* ---- Targets ---- */
+function renderTargets(){
+  document.getElementById('targetsWrap').innerHTML=targets.map((t,i)=>{
+    const pct=t.target>0?Math.min(100,Math.round(t.done/t.target*100)):0;
     return `<div class="target-row">
       <span class="target-icon">${t.icon}</span>
       <span class="target-name">${t.name}</span>
       <div class="target-bar-wrap"><div class="target-bar" style="width:${pct}%"></div></div>
-      <span class="target-count">${t.done} / ${t.target}</span>
+      <span class="target-count">${t.done}/${t.target}</span>
       <button class="edit-btn" onclick="editTarget(${i})">edit</button>
     </div>`;
   }).join('');
 }
-
-function editTarget(i) {
-  const t = targets[i];
-  const val = prompt(`${t.name}\nEnter done count (target: ${t.target}):`, t.done);
-  if (val !== null && !isNaN(+val)) {
-    targets[i].done = +val;
-    renderTargets();
-    saveAll();
-  }
+function editTarget(i){
+  const t=targets[i];
+  const v=prompt(`${t.name}\nDone (target ${t.target}):`,t.done);
+  if(v!==null&&!isNaN(+v)){targets[i].done=+v;renderTargets();save();}
 }
 
-function renderSR() {
-  const body = document.getElementById('srBody');
-  const gapClass = {'⚡ D+1':'gap-d1','✨ D+3':'gap-d3','💥 D+7':'gap-d7','🔥 D+15':'gap-d15','♻️ D+30':'gap-d30'};
-  body.innerHTML = srData.map((r,i) => `<tr>
-    <td><span class="gap-badge ${gapClass[r.gap]||''}">${r.gap}</span></td>
+/* ---- Spaced Rep ---- */
+function renderSR(){
+  const gc={'⚡ D+1':'gap-d1','✨ D+3':'gap-d3','💥 D+7':'gap-d7','🔥 D+15':'gap-d15','♻️ D+30':'gap-d30'};
+  document.getElementById('srBody').innerHTML=srData.map((r,i)=>`<tr>
+    <td><span class="gap-badge ${gc[r.gap]||''}">${r.gap}</span></td>
     <td>${r.topic}</td>
-    <td><input type="checkbox" ${r.ticked?'checked':''} onchange="toggleSR(${i},this.checked)" style="accent-color:var(--accent);width:14px;height:14px;cursor:pointer;"></td>
+    <td><input type="checkbox" ${r.ticked?'checked':''} onchange="srToggle(${i},this.checked)"
+      style="accent-color:var(--green);width:14px;height:14px;cursor:pointer;"></td>
   </tr>`).join('');
 }
+function srToggle(i,v){srData[i].ticked=v;save();}
 
-function toggleSR(i, v) {
-  srData[i].ticked = v;
-  saveAll();
-}
-
-// ---- CONFIDENCE ----
-let editingConf = -1;
-function getGrade(conf) {
-  const grades = ['','🔴 Very Weak','🟠 Weak','🟡 Average','🟢 Good','⭐ Excellent'];
-  const cls = ['','grade-vweak','grade-weak','grade-avg','grade-good','grade-exc'];
-  const col = ['','#ff4d6d','#ff8c42','#ffd60a','#43e97b','#4cc9f0'];
-  return {label: grades[conf]||'', cls: cls[conf]||'', col: col[conf]||'#444'};
-}
-
-function renderConf() {
-  const grid = document.getElementById('confGrid');
-  grid.innerHTML = subjects.map((s,i) => {
-    const g = getGrade(s.conf);
-    const stars = [1,2,3,4,5].map(n => `<div class="conf-star" style="background:${n<=s.conf?g.col:'#2a2a4a'}"></div>`).join('');
+/* ---- Confidence Grid ---- */
+const gradeInfo={
+  1:{label:'🔴 Very Weak',cls:'grade-vweak',col:'#ff4d6d'},
+  2:{label:'🟠 Weak',cls:'grade-weak',col:'#ff8c42'},
+  3:{label:'🟡 Average',cls:'grade-avg',col:'#ffd60a'},
+  4:{label:'🟢 Good',cls:'grade-good',col:'#7bed9f'},
+  5:{label:'⭐ Excellent',cls:'grade-exc',col:'#2ecc71'},
+};
+function renderConf(){
+  document.getElementById('confGrid').innerHTML=subjects.map((s,i)=>{
+    const g=gradeInfo[s.conf]||gradeInfo[1];
+    const stars=[1,2,3,4,5].map(n=>`<div class="conf-star" style="background:${n<=s.conf?g.col:'#2a2a4a'}"></div>`).join('');
     return `<div class="conf-card" onclick="openConfModal(${i})">
       <div class="conf-card-name">${s.name}</div>
       <div class="conf-stars">${stars}</div>
       <div class="conf-grade ${g.cls}">${g.label}</div>
-      ${s.pyq ? `<div style="font-size:0.58rem;color:var(--muted);margin-top:0.3rem;">PYQ: ${s.pyq}%</div>` : ''}
+      ${s.pyq?`<div style="font-size:.56rem;color:var(--muted);margin-top:.25rem">PYQ ${s.pyq}%</div>`:''}
       <div class="conf-edit-overlay">
-        <div style="font-size:0.65rem;color:white;">EDIT</div>
-        <button class="conf-btn">Update</button>
+        <div style="font-size:.6rem;color:#fff">EDIT</div>
+        <button class="conf-overlay-btn">Update</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function openConfModal(i) {
-  editingConf = i;
-  const s = subjects[i];
-  document.getElementById('confModalTitle').textContent = 'Edit: ' + s.name;
-  document.getElementById('confModalInput').value = s.conf;
-  document.getElementById('confModalRevised').value = s.revised || '';
-  document.getElementById('confModalPYQ').value = s.pyq || '';
-  document.getElementById('confModalMCQ').value = s.mcq || '';
+/* ---- Rating ---- */
+const ratingLabels=['','🔴 Not started','🟠 Barely started','🟡 Partially done','🟢 Mostly done','🟩 Fully done ✓'];
+function setRating(n){
+  todayRating=n;renderRating(n);
+  // Also update the study day's row rating in schedule
+  const studyRow=scheduleData.find(r=>r.section==='study');
+  if(studyRow){studyRow.rating=n;}
+  save();
+}
+function renderRating(n){
+  for(let i=1;i<=5;i++){
+    const btn=document.getElementById('rb'+i);
+    btn.className='r-btn'+(i<=n?' active-'+i:'');
+  }
+  document.getElementById('ratingDesc').textContent=n?ratingLabels[n]:'Tap to rate your day';
+}
+
+/* ---- Conf Modal ---- */
+function openConfModal(i){
+  editingConf=i;
+  const s=subjects[i];
+  document.getElementById('confModalTitle').textContent='Edit: '+s.name;
+  document.getElementById('confModalInput').value=s.conf;
+  document.getElementById('confModalRevised').value=s.revised||'';
+  document.getElementById('confModalPYQ').value=s.pyq||'';
+  document.getElementById('confModalMCQ').value=s.mcq||'';
   document.getElementById('confModal').classList.add('open');
 }
+function closeConfModal(){document.getElementById('confModal').classList.remove('open');editingConf=-1;}
+function saveConf(){
+  if(editingConf<0)return;
+  subjects[editingConf].conf=Math.max(1,Math.min(5,+document.getElementById('confModalInput').value));
+  subjects[editingConf].revised=document.getElementById('confModalRevised').value;
+  subjects[editingConf].pyq=document.getElementById('confModalPYQ').value;
+  subjects[editingConf].mcq=document.getElementById('confModalMCQ').value;
+  closeConfModal();renderConf();save();
+}
+document.getElementById('confModal').addEventListener('click',e=>{if(e.target===document.getElementById('confModal'))closeConfModal();});
 
-function closeConfModal() {
-  document.getElementById('confModal').classList.remove('open');
-  editingConf = -1;
+// ============================================================
+// SCHEDULE — 4-section accordion layout
+// ============================================================
+const SECTION_DEFS=[
+  {key:'study',  id:'sched-study',  title:'📖 Study Now', headerCls:'sh-study',  rowCls:'row-study',   defaultOpen:true},
+  {key:'revise', id:'sched-revise', title:'🔄 Revise Now',headerCls:'sh-revise', rowCls:'row-revise',  defaultOpen:true},
+  {key:'done',   id:'sched-done',   title:'✅ Done',       headerCls:'sh-done',   rowCls:'row-done',    defaultOpen:false},
+  {key:'upcoming',id:'sched-upcoming',title:'🗓 Upcoming',headerCls:'sh-upcoming',rowCls:'row-upcoming',defaultOpen:false},
+];
+// Track open/closed state per section
+const sectionOpen={study:true,revise:true,done:false,upcoming:false};
+
+function toggleSection(key){
+  sectionOpen[key]=!sectionOpen[key];
+  renderSchedule();
 }
 
-function saveConf() {
-  if (editingConf < 0) return;
-  const conf = +document.getElementById('confModalInput').value;
-  subjects[editingConf].conf = Math.max(1,Math.min(5,conf));
-  subjects[editingConf].revised = document.getElementById('confModalRevised').value;
-  subjects[editingConf].pyq = document.getElementById('confModalPYQ').value;
-  subjects[editingConf].mcq = document.getElementById('confModalMCQ').value;
-  closeConfModal();
-  renderConf();
-  saveAll();
-}
-
-document.getElementById('confModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('confModal')) closeConfModal();
-});
-
-// ==============================
-// SCHEDULE
-// ==============================
-function renderSchedule() {
-  const body = document.getElementById('schedBody');
-  const logFields = ['pyq','mcq','mix','anki','ankiN','fact','gt','vid','sleep','exer'];
-  body.innerHTML = scheduleData.map((row,ri) => {
-    const isGT = row.subject && row.subject.startsWith('GT');
-    let rowClass = '';
-    if (row.status==='today') rowClass='row-today';
-    else if (row.status==='done') rowClass='row-past';
-    else if (row.status&&row.status.startsWith('revise')) rowClass='row-revdue';
-    else if (isGT && row.status!=='done') rowClass='row-gt';
-
-    let statusHtml = '';
-    if (row.status==='today') statusHtml=`<span class="sched-status status-today">📖 STUDY NOW</span>`;
-    else if (row.status==='done') statusHtml=`<span class="sched-status status-done">✅ Done</span>`;
-    else if (row.status==='revise-d1') statusHtml=`<span class="sched-status status-d1">⚡ D+1 Revise</span>`;
-    else if (row.status==='revise-d3') statusHtml=`<span class="sched-status status-revise">✨ D+3 Revise</span>`;
-    else if (row.status==='gt-upcoming') statusHtml=`<span class="sched-status status-gt">🔴 GT Day</span>`;
-    else statusHtml=`<span class="sched-status status-upcoming">⬜ Upcoming</span>`;
-
-    const ticks = ['d1t','d3t','d7t','d15t','d30t'].map((k,ti)=>
-      `<td><input type="checkbox" ${row[k]?'checked':''} onchange="schedTick(${ri},'${k}',this.checked)" style="accent-color:var(--green);cursor:pointer;"></td>`
-    ).join('');
-
-    const nums = logFields.map(k =>
-      `<td><input type="${k==='sleep'||k==='exer'?'text':'number'}" class="${k==='sleep'||k==='exer'?'wide':''}" value="${row[k]||''}" onchange="schedSet(${ri},'${k}',this.value)" placeholder="${k==='sleep'?'hrs':k==='exer'?'Y/N':'-'}"></td>`
-    ).join('');
-
-    return `<tr class="${rowClass}">
-      <td style="white-space:nowrap;color:var(--muted)">${row.date}</td>
-      <td style="color:var(--accent);font-weight:700">${row.day}</td>
-      <td style="font-weight:600">${row.subject}</td>
-      <td>${statusHtml}</td>
-      ${ticks}
-      ${nums}
-    </tr>`;
+/* Build SR pill strip for one row */
+function buildSRStrip(row,origIdx){
+  const keys =['d1t','d3t','d7t','d15t','d30t'];
+  const labels=['D+1','D+3','D+7','D+15','D+30'];
+  const nums  =['1','3','7','15','30'];
+  const ticked=keys.filter(k=>row[k]).length;
+  const pct=ticked/5*100;
+  const allDone=ticked===5;
+  const dots=keys.map((k,i)=>{
+    const done=row[k];
+    return `<div class="sr-dot ${done?'sr-done':'sr-pending'}"
+      onclick="schedTickSR(${origIdx},'${k}',${!done})"
+      title="${labels[i]}">${nums[i]}</div>`;
   }).join('');
-}
-
-function schedTick(ri, key, val) {
-  scheduleData[ri][key] = val;
-  saveAll();
-}
-
-function schedSet(ri, key, val) {
-  scheduleData[ri][key] = val;
-  saveAll();
-}
-
-// ==============================
-// GT SCORES
-// ==============================
-function renderGT() {
-  const list = document.getElementById('gtList');
-  list.innerHTML = gtScores.map((g,i) => {
-    const acc = g.acc;
-    const prev = i > 0 ? gtScores[i-1].acc : null;
-    const trend = prev === null ? '' : acc > prev ? '↑' : acc < prev ? '↓' : '=';
-    const trendColor = trend==='↑'?'var(--green)':trend==='↓'?'var(--red)':'var(--muted)';
-    const barPct = Math.min(100, acc);
-    const barColor = acc >= 55 ? 'var(--green)' : acc >= 40 ? 'var(--orange)' : 'var(--red)';
-    return `
-    <div class="gt-row" onclick="toggleGTEdit(${i})" id="gtrow-${i}">
-      <span class="gt-num">${g.num}</span>
-      <span class="gt-name">${g.name}</span>
-      <span class="gt-date">${g.date}</span>
-      <span class="gt-score" style="color:var(--muted)">${g.correct}/${g.wrong}/${g.skip}</span>
-      <div class="gt-bar-wrap"><div class="gt-bar" style="width:${barPct}%;background:${barColor}"></div></div>
-      <span class="gt-acc" style="color:${barColor}">${acc.toFixed(1)}%</span>
-      <span class="gt-trend" style="color:${trendColor}">${trend}</span>
+  return `<td class="sr-cell">
+    <div class="sr-strip ${allDone?'sr-all-done':''}">${dots}</div>
+    <div class="sr-progress-bar ${allDone?'sr-all-done':''}">
+      <div class="sr-progress-fill" style="width:${pct}%"></div>
     </div>
-    <div class="gt-edit-row" id="gtedit-${i}">
-      <div style="font-size:0.65rem;color:var(--muted);margin-bottom:0.75rem;">Editing GT #${g.num}: ${g.name}</div>
-      <div class="gt-inputs">
-        <div>
-          <label class="modal-label">Test Name</label>
-          <input class="modal-input" style="font-size:0.7rem;padding:0.4rem 0.6rem" value="${g.name}" onchange="updateGT(${i},'name',this.value)">
+  </td>`;
+}
+
+/* Build journal emoji tip for a row (from journal entry matching day) */
+function journalTip(dayNum){
+  const entry=journalEntries.find(e=>e.day===dayNum);
+  if(!entry)return '';
+  let tip='';
+  if(entry.sleep)tip+=`<span class="row-journal-tip" title="Sleep: ${entry.sleep}h">💤${entry.sleep}</span>`;
+  if(entry.exercise)tip+=`<span class="row-journal-tip" title="Exercise: ${entry.exercise}">🏃</span>`;
+  return tip;
+}
+
+function buildSchedTable(rows,sectionKey,rowCls){
+  if(!rows.length)return `<div style="padding:.75rem 1rem;font-size:.65rem;color:var(--muted);">Nothing here yet.</div>`;
+  return `<table class="sched-table">
+    <thead><tr>
+      <th>Date</th><th>Day</th><th style="min-width:100px;">Subject</th><th>Rating</th>
+      <th style="white-space:nowrap;">🔁 SR</th>
+      <th>PYQ 📖</th><th>MCQ 📝</th><th>Mix 🔀</th><th>Anki 💡</th>
+    </tr></thead>
+    <tbody>
+    ${rows.map((row)=>{
+      const origIdx=scheduleData.indexOf(row);
+      const isGTRow=row.subject&&row.subject.startsWith('GT');
+      const rc=isGTRow?'row-gt':rowCls;
+      // Rating pills
+      const rPills=[1,2,3,4,5].map(n=>{
+        const active=row.rating===n?`sr${n}`:'';
+        return `<div class="sched-r ${active}" onclick="schedSetRating(${origIdx},${n})">${n}</div>`;
+      }).join('');
+      // Numeric inputs — only pyq,mcq,mix,anki
+      const nums=['pyq','mcq','mix','anki'].map(k=>
+        `<td><input type="number" value="${row[k]||''}" placeholder="-"
+          onchange="schedSet(${origIdx},'${k}',this.value)"></td>`
+      ).join('');
+      // Journal tips for done/revise rows
+      const jTip=(sectionKey==='done'||sectionKey==='revise')?journalTip(row.day):'';
+      return `<tr class="${rc}">
+        <td style="color:var(--muted);white-space:nowrap;">${row.date}</td>
+        <td style="color:var(--accent);font-weight:700;">${row.day}</td>
+        <td style="font-weight:600;">${row.subject}${row.reviseNote?`<br><span style="font-size:.55rem;color:var(--green)">${row.reviseNote}</span>`:''}${jTip}</td>
+        <td><div class="sched-rating">${rPills}</div></td>
+        ${buildSRStrip(row,origIdx)}
+        ${nums}
+      </tr>`;
+    }).join('')}
+    </tbody></table>`;
+}
+
+function renderSchedule(){
+  // Update live Anki pill
+  const studyRow=scheduleData.find(r=>r.section==='study');
+  const ankiEl=document.getElementById('ankiTodayLive');
+  if(ankiEl)ankiEl.textContent=studyRow&&studyRow.anki?studyRow.anki:'—';
+
+  SECTION_DEFS.forEach(sec=>{
+    let rows;
+    if(sec.key==='upcoming'){
+      rows=scheduleData.filter(r=>r.section==='upcoming'||r.section==='gt');
+    } else {
+      rows=scheduleData.filter(r=>r.section===sec.key);
+    }
+    const count=rows.length;
+    const open=sectionOpen[sec.key];
+    document.getElementById(sec.id).innerHTML=`
+      <div class="sched-section-header ${sec.headerCls} ${open?'':'collapsed'}"
+           onclick="toggleSection('${sec.key}')">
+        ${sec.title}
+        <span class="badge">${count} ${count===1?'day':'days'}</span>
+        <span class="toggle-arrow">▼</span>
+      </div>
+      <div class="sched-section-body sched-wrap ${open?'':'collapsed'}">
+        ${buildSchedTable(rows,sec.key,sec.rowCls||'')}
+      </div>`;
+  });
+}
+
+function schedTick(i,k,v){scheduleData[i][k]=v;save();}
+function schedTickSR(i,k,v){scheduleData[i][k]=v;renderSchedule();save();}
+function schedSet(i,k,v){scheduleData[i][k]=v;save();}
+function schedSetRating(i,n){
+  scheduleData[i].rating=n;
+  renderSchedule();
+  save();
+}
+
+// ============================================================
+// GT SCORES
+// ============================================================
+function renderGT(){
+  const list=document.getElementById('gtList');
+  list.innerHTML=gtScores.map((g,i)=>{
+    const prev=i>0?gtScores[i-1].acc:null;
+    const trend=prev===null?'—':g.acc>prev?'↑':g.acc<prev?'↓':'=';
+    const tCol=trend==='↑'?'var(--green)':trend==='↓'?'var(--r1)':'var(--muted)';
+    const aCol=g.acc>=55?'var(--green)':g.acc>=40?'var(--orange)':'var(--r1)';
+    const total=g.correct+g.wrong+g.skip||1;
+    const cPct=(g.correct/total*100).toFixed(0);
+    const wPct=(g.wrong/total*100).toFixed(0);
+    const sPct=(g.skip/total*100).toFixed(0);
+    return `
+    <div class="gt-row" onclick="toggleGTEdit(${i})">
+      <div class="gt-num">${g.num}</div>
+      <div class="gt-name">${g.name}</div>
+      <div class="gt-date">${g.date}</div>
+      <div class="gt-cws">
+        <span style="color:var(--green)">${g.correct}</span> /
+        <span style="color:var(--r1)">${g.wrong}</span> /
+        <span style="color:var(--muted)">${g.skip}</span>
+        <div class="cw-bar" style="margin-top:3px">
+          <div class="cw-correct" style="width:${cPct}%"></div>
+          <div class="cw-wrong" style="width:${wPct}%"></div>
+          <div class="cw-skip" style="width:${sPct}%"></div>
         </div>
-        <div>
-          <label class="modal-label">Date</label>
-          <input class="modal-input" style="font-size:0.7rem;padding:0.4rem 0.6rem" value="${g.date}" onchange="updateGT(${i},'date',this.value)">
+      </div>
+      <div class="gt-acc" style="color:${aCol}">${g.acc.toFixed(1)}%</div>
+      <div class="gt-pct">${g.percentile?g.percentile+'%':'—'}</div>
+      <div class="gt-trend" style="color:${tCol};font-weight:700">${trend}</div>
+      <div class="gt-pct">${g.rank||'—'}</div>
+      <div class="gt-notes-cell">${g.notes||'—'}</div>
+    </div>
+    <div class="gt-edit-panel" id="gtedit-${i}">
+      <div style="font-size:.6rem;color:var(--muted);margin-bottom:.65rem;">
+        Editing GT #${g.num} — changes save automatically
+      </div>
+      <div class="gt-edit-grid">
+        <div class="field-group" style="grid-column:span 2">
+          <label class="field-label">Test Name</label>
+          <input class="field-input" value="${g.name}" onchange="gtUpdate(${i},'name',this.value)">
         </div>
-        <div>
-          <label class="modal-label">Correct</label>
-          <input class="modal-input" type="number" style="font-size:0.7rem;padding:0.4rem 0.6rem" value="${g.correct}" onchange="updateGTNum(${i},'correct',this.value)">
+        <div class="field-group">
+          <label class="field-label">Date</label>
+          <input class="field-input" value="${g.date}" onchange="gtUpdate(${i},'date',this.value)">
         </div>
-        <div>
-          <label class="modal-label">Wrong</label>
-          <input class="modal-input" type="number" style="font-size:0.7rem;padding:0.4rem 0.6rem" value="${g.wrong}" onchange="updateGTNum(${i},'wrong',this.value)">
+        <div class="field-group">
+          <label class="field-label">Correct</label>
+          <input class="field-input" type="number" value="${g.correct}" onchange="gtUpdateNum(${i},'correct',this.value)">
         </div>
-        <div>
-          <label class="modal-label">Skip</label>
-          <input class="modal-input" type="number" style="font-size:0.7rem;padding:0.4rem 0.6rem" value="${g.skip}" onchange="updateGTNum(${i},'skip',this.value)">
+        <div class="field-group">
+          <label class="field-label">Wrong</label>
+          <input class="field-input" type="number" value="${g.wrong}" onchange="gtUpdateNum(${i},'wrong',this.value)">
         </div>
-        <div>
-          <label class="modal-label">Max Marks</label>
-          <input class="modal-input" type="number" style="font-size:0.7rem;padding:0.4rem 0.6rem" value="${g.maxMarks}" onchange="updateGTNum(${i},'maxMarks',this.value)">
+        <div class="field-group">
+          <label class="field-label">Skip</label>
+          <input class="field-input" type="number" value="${g.skip}" onchange="gtUpdateNum(${i},'skip',this.value)">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Max Marks</label>
+          <input class="field-input" type="number" value="${g.maxMarks}" onchange="gtUpdateNum(${i},'maxMarks',this.value)">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Percentile %</label>
+          <input class="field-input" type="number" value="${g.percentile}" onchange="gtUpdateNum(${i},'percentile',this.value)">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Rank</label>
+          <input class="field-input" value="${g.rank||''}" placeholder="e.g. 450/3200" onchange="gtUpdate(${i},'rank',this.value)">
+        </div>
+        <div class="field-group" style="grid-column:span 2">
+          <label class="field-label">Weak Areas / Notes</label>
+          <input class="field-input" value="${g.notes||''}" placeholder="e.g. Pharmacology, PSM basics" onchange="gtUpdate(${i},'notes',this.value)">
+        </div>
+        <div class="field-group">
+          <button class="del-btn" onclick="delGT(${i});event.stopPropagation()">Delete</button>
         </div>
       </div>
     </div>`;
   }).join('');
   drawGTChart();
+  drawCWBars();
 }
 
-function toggleGTEdit(i) {
-  const el = document.getElementById('gtedit-'+i);
-  el.classList.toggle('open');
-}
-
-function updateGT(i, key, val) {
-  gtScores[i][key] = val;
-  recalcAcc(i);
-  saveAll();
-}
-
-function updateGTNum(i, key, val) {
-  gtScores[i][key] = +val;
-  recalcAcc(i);
-  renderGT();
-  saveAll();
-}
-
-function recalcAcc(i) {
-  const g = gtScores[i];
-  const total = g.correct + g.wrong + g.skip;
-  g.acc = total > 0 ? (g.correct / total) * 100 : 0;
-}
-
-function addGTRow() {
-  gtScores.push({num: gtScores.length+1, name:'New GT', date:'', correct:0, wrong:0, skip:0, scoreNum:0, maxMarks:800, acc:0});
-  renderGT();
-  saveAll();
-}
-
-function drawGTChart() {
-  const svg = document.getElementById('gtChart');
-  const W = 800, H = 160, PAD = 20;
-  const accs = gtScores.map(g => g.acc);
-  const maxA = Math.max(...accs, 70);
-  const pts = accs.map((a, i) => {
-    const x = PAD + (i / (accs.length-1)) * (W - 2*PAD);
-    const y = H - PAD - (a / maxA) * (H - 2*PAD);
-    return [x, y, a];
+function toggleGTEdit(i){
+  document.querySelectorAll('.gt-edit-panel').forEach((p,j)=>{
+    if(j===i)p.classList.toggle('open');
+    else p.classList.remove('open');
   });
-  const linePts = pts.map(p => p[0]+','+p[1]).join(' ');
-  const areaPts = `${pts[0][0]},${H-PAD} ` + pts.map(p=>p[0]+','+p[1]).join(' ') + ` ${pts[pts.length-1][0]},${H-PAD}`;
+}
+function gtUpdate(i,k,v){gtScores[i][k]=v;save();}
+function gtUpdateNum(i,k,v){gtScores[i][k]=parseFloat(v)||0;recalcAcc(i);renderGT();save();}
+function recalcAcc(i){
+  const g=gtScores[i];
+  const t=g.correct+g.wrong+g.skip;
+  g.acc=t>0?(g.correct/t*100):0;
+}
+function delGT(i){
+  if(!confirm('Delete GT #'+(i+1)+'?'))return;
+  gtScores.splice(i,1);gtScores.forEach((g,j)=>g.num=j+1);
+  renderGT();save();
+}
+function addGTRow(){
+  gtScores.push({num:gtScores.length+1,name:'New GT',date:'',correct:0,wrong:0,skip:0,maxMarks:800,acc:0,percentile:0,rank:'',notes:''});
+  renderGT();save();
+  // Expand last
+  setTimeout(()=>toggleGTEdit(gtScores.length-1),50);
+}
 
-  let circles = pts.map((p,i) => {
-    const col = p[2]>=55?'#43e97b':p[2]>=40?'#ff8c42':'#ff4d6d';
-    return `<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="${col}" stroke="var(--card)" stroke-width="2">
-      <title>GT#${i+1}: ${p[2].toFixed(1)}%</title></circle>`;
+/* ---- Accuracy Chart ---- */
+function drawGTChart(){
+  const svg=document.getElementById('gtChart');
+  const W=820,H=160,PX=30,PY=15;
+  const accs=gtScores.map(g=>g.acc);
+  const maxA=Math.max(...accs,65);
+  const pts=accs.map((a,i)=>{
+    const x=PX+(i/(accs.length-1))*(W-2*PX);
+    const y=H-PY-(a/maxA)*(H-2*PY);
+    return[x,y,a,i];
+  });
+  const line=pts.map(p=>p[0]+','+p[1]).join(' ');
+  const area=`${pts[0][0]},${H-PY} `+pts.map(p=>p[0]+','+p[1]).join(' ')+` ${pts[pts.length-1][0]},${H-PY}`;
+  // Guide lines at 40% and 55%
+  const y40=H-PY-(40/maxA)*(H-2*PY);
+  const y55=H-PY-(55/maxA)*(H-2*PY);
+  const circles=pts.map(p=>{
+    const col=p[2]>=55?'#2ecc71':p[2]>=40?'#ff8c42':'#ff4d6d';
+    return `<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${col}" stroke="#0a0a0f" stroke-width="2">
+      <title>GT#${p[3]+1}: ${p[2].toFixed(1)}%</title></circle>`;
   }).join('');
-
-  svg.innerHTML = `
-    <defs>
-      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#6c63ff" stop-opacity="0.3"/>
-        <stop offset="100%" stop-color="#6c63ff" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <polygon points="${areaPts}" fill="url(#areaGrad)"/>
-    <polyline points="${linePts}" fill="none" stroke="#6c63ff" stroke-width="2" stroke-linejoin="round"/>
+  svg.innerHTML=`<defs>
+    <linearGradient id="aGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6c63ff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#6c63ff" stop-opacity="0"/>
+    </linearGradient></defs>
+    <line x1="${PX}" y1="${y55}" x2="${W-PX}" y2="${y55}" stroke="rgba(46,204,113,.2)" stroke-width="1" stroke-dasharray="4"/>
+    <line x1="${PX}" y1="${y40}" x2="${W-PX}" y2="${y40}" stroke="rgba(255,140,66,.2)" stroke-width="1" stroke-dasharray="4"/>
+    <text x="${W-PX+3}" y="${y55+4}" font-size="8" fill="rgba(46,204,113,.6)" font-family="JetBrains Mono">55%</text>
+    <text x="${W-PX+3}" y="${y40+4}" font-size="8" fill="rgba(255,140,66,.6)" font-family="JetBrains Mono">40%</text>
+    <polygon points="${area}" fill="url(#aGrad)"/>
+    <polyline points="${line}" fill="none" stroke="#6c63ff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
     ${circles}
-    <text x="${PAD}" y="${H-5}" font-size="9" fill="#6b6b8a" font-family="JetBrains Mono">GT 1</text>
-    <text x="${W-PAD-20}" y="${H-5}" font-size="9" fill="#6b6b8a" font-family="JetBrains Mono">GT ${accs.length}</text>
-  `;
+    <text x="${PX}" y="${H-2}" font-size="8" fill="#6b6b8a" font-family="JetBrains Mono">GT1</text>
+    <text x="${W-PX-16}" y="${H-2}" font-size="8" fill="#6b6b8a" font-family="JetBrains Mono">GT${accs.length}</text>`;
 }
 
-// ==============================
-// JOURNAL
-// ==============================
-function renderJournal() {
-  const wrap = document.getElementById('journalWrap');
-  const shown = journalEntries.slice(0, 10); // show first 10 by default
-  wrap.innerHTML = journalEntries.slice(0,10).map((e,i) => renderJournalEntry(e, i)).join('') +
-    `<div style="text-align:center;margin-top:1rem;">
-      <button class="add-btn" onclick="showMoreJournal()" id="journalLoadMore">Load more entries ↓</button>
+/* ---- C/W/S stacked bars ---- */
+function drawCWBars(){
+  const wrap=document.getElementById('cwBars');
+  const maxT=Math.max(...gtScores.map(g=>g.correct+g.wrong+g.skip),1);
+  wrap.innerHTML=gtScores.map((g,i)=>{
+    const total=g.correct+g.wrong+g.skip||1;
+    const ch=Math.round((g.correct/maxT)*55);
+    const wh=Math.round((g.wrong/maxT)*55);
+    const sh=Math.round((g.skip/maxT)*55);
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:20px;cursor:pointer;" title="GT${i+1}: ${g.correct}C/${g.wrong}W/${g.skip}S" onclick="toggleGTEdit(${i})">
+      <div style="width:100%;background:var(--muted);height:${sh}px;border-radius:2px 2px 0 0;"></div>
+      <div style="width:100%;background:var(--r1);height:${wh}px;"></div>
+      <div style="width:100%;background:var(--green);height:${ch}px;border-radius:0 0 2px 2px;"></div>
     </div>`;
+  }).join('');
 }
 
-let journalShown = 10;
-function showMoreJournal() {
-  journalShown = Math.min(journalEntries.length, journalShown + 10);
-  const wrap = document.getElementById('journalWrap');
-  wrap.innerHTML = journalEntries.slice(0, journalShown).map((e,i) => renderJournalEntry(e, i)).join('') +
-    (journalShown < journalEntries.length ?
-      `<div style="text-align:center;margin-top:1rem;"><button class="add-btn" onclick="showMoreJournal()" id="journalLoadMore">Load more entries ↓</button></div>`
-    : '');
+// ============================================================
+// JOURNAL
+// ============================================================
+function renderJournal(){
+  const wrap=document.getElementById('journalWrap');
+  wrap.innerHTML=journalEntries.slice(0,journalShown).map((e,i)=>renderJEntry(e,i)).join('');
+  const btn=document.getElementById('loadMoreBtn');
+  if(btn)btn.style.display=journalShown>=journalEntries.length?'none':'inline-block';
+}
+function showMoreJournal(){journalShown=Math.min(journalEntries.length,journalShown+8);renderJournal();}
+
+/* Compute streak up to index i (consecutive days with sleep > 0) */
+function calcStreak(upToIdx){
+  let streak=0;
+  for(let j=upToIdx;j>=0;j--){
+    if(journalEntries[j].sleep>0)streak++;
+    else break;
+  }
+  return streak;
 }
 
-function renderJournalEntry(e, i) {
-  const isToday = i===4; // day 5 = index 4
-  const moodEmojis = ['','😞','😐','😊','😄','🤩'];
-  const moods = [1,2,3,4,5].map(n=>
-    `<div class="mood-circle ${e.mood===n?'sel':''}" onclick="setMood(${i},${n},'mood')" title="${moodEmojis[n]}">${n}</div>`
-  ).join('');
-  const energy = [1,2,3,4,5].map(n=>
-    `<div class="mood-circle ${e.energy===n?'sel':''}" onclick="setMood(${i},${n},'energy')" style="${e.energy===n?'background:var(--accent2);border-color:var(--accent2)':''}">${n}</div>`
-  ).join('');
-
+function renderJEntry(e,i){
+  const isToday=i===4;
+  const moods=[1,2,3,4,5].map(n=>`<div class="mood-circle ${e.mood===n?'sel':''}" onclick="jMood(${i},${n},'mood')">${n}</div>`).join('');
+  const energy=[1,2,3,4,5].map(n=>`<div class="mood-circle ${e.energy===n?'sel':''}" onclick="jMood(${i},${n},'energy')" style="${e.energy===n?'background:var(--accent2);border-color:var(--accent2)':''}">${n}</div>`).join('');
+  const streak=e.sleep>0?calcStreak(i):0;
+  const streakBadge=streak>0?`<span style="font-size:.58rem;background:rgba(255,100,132,.15);color:var(--accent2);border:1px solid rgba(255,100,132,.3);padding:.1rem .45rem;border-radius:20px;margin-left:.4rem;">🔥${streak}d</span>`:'';
   return `<div class="journal-entry ${isToday?'today-entry':''}">
     <div class="journal-header">
       <div>
-        <div class="journal-date">${e.date}</div>
-        <div class="journal-day">Day ${e.day} ${isToday?'· TODAY':''}</div>
+        <div class="journal-date">${e.date}${streakBadge}</div>
+        <div class="journal-day">Day ${e.day}${isToday?' · TODAY':''}</div>
       </div>
-      <div style="display:flex;gap:0.75rem;align-items:center;">
-        <div style="text-align:center"><div style="font-size:0.55rem;color:var(--muted);margin-bottom:0.3rem">MOOD</div><div class="journal-mood">${moods}</div></div>
-        <div style="text-align:center"><div style="font-size:0.55rem;color:var(--muted);margin-bottom:0.3rem">ENERGY</div><div class="journal-mood">${energy}</div></div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+        <div><div class="j-label">Mood</div><div class="journal-mood">${moods}</div></div>
+        <div><div class="j-label">Energy</div><div class="journal-mood">${energy}</div></div>
+      </div>
+    </div>
+    <div class="j-inline-row">
+      <div class="j-inline-field">
+        <label class="j-label">😴 Sleep (hrs)</label>
+        <input class="j-input" type="number" min="0" max="12" step="0.5"
+          value="${e.sleep||''}" placeholder="7.5"
+          onchange="jSetSleep(${i},this.value)">
+      </div>
+      <div class="j-inline-field" style="flex:3;">
+        <label class="j-label">🏃 Exercise</label>
+        <input class="j-input" type="text"
+          value="${e.exercise||''}" placeholder="e.g. Push day · 40min"
+          onchange="jSet(${i},'exercise',this.value)">
       </div>
     </div>
     <div class="journal-grid">
       <div>
-        <div style="font-size:0.58rem;color:var(--muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.1em">What I Studied</div>
-        <textarea class="journal-textarea" rows="3" placeholder="What did you study today?" onchange="journalSet(${i},'studied',this.value)">${e.studied||''}</textarea>
+        <div class="j-label">What I Studied</div>
+        <textarea class="journal-textarea" rows="3" placeholder="What did you cover today?" onchange="jSet(${i},'studied',this.value)">${e.studied||''}</textarea>
       </div>
       <div>
-        <div style="font-size:0.58rem;color:var(--muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.1em">What Was Unclear</div>
-        <textarea class="journal-textarea" rows="3" placeholder="Doubts / gaps..." onchange="journalSet(${i},'unclear',this.value)">${e.unclear||''}</textarea>
+        <div class="j-label">What Was Unclear</div>
+        <textarea class="journal-textarea" rows="3" placeholder="Doubts / gaps..." onchange="jSet(${i},'unclear',this.value)">${e.unclear||''}</textarea>
       </div>
       <div>
-        <div style="font-size:0.58rem;color:var(--muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.1em">Tomorrow's Plan</div>
-        <textarea class="journal-textarea" rows="3" placeholder="Plan for tomorrow..." onchange="journalSet(${i},'tomorrow',this.value)">${e.tomorrow||''}</textarea>
+        <div class="j-label">Tomorrow's Plan</div>
+        <textarea class="journal-textarea" rows="3" placeholder="Plan for tomorrow..." onchange="jSet(${i},'tomorrow',this.value)">${e.tomorrow||''}</textarea>
       </div>
     </div>
   </div>`;
 }
+function jMood(i,v,k){journalEntries[i][k]=v;renderJournal();save();}
+function jSet(i,k,v){journalEntries[i][k]=v;save();}
+function jSetSleep(i,v){journalEntries[i].sleep=+v||'';renderJournal();save();}
 
-function setMood(i, val, key) {
-  journalEntries[i][key] = val;
-  renderJournal();
-  saveAll();
-}
-
-function journalSet(i, key, val) {
-  journalEntries[i][key] = val;
-  saveAll();
-}
-
-// ==============================
+// ============================================================
 // WEAK TOPICS
-// ==============================
-function renderWeak() {
-  const body = document.getElementById('weakBody');
-  if (!weakTopics.length) {
-    body.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:2rem;font-size:0.72rem;">No weak topics flagged yet. Add one when you get a question wrong 3+ times.</td></tr>`;
+// ============================================================
+function renderWeak(){
+  const body=document.getElementById('weakBody');
+  if(!weakTopics.length){
+    body.innerHTML=`<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:2rem;font-size:.7rem;">No weak topics yet. Add one when you miss a question 3+ times.</td></tr>`;
     return;
   }
-  body.innerHTML = weakTopics.map((t,i) => `<tr>
+  body.innerHTML=weakTopics.map((t,i)=>`<tr>
     <td style="color:var(--muted)">${i+1}</td>
-    <td>${t.subject}</td>
-    <td>${t.topic}</td>
-    <td style="color:var(--muted)">${t.reason}</td>
-    <td style="text-align:center"><span style="color:var(--red);font-weight:700">${t.timesWrong}</span></td>
+    <td>${t.subject}</td><td>${t.topic}</td><td style="color:var(--muted)">${t.reason}</td>
+    <td style="text-align:center;color:var(--r1);font-weight:700">${t.timesWrong}</td>
     <td style="color:var(--muted)">${t.dateFlagged}</td>
-    <td><input class="mcq-input wide" value="${t.rev1||''}" placeholder="date" onchange="weakSet(${i},'rev1',this.value)"></td>
-    <td><input class="mcq-input wide" value="${t.rev2||''}" placeholder="date" onchange="weakSet(${i},'rev2',this.value)"></td>
+    <td><input class="mcq-input wide" value="${t.rev1||''}" placeholder="date" onchange="wSet(${i},'rev1',this.value)"></td>
+    <td><input class="mcq-input wide" value="${t.rev2||''}" placeholder="date" onchange="wSet(${i},'rev2',this.value)"></td>
     <td>
-      <select class="mcq-input" onchange="weakSet(${i},'resolved',this.value)" style="width:70px;">
+      <select class="mcq-input" onchange="wSet(${i},'resolved',this.value)" style="width:65px">
         <option ${!t.resolved||t.resolved==='❌'?'selected':''}>❌</option>
         <option ${t.resolved==='✅'?'selected':''}>✅</option>
       </select>
@@ -1304,62 +1373,44 @@ function renderWeak() {
     <td><button class="del-btn" onclick="delWeak(${i})">✕</button></td>
   </tr>`).join('');
 }
-
-function weakSet(i, key, val) {
-  weakTopics[i][key] = val;
-  saveAll();
+function wSet(i,k,v){weakTopics[i][k]=v;save();}
+function addWeakTopic(){
+  const s=prompt('Subject:');if(!s)return;
+  const t=prompt('Topic:');if(!t)return;
+  const r=prompt('Reason:','Wrong 3+ times')||'Wrong 3+ times';
+  const n=+prompt('Times wrong:',3)||3;
+  weakTopics.push({subject:s,topic:t,reason:r,timesWrong:n,
+    dateFlagged:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),
+    rev1:'',rev2:'',resolved:'❌'});
+  renderWeak();save();
 }
+function delWeak(i){if(!confirm('Delete?'))return;weakTopics.splice(i,1);renderWeak();save();}
 
-function addWeakTopic() {
-  const subject = prompt('Subject:');
-  if (!subject) return;
-  const topic = prompt('Topic:');
-  if (!topic) return;
-  const reason = prompt('Reason flagged:', 'Wrong 3+ times');
-  const times = +prompt('Times wrong:', 3) || 3;
-  weakTopics.push({
-    subject, topic, reason: reason||'', timesWrong: times,
-    dateFlagged: new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),
-    rev1:'', rev2:'', resolved:'❌'
-  });
-  renderWeak();
-  saveAll();
-}
-
-function delWeak(i) {
-  if (confirm('Delete this topic?')) {
-    weakTopics.splice(i, 1);
-    renderWeak();
-    saveAll();
-  }
-}
-
-// ==============================
+// ============================================================
 // MCQ LOG
-// ==============================
-function renderMCQ() {
-  const body = document.getElementById('mcqBody');
-  if (!mcqLog.length) {
-    body.innerHTML = `<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:2rem;font-size:0.72rem;">No MCQ sessions logged. Add one to track your practice.</td></tr>`;
-    updateMCQStats();
-    return;
+// ============================================================
+function renderMCQ(){
+  const body=document.getElementById('mcqBody');
+  if(!mcqLog.length){
+    body.innerHTML=`<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:2rem;font-size:.7rem;">No sessions yet. Add one to start tracking.</td></tr>`;
+    updateMCQStats();return;
   }
-  body.innerHTML = mcqLog.map((r,i) => {
-    const total = r.total||0, correct = r.correct||0, wrong = r.wrong||0, skip = r.skip||0;
-    const acc = total > 0 ? ((correct/(total))*100).toFixed(1)+'%' : '—';
+  body.innerHTML=mcqLog.map((r,i)=>{
+    const acc=r.total>0?((r.correct/r.total)*100).toFixed(1)+'%':'—';
+    const accCol=r.total>0?(+acc.replace('%','')>50?'var(--green)':+acc.replace('%','')>35?'var(--orange)':'var(--r1)'):'var(--muted)';
     return `<tr>
       <td style="color:var(--muted)">${i+1}</td>
-      <td><input class="mcq-input wide" value="${r.date||''}" placeholder="date" onchange="mcqSet(${i},'date',this.value)"></td>
-      <td><input class="mcq-input wide" value="${r.source||''}" placeholder="source" onchange="mcqSet(${i},'source',this.value)"></td>
-      <td><input class="mcq-input num" type="number" value="${r.total||''}" onchange="mcqSetN(${i},'total',this.value)"></td>
-      <td><input class="mcq-input num" type="number" value="${r.correct||''}" onchange="mcqSetN(${i},'correct',this.value)"></td>
-      <td><input class="mcq-input num" type="number" value="${r.wrong||''}" onchange="mcqSetN(${i},'wrong',this.value)"></td>
-      <td><input class="mcq-input num" type="number" value="${r.skip||''}" onchange="mcqSetN(${i},'skip',this.value)"></td>
-      <td style="color:${+acc>50?'var(--green)':+acc>35?'var(--orange)':'var(--red)'};font-weight:600">${acc}</td>
-      <td><input class="mcq-input wide" value="${r.subject||''}" placeholder="subject" onchange="mcqSet(${i},'subject',this.value)"></td>
-      <td><input class="mcq-input wide" value="${r.topic||''}" placeholder="topic" onchange="mcqSet(${i},'topic',this.value)"></td>
+      <td><input class="mcq-input wide" value="${r.date||''}" placeholder="date" onchange="mSet(${i},'date',this.value)"></td>
+      <td><input class="mcq-input wide" value="${r.source||''}" placeholder="source" onchange="mSet(${i},'source',this.value)"></td>
+      <td><input class="mcq-input num" type="number" value="${r.total||''}" onchange="mSetN(${i},'total',this.value)"></td>
+      <td><input class="mcq-input num" type="number" value="${r.correct||''}" onchange="mSetN(${i},'correct',this.value)"></td>
+      <td><input class="mcq-input num" type="number" value="${r.wrong||''}" onchange="mSetN(${i},'wrong',this.value)"></td>
+      <td><input class="mcq-input num" type="number" value="${r.skip||''}" onchange="mSetN(${i},'skip',this.value)"></td>
+      <td style="color:${accCol};font-weight:600">${acc}</td>
+      <td><input class="mcq-input wide" value="${r.subject||''}" placeholder="subject" onchange="mSet(${i},'subject',this.value)"></td>
+      <td><input class="mcq-input wide" value="${r.topic||''}" placeholder="topic" onchange="mSet(${i},'topic',this.value)"></td>
       <td>
-        <select class="mcq-input" onchange="mcqSet(${i},'conf',this.value)">
+        <select class="mcq-input" onchange="mSet(${i},'conf',this.value)" style="width:50px">
           ${[1,2,3,4,5].map(n=>`<option ${r.conf==n?'selected':''}>${n}</option>`).join('')}
         </select>
       </td>
@@ -1368,32 +1419,28 @@ function renderMCQ() {
   }).join('');
   updateMCQStats();
 }
-
-function mcqSet(i, key, val) { mcqLog[i][key]=val; renderMCQ(); saveAll(); }
-function mcqSetN(i, key, val) { mcqLog[i][key]=+val; renderMCQ(); saveAll(); }
-function delMCQ(i) { mcqLog.splice(i,1); renderMCQ(); saveAll(); }
-
-function addMCQRow() {
-  mcqLog.push({date:'', source:'', total:0, correct:0, wrong:0, skip:0, subject:'', topic:'', conf:3});
+function mSet(i,k,v){mcqLog[i][k]=v;renderMCQ();save();}
+function mSetN(i,k,v){mcqLog[i][k]=+v;renderMCQ();save();}
+function delMCQ(i){mcqLog.splice(i,1);renderMCQ();save();}
+function addMCQRow(){
+  mcqLog.push({date:'',source:'',total:0,correct:0,wrong:0,skip:0,subject:'',topic:'',conf:3});
   renderMCQ();
 }
-
-function updateMCQStats() {
-  const today = mcqLog;
-  const totalMCQ = today.reduce((s,r)=>s+(r.total||0),0);
-  const totalCorrect = today.reduce((s,r)=>s+(r.correct||0),0);
-  const totalWrong = today.reduce((s,r)=>s+(r.wrong||0),0);
-  const acc = totalMCQ > 0 ? ((totalCorrect/totalMCQ)*100).toFixed(1)+'%' : '—';
-  document.getElementById('mcqTotalToday').textContent = totalMCQ;
-  document.getElementById('mcqAccuracy').textContent = acc;
-  document.getElementById('mcqCorrectTotal').textContent = totalCorrect;
-  document.getElementById('mcqWrongTotal').textContent = totalWrong;
+function updateMCQStats(){
+  const total=mcqLog.reduce((s,r)=>s+(r.total||0),0);
+  const correct=mcqLog.reduce((s,r)=>s+(r.correct||0),0);
+  const wrong=mcqLog.reduce((s,r)=>s+(r.wrong||0),0);
+  const acc=total>0?((correct/total)*100).toFixed(1)+'%':'—';
+  document.getElementById('mcqTotal').textContent=total;
+  document.getElementById('mcqAcc').textContent=acc;
+  document.getElementById('mcqCorrect').textContent=correct;
+  document.getElementById('mcqWrong').textContent=wrong;
 }
 
-// ==============================
+// ============================================================
 // INIT
-// ==============================
-loadAll();
+// ============================================================
+load();
 renderDashboard();
 renderSchedule();
 renderGT();
