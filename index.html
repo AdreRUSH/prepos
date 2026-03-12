@@ -150,7 +150,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
 .grade-good{color:var(--r4);} .grade-exc{color:var(--r5);}
 
 /* ======================== VERTICAL TIMETABLE ======================== */
-/* Vertical timeline bar on the left */
 .tt-vertical-wrap{display:flex;gap:1rem;}
 .tt-vertical-timeline{position:relative;width:72px;flex-shrink:0;border-right:3px solid var(--border);
   display:flex;flex-direction:column;}
@@ -166,7 +165,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
   background:var(--r1);z-index:10;pointer-events:none;}
 .tt-now-marker::after{content:'NOW';position:absolute;right:-26px;top:-5px;
   font-size:.38rem;color:var(--r1);font-weight:700;white-space:nowrap;background:var(--card);padding:1px 2px;}
-/* Slot cards on the right */
 .tt-vt-cards{flex:1;display:flex;flex-direction:column;gap:.4rem;}
 .tt-slot-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;transition:border-color .2s;}
 .tt-slot-card.active-slot-card{border-color:var(--accent);background:rgba(108,99,255,.07);}
@@ -237,7 +235,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
 .sched-r.sr3{background:rgba(255,214,10,.3);border-color:var(--r3);color:var(--r3);}
 .sched-r.sr4{background:rgba(123,237,159,.25);border-color:var(--r4);color:var(--r4);}
 .sched-r.sr5{background:rgba(46,204,113,.3);border-color:var(--r5);color:var(--r5);}
-/* SR dot strip */
 .sr-cell{padding:.35rem .65rem !important;}
 .sr-strip{display:flex;gap:3px;align-items:center;margin-bottom:4px;}
 .sr-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -249,7 +246,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
 .sr-done{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;box-shadow:0 0 6px rgba(108,99,255,.4);}
 .sr-progress-bar{height:3px;background:var(--dim);border-radius:2px;overflow:hidden;}
 .sr-progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s ease;}
-/* Row notes */
 .row-notes-toggle{background:var(--dim);border:none;color:var(--muted);font-size:.55rem;
   padding:.1rem .35rem;border-radius:4px;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .row-notes-toggle:hover,.row-notes-toggle.active{background:var(--accent);color:#fff;}
@@ -266,7 +262,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
 .gt-summary-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;}
 .gt-chart-wrap{height:170px;position:relative;margin-bottom:.75rem;}
 .gt-chart-wrap svg{width:100%;height:100%;}
-/* Interactive bar chart */
 .gt-bar-chart{position:relative;margin-bottom:.5rem;}
 .gt-bar-canvas{display:flex;align-items:flex-end;gap:3px;height:150px;padding:0 4px;
   border-bottom:1px solid var(--border);border-left:1px solid var(--border);}
@@ -324,7 +319,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
 .journal-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:.5rem;}
 .j-label{font-size:.54rem;color:var(--muted);margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.1em;}
 .journal-textarea{width:100%;background:var(--dim);border:1px solid var(--border);color:var(--text);
-  font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.5rem .65rem;border-radius:6px;resize:none;line-height:1.6;transition:border-color .15s;}
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.5rem .65rem;border-radius:6px;resize:none;line-height:1.6;transition:border-color .15rem;}
 .journal-textarea:focus{outline:none;border-color:var(--accent);}
 .j-inline-row{display:flex;gap:.75rem;margin-bottom:.65rem;flex-wrap:wrap;}
 .j-inline-field{display:flex;flex-direction:column;gap:.2rem;flex:1;min-width:100px;}
@@ -515,7 +510,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
         </div>
         <div style="font-size:.65rem;color:var(--muted)" id="ttNowIST">—</div>
       </div>
-      <!-- Vertical layout: timeline strip on left, cards on right -->
       <div class="tt-vertical-wrap">
         <div class="tt-vertical-timeline" id="ttTimeline"></div>
         <div class="tt-vt-cards" id="ttSlotsGrid"></div>
@@ -586,7 +580,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
 
 <!-- ==================== JOURNAL ==================== -->
 <div class="page" id="page-journal">
-  <!-- Life in Weeks panel -->
   <div class="panel" id="liwPanel">
     <div class="panel-title panel-title-btn" onclick="toggleLiW()">
       <span class="dot" style="background:var(--accent2)"></span>🌍 Life in Weeks — DOB: 26 Mar 2002
@@ -605,7 +598,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.92);backdrop-fil
       <div style="font-size:.58rem;color:var(--muted);margin-top:.4rem;">52 columns = weeks/year · 80 rows = 80-year life · Each square = 1 week</div>
     </div>
   </div>
-  <!-- Journal entries -->
   <div class="panel">
     <div class="panel-title"><span class="dot" style="background:var(--accent2)"></span>End-of-Day Journal</div>
     <div id="journalWrap"></div>
@@ -682,17 +674,11 @@ const DOB=new Date('2002-03-26T00:00:00+05:30');
 // ============================================================
 // SR GAP LOGIC
 // ============================================================
-// Each row has: d1t, d3t, d7t, d15t, d30t (boolean)
-// The "next due" gap for a row is the first key that is NOT ticked.
-// A row is "due today" if its studyDate + gap_days <= today.
-// For simplicity: we track studyDate per scheduleData row and compute due gaps.
-
 const SR_KEYS   = ['d1t','d3t','d7t','d15t','d30t'];
 const SR_DAYS   = [1,   3,    7,    15,    30  ];
 const SR_LABELS = ['⚡ D+1','✨ D+3','💥 D+7','🔥 D+15','♻️ D+30'];
 const SR_CLASSES= ['gap-d1','gap-d3','gap-d7','gap-d15','gap-d30'];
 
-// Parse "DD-Mon" -> Date object (year = current or next)
 function parseDDMon(str){
   const months={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
   const parts=str.split('-');
@@ -702,34 +688,27 @@ function parseDDMon(str){
   if(isNaN(d)||m===undefined)return null;
   const ist=getTodayIST();
   let year=ist.getFullYear();
-  // If month already passed, assume next year
   const candidate=new Date(year,m,d);
   return candidate;
 }
 
-// Given a scheduleData row, return array of {gapIdx, key, label, cls}
-// for all gaps that are NOW DUE (studyDate + gapDays <= today) AND not yet ticked
-// AND all previous gaps are ticked (sequential)
 function getDueGapsForRow(row){
   const studyDate=parseDDMon(row.date);
   if(!studyDate)return[];
   const ist=getTodayIST();
-  // Normalize both to midnight for day comparison
   const todayMidnight=new Date(ist.getFullYear(),ist.getMonth(),ist.getDate());
   const due=[];
   for(let i=0;i<SR_KEYS.length;i++){
     const key=SR_KEYS[i];
-    // Check all previous gaps are ticked
     const prevDone=SR_KEYS.slice(0,i).every(k=>row[k]);
-    if(!prevDone) break; // sequential — can't do this gap until previous is done
-    if(row[key]) continue; // already ticked
-    // Check if due date reached
+    if(!prevDone) break;
+    if(row[key]) continue;
     const dueDate=new Date(studyDate.getTime()+SR_DAYS[i]*24*60*60*1000);
     const dueMidnight=new Date(dueDate.getFullYear(),dueDate.getMonth(),dueDate.getDate());
     if(dueMidnight<=todayMidnight){
       due.push({gapIdx:i,key,label:SR_LABELS[i],cls:SR_CLASSES[i]});
     }
-    break; // Only show the first pending due gap (sequential)
+    break;
   }
   return due;
 }
@@ -817,24 +796,32 @@ let scheduleData=[
 
 let scheduleNotes={};
 
-// Timetable slots
+// ============================================================
+// UPDATED TIMETABLE — 22 slots reflecting optimised routine
+// ============================================================
 let ttSlots=[
-  {start:'2300',end:'0530',label:'Sleep 😴',color:'#1a1a3e',note:''},
-  {start:'0530',end:'0545',label:'Getting Ready ☀️',color:'#2d4a6b',note:''},
-  {start:'0545',end:'0800',label:'Revision Video + PYQ 📖',color:'#3a2060',note:''},
-  {start:'0800',end:'0930',label:'Exercise + Shower 💪',color:'#1a4a2e',note:''},
-  {start:'0930',end:'1100',label:'Revision Video + PYQ 📖',color:'#3a2060',note:''},
-  {start:'1100',end:'1115',label:'Break ☕',color:'#2a1a10',note:''},
-  {start:'1115',end:'1300',label:'Revision Video + PYQ 📖',color:'#3a2060',note:''},
-  {start:'1300',end:'1400',label:'Lunch + Nap 🍽️',color:'#2a1a10',note:''},
+  {start:'2230',end:'0530',label:'Sleep 😴',color:'#1a1a3e',note:''},
+  {start:'0530',end:'0545',label:'Kapalabhati + Cold Water + Daily Intention 🌬️',color:'#1a2d3a',note:''},
+  {start:'0545',end:'0800',label:'Revision Video + PYQ Analysis 📖',color:'#3a2060',note:''},
+  {start:'0800',end:'0930',label:'Exercise + Cold Shower + Breakfast 💪',color:'#1a4a2e',note:''},
+  {start:'0930',end:'0935',label:'5 Chess Puzzles / Mental Warm-Up ♟️',color:'#2a2a4a',note:''},
+  {start:'0935',end:'1100',label:'Revision Video + PYQ Analysis 📖',color:'#3a2060',note:''},
+  {start:'1100',end:'1115',label:'Break — Walk, No Phone 🚶',color:'#2a1a10',note:''},
+  {start:'1115',end:'1300',label:'Revision Video + PYQ Analysis 📖',color:'#3a2060',note:''},
+  {start:'1300',end:'1320',label:'Lunch (No Screen) 🍽️',color:'#2a1a10',note:''},
+  {start:'1320',end:'1340',label:'Yoga Nidra / NSDR 🧘',color:'#2a1a3a',note:''},
+  {start:'1340',end:'1400',label:'Short Walk + Mental Rehearsal 🌿',color:'#1a2a1a',note:''},
   {start:'1400',end:'1530',label:"Today's PYQ Solving 📝",color:'#1e1a40',note:''},
   {start:'1530',end:'1545',label:'Break ☕',color:'#2a1a10',note:''},
   {start:'1545',end:'1745',label:'Spaced Repetition 🔁',color:'#1a3a2a',note:''},
-  {start:'1745',end:'1800',label:'Meditation 🧘',color:'#2a1a3a',note:''},
-  {start:'1800',end:'2000',label:'Mixed Bag MCQ 🔀',color:'#1e1a40',note:''},
+  {start:'1745',end:'1800',label:'Meditation — Open Monitoring / Recovery 🧘',color:'#2a1a3a',note:''},
+  {start:'1800',end:'1930',label:'GT Analysis 🏆',color:'#3a1a20',note:''},
+  {start:'1930',end:'2000',label:'Mixed Bag MCQ 🔀',color:'#1e1a40',note:''},
   {start:'2000',end:'2030',label:'Dinner 🍛',color:'#2a1a10',note:''},
-  {start:'2030',end:'2200',label:'GT Analysis 🏆',color:'#3a1a20',note:''},
-  {start:'2200',end:'2300',label:'Next Day Plan 🌙',color:'#1a1a2e',note:''},
+  {start:'2030',end:'2200',label:'Light Revision / Anki / Weak Area Notes 💡',color:'#1a3a2a',note:''},
+  {start:'2200',end:'2210',label:'Next Day Plan (Paper Only) 🌙',color:'#1a1a2e',note:''},
+  {start:'2210',end:'2220',label:'Memory Palace Walk 🏛️',color:'#1a1a3e',note:''},
+  {start:'2220',end:'2230',label:'Bhramari Breathing 🕉️',color:'#2a1a3a',note:''},
 ];
 
 let gtScores=[
@@ -888,7 +875,6 @@ function autoFixSections(){
   const ist = getTodayIST();
   const todayStr = fmtISTDate(ist);
   scheduleData.forEach(row => {
-    // Skip GT rows — keep them as-is unless they need to be in done
     const isGT = row.subject && row.subject.startsWith('GT');
     const studyDate = parseDDMon(row.date);
     if(!studyDate) return;
@@ -897,23 +883,21 @@ function autoFixSections(){
     const todayMidnight = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
     const rowMidnight = new Date(studyDate.getFullYear(), studyDate.getMonth(), studyDate.getDate());
     if(rowMidnight < todayMidnight){
-      // Past date → done (unless already explicitly set to revise by user)
       if(row.section === 'study' || row.section === 'upcoming'){
-        row.section = isGT ? 'done' : 'done';
+        row.section = 'done';
       }
     } else if(rowMidnight.getTime() === todayMidnight.getTime()){
-      // Today → study
       if(row.section !== 'done' && row.section !== 'revise'){
         row.section = isGT ? 'gt' : 'study';
       }
     } else {
-      // Future → upcoming (only if not already done)
       if(row.section === 'study'){
         row.section = isGT ? 'gt' : 'upcoming';
       }
     }
   });
 }
+
 function save(){
   try{
     sessionStorage.setItem('prepos_v4',JSON.stringify({
@@ -1006,7 +990,6 @@ function renderDashboard(){
   renderRating(todayRating);
 }
 
-/* ---- Targets ---- */
 function renderTargets(){
   document.getElementById('targetsWrap').innerHTML=targets.map((t,i)=>{
     const pct=t.target>0?Math.min(100,Math.round(t.done/t.target*100)):0;
@@ -1025,13 +1008,9 @@ function editTarget(i){
   if(v!==null&&!isNaN(+v)){targets[i].done=+v;renderTargets();save();}
 }
 
-/* ---- Spaced Rep (Dashboard) ---- */
-// Shows ALL rows from done/revise sections that have a gap due today
 function renderSR(){
-  const ist=getTodayIST();
   const doneAndRevise=scheduleData.filter(r=>r.section==='done'||r.section==='revise');
   const srItems=[];
-
   doneAndRevise.forEach(row=>{
     const origIdx=scheduleData.indexOf(row);
     const dueGaps=getDueGapsForRow(row);
@@ -1039,9 +1018,7 @@ function renderSR(){
       srItems.push({gap,topic:row.subject,date:row.date,idx:origIdx,key:gap.key});
     });
   });
-
   document.getElementById('srCount').textContent=srItems.length;
-
   if(!srItems.length){
     document.getElementById('srBody').innerHTML=`<tr><td colspan="3" style="color:var(--muted);font-size:.65rem;padding:.75rem .6rem;">No revisions due today 🎉</td></tr>`;
     return;
@@ -1063,7 +1040,6 @@ function srTickFromPanel(idx,key,val){
   save();
 }
 
-/* ---- Confidence Grid ---- */
 const gradeInfo={
   1:{label:'🔴 Very Weak',cls:'grade-vweak',col:'#ff4d6d'},
   2:{label:'🟠 Weak',cls:'grade-weak',col:'#ff8c42'},
@@ -1129,14 +1105,11 @@ function ttTotalMins(start,end){
   return e-s;
 }
 
-// Normalize to "visual day" starting at 05:30 (when the schedule starts)
-// We use absolute minute in day, wrapping at midnight
-const TT_DAY_START_MIN = ttMinutes('0530'); // 330
-const TT_DAY_END_MIN   = ttMinutes('0530') + 1440; // 1770 (next day 05:30)
+const TT_DAY_START_MIN = ttMinutes('0530');
+const TT_DAY_END_MIN   = ttMinutes('0530') + 1440;
 const TT_DAY_RANGE     = 1440;
 
 function ttNormMin(hhmm){
-  // Returns minutes since 05:30
   let m = ttMinutes(hhmm);
   if(m < TT_DAY_START_MIN) m += 1440;
   return m - TT_DAY_START_MIN;
@@ -1146,19 +1119,17 @@ function renderTimetable(){
   const ist=getTodayIST();
   const nowMins=ist.getHours()*60+ist.getMinutes();
   const nowNorm=(nowMins<TT_DAY_START_MIN)?nowMins+1440-TT_DAY_START_MIN:nowMins-TT_DAY_START_MIN;
-  const nowPct=Math.max(0,Math.min(100,(nowNorm/TT_DAY_RANGE)*100));
 
   const h=String(ist.getHours()).padStart(2,'0');
   const m=String(ist.getMinutes()).padStart(2,'0');
   document.getElementById('ttNowIST').textContent=`IST ${h}:${m}`;
 
-  // Find active slot
   let activeSlot=null;
   ttSlots.forEach((slot,i)=>{
     const sn=ttNormMin(slot.start);
     let en=ttNormMin(slot.end);
     if(en===0)en=TT_DAY_RANGE;
-    if(en<sn)en+=TT_DAY_RANGE; // handles wrap
+    if(en<sn)en+=TT_DAY_RANGE;
     if(nowNorm>=sn&&nowNorm<en)activeSlot=i;
   });
 
@@ -1175,11 +1146,8 @@ function renderTimetable(){
     document.getElementById('ttCurrentMini').textContent='';
   }
 
-  // ---- VERTICAL TIMELINE BAR ----
   const timeline=document.getElementById('ttTimeline');
-  // Compute total height proportional to duration of each slot
-  // Use pixel heights: 1 minute = 1px (scaled down), total ~1440px capped at 600
-  const SCALE=0.75; // 0.75px per minute — bigger bar
+  const SCALE=0.75;
   let html='';
   let nowPlaced=false;
 
@@ -1190,7 +1158,6 @@ function renderTimetable(){
     let en=ttNormMin(slot.end);if(en===0||en<sn)en+=TT_DAY_RANGE;
     const isActive=i===activeSlot;
 
-    // Place NOW marker inside this slot?
     let nowLine='';
     if(!nowPlaced&&nowNorm>=sn&&nowNorm<en){
       const relPct=((nowNorm-sn)/(en-sn))*100;
@@ -1208,7 +1175,6 @@ function renderTimetable(){
   });
   timeline.innerHTML=html;
 
-  // ---- VERTICAL SLOT CARDS ----
   const grid=document.getElementById('ttSlotsGrid');
   grid.innerHTML=ttSlots.map((slot,i)=>{
     const isActive=i===activeSlot;
@@ -1278,7 +1244,6 @@ function buildSRStrip(row,origIdx){
   const allDone=ticked===5;
   const dots=SR_KEYS.map((k,i)=>{
     const isDone=row[k];
-    // A gap is "unlocked" if all previous are done
     const unlocked=SR_KEYS.slice(0,i).every(pk=>row[pk]);
     const opacity=isDone?1:unlocked?1:0.35;
     return `<div class="sr-dot ${isDone?'sr-done':'sr-pending'}"
@@ -1292,18 +1257,6 @@ function buildSRStrip(row,origIdx){
       <div class="sr-progress-fill" style="width:${pct}%"></div>
     </div>
   </td>`;
-}
-
-// Build "Revise Now" section: automatically show rows from DONE section
-// whose next due gap is today or overdue
-function getReviseNowRows(){
-  const doneRows=scheduleData.filter(r=>r.section==='done');
-  const due=[];
-  doneRows.forEach(row=>{
-    const gaps=getDueGapsForRow(row);
-    if(gaps.length>0)due.push({row,gaps});
-  });
-  return due;
 }
 
 function journalTip(dayNum){
@@ -1339,8 +1292,6 @@ function buildSchedTable(rows,sectionKey,rowCls){
       const jTip=(sectionKey==='done'||sectionKey==='revise')?journalTip(row.day):'';
       const noteOpen=scheduleNotes[row.date]?'open':'';
       const noteActive=scheduleNotes[row.date]?'active':'';
-
-      // Show which gap is currently due (for visual hint in Revise section)
       const dueGaps=getDueGapsForRow(row);
       const dueLabel=dueGaps.length>0?`<span class="gap-badge ${dueGaps[0].cls}" style="margin-left:4px;">${dueGaps[0].label}</span>`:'';
 
@@ -1383,8 +1334,6 @@ function saveRowNote(dateStr,val){
 }
 
 function renderSchedule(){
-  const ist=getTodayIST();
-
   const ankiEl=document.getElementById('ankiTodayLive');
   const studyRow=scheduleData.find(r=>r.section==='study');
   if(ankiEl)ankiEl.textContent=studyRow&&studyRow.anki?studyRow.anki:'—';
@@ -1394,13 +1343,11 @@ function renderSchedule(){
     if(sec.key==='upcoming'){
       rows=scheduleData.filter(r=>r.section==='upcoming'||r.section==='gt');
     } else if(sec.key==='revise'){
-      // Revise Now = explicit 'revise' rows + any 'done' rows with gaps due today
       const explicitRevise=scheduleData.filter(r=>r.section==='revise');
       const dueFromDone=scheduleData.filter(r=>{
         if(r.section!=='done')return false;
         return getDueGapsForRow(r).length>0;
       });
-      // Merge, deduplicate
       const seen=new Set();
       rows=[];
       [...explicitRevise,...dueFromDone].forEach(r=>{
@@ -1646,7 +1593,6 @@ function renderLifeInWeeks(){
 
   function fmt(n){return n.toLocaleString('en-IN');}
 
-  // Removed heartbeats and breaths as requested
   document.getElementById('liwStats').innerHTML=[
     {v:fmt(weeksLived),l:'Weeks Lived'},
     {v:fmt(daysLived),l:'Days Lived'},
@@ -1821,7 +1767,7 @@ function updateMCQStats(){
 }
 
 // ============================================================
-// IST CLOCK — updates all time displays every 60s
+// IST CLOCK
 // ============================================================
 function updateAllISTDisplays(){
   const ist = getTodayIST();
@@ -1829,22 +1775,10 @@ function updateAllISTDisplays(){
   const m = String(ist.getMinutes()).padStart(2,'0');
   const timeStr = `${h}:${m} IST`;
   const dateStr = fmtISTDateLong(ist);
-
-  // Nav / badge time
-  const examBadge = document.querySelector('.exam-badge');
-  if(examBadge && !examBadge.dataset.orig){
-    examBadge.dataset.orig = examBadge.textContent;
-  }
-
-  // Dashboard meta line
   const metaEl = document.getElementById('todayMeta');
   if(metaEl) metaEl.textContent = `${dateStr} · ${timeStr}`;
-
-  // Timetable IST display
   const ttNow = document.getElementById('ttNowIST');
   if(ttNow) ttNow.textContent = timeStr;
-
-  // Schedule subtitle
   const schedSub = document.getElementById('schedSubtitle');
   if(schedSub) schedSub.textContent = `46-day plan · INI-CET May 8, 2026 · Now: ${timeStr}`;
 }
